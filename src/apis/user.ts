@@ -1,32 +1,38 @@
-import User from '@/models/user'
-import PageInfo from '@/models/page-info'
+import { User, PageInfo, Leaderboard } from '@/models'
+import { toCamelCaseObject } from '@/helpers/camel-case'
+import { endpoint } from '@/helpers/uri'
 
-import { toCamelCase } from '@/helpers/camel-case'
-
-const GET_USERS = `${process.env.VUE_APP_API_URI}/v1/users`
-
-interface GetUsersResponse {
+export interface GetUsersResponse {
   users: User[];
   pageInfo: PageInfo;
 }
 
 export async function getUsers (): Promise<GetUsersResponse> {
-  const response = await window.fetch(GET_USERS)
+  const response = await window.fetch(endpoint`/v1/users`)
   if (!response.ok) {
     throw new Error(await response.text())
   }
-  const { data: users, page_info: pageInfo } = await response.json()
+  const { data, page_info: pageInfo } = await response.json()
   return {
-    users: users.map(user => {
-      for (let key in user) {
-        const newKey = toCamelCase(key)
-        user[newKey] = user[key]
-        if (newKey !== key) {
-          delete user[key]
-        }
-      }
-      return user
-    }),
+    users: data.map(toCamelCaseObject),
     pageInfo
   }
+}
+
+export async function getUserCountByYears (): Promise<Leaderboard[]> {
+  const response = await window.fetch(endpoint`/v1/years/users`)
+  if (!response.ok) {
+    throw new Error(await response.text())
+  }
+  const { data } = await response.json()
+  return data
+}
+
+export async function getCompanyCount (): Promise<Leaderboard[]> {
+  const response = await window.fetch(endpoint`/v1/companies`)
+  if (!response.ok) {
+    throw new Error(await response.text())
+  }
+  const { data } = await response.json()
+  return data
 }

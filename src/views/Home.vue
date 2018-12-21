@@ -2,7 +2,8 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
 
-    <GithubCard :user="user" v-for='user in users'/>
+    <GithubCard :user="user" v-for="user in users"/>
+    <LeaderboardCell v-bind="user" v-for="user in leaderboardUsers"/>
   </div>
 </template>
 
@@ -11,21 +12,34 @@
 // HINT: @ is an alias to /src
 
 import { Component, Vue } from 'vue-property-decorator'
+
 import GithubCard from '@/components/GithubCard.vue'
-import * as UserApi  from '@/apis/user'
+import LeaderboardCell from '@/components/LeaderboardCell.vue'
+
+import { UserApi } from '@/apis'
+import { Leaderboard, User } from '@/models'
 
 @Component({
   components: {
-    GithubCard
+    GithubCard,
+    LeaderboardCell
   }
 })
 export default class Home extends Vue {
-    users = []
+    users: User[] = []
+    leaderboardUsers: Leaderboard[] = []
+
     async mounted() {
       try {
-        const {users, pageInfo } = await UserApi.getUsers()
+        const { users, pageInfo } = await UserApi.getUsers()
         this.users = users
       } catch(error) {
+        console.log(error)
+      }
+      try {
+        const leaderboardUsers = await UserApi.getUserCountByYears()
+        this.leaderboardUsers = leaderboardUsers
+      } catch (error) {
         console.log(error)
       }
     }

@@ -1,4 +1,4 @@
-interface User {
+export interface User {
   avatarUrl: string;
   bio: string;
   company: string;
@@ -17,4 +17,3 @@ interface User {
   updatedAt: string;
   updateCount: number;
 }
-export default User
