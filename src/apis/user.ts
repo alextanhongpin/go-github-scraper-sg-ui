@@ -28,11 +28,11 @@ export async function getUserCountByYears (): Promise<Leaderboard[]> {
   return data
 }
 
-export async function getCompanyCount (): Promise<Leaderboard[]> {
+export async function getCompanyCount (): Promise<number> {
   const response = await window.fetch(endpoint`/v1/companies`)
   if (!response.ok) {
     throw new Error(await response.text())
   }
-  const { data } = await response.json()
-  return data
+  const { count } = await response.json()
+  return count
 }
