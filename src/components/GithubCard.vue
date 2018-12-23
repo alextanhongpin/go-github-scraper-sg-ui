@@ -1,7 +1,7 @@
 <template>
-  <div class='card'>
+  <a class='card' :href='githubLink' target='_blank'>
     <div class='front'>
-      <img class='image' src='user.avatarUrl'/>
+      <img class='image' :src='user.avatarUrl'/>
       <div class='user-info'>
         <Break/>
         <div class='name'>
@@ -25,10 +25,10 @@
       <div class='user-detail'>
         <Break/>
         <div class='user-row'>
-          <img class='thumbnail' src='user.avatarUrl'/>
+          <img class='thumbnail' :src='user.avatarUrl'/>
           <div>
             <div class='user-row__name'>{{user.name}}</div>
-            <div class='user-row__created_at'>Member since {{user.createdAt}}</div>
+            <div class='user-row__created_at'>Member since {{createdAtFmt}}</div>
           </div>
         </div>
         <Break/>
@@ -46,13 +46,14 @@
         <Break/>
       </div>
     </div>
-  </div>
+  </a>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { User } from '@/models'
 import Break from '@/components/Break.vue'
+import * as DateHelper from '@/helpers/date'
 
 @Component({
   components: {
@@ -61,6 +62,15 @@ import Break from '@/components/Break.vue'
 })
 export default class GithubCard extends Vue {
   @Prop() private user?: User;
+  get createdAtFmt (): string {
+    if (!this.user) {
+      return ''
+    }
+    return DateHelper.shortDate(this.user.createdAt)
+  }
+  get githubLink (): string {
+    return `https://github.com/${this.user.login}`
+  }
 }
 </script>
 
@@ -75,6 +85,8 @@ export default class GithubCard extends Vue {
   backface-visibility: hidden;
   perspective: 1500px;
   transform-origin: center center;
+  text-decoration: none;
+  color: inherit;
 }
 
 .card:hover .back {
@@ -82,6 +94,10 @@ export default class GithubCard extends Vue {
 }
 .card:hover .front {
   transform: rotateY(-180deg);
+}
+.card:hover .front,
+.card:hover .back {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
 .front,
@@ -92,6 +108,8 @@ export default class GithubCard extends Vue {
   transform-style: preserve-3d;
   backface-visibility: hidden;
   transition: .134s all ease-out;
+  overflow: hidden;
+  border-radius: 5px;
 }
 
 .back {

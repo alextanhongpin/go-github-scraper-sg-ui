@@ -1,31 +1,39 @@
+$dim-100: 12px;
+$dim-200: 16px;
+$dim-300: 21px;
+$dim-400: 28px;
+$dim-500: 37px;
+$dim-600: 50px;
+$dim-700: 67px;
+
 %h6, h6 {
-	font-size: 12px;
-	line-height: 21px;
+	font-size: $dim-100;
+	line-height: $dim-300;
 }
 
 %h5, h5 {
-	font-size: 16px;
-	line-height: 21px;
+	font-size: $dim-200;
+	line-height: $dim-300;
 }
 
 %h4, h4 {
-	font-size: 21px;
-	line-height: 37px;
+	font-size: $dim-300;
+	line-height: $dim-500;
 }
 
 %h3, h3 {
-	font-size: 28px;
-	line-height: 37px;
+	font-size: $dim-400;
+	line-height: $dim-500;
 }
 
 %h2, h2 {
-	font-size: 37px;
-	line-height: 67px;
+	font-size: $dim-500;
+	line-height: $dim-700;
 }
 
 %h1, h1 {
-	font-size: 50px;
-	line-height: 67px;
+	font-size: $dim-600;
+	line-height: $dim-700;
 }
 
 $color-gray: #DDDDDD;

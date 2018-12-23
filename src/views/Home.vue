@@ -19,7 +19,9 @@
     <LeaderboardCell v-bind="data" v-for="data in leaderboardUser"/>
 
     <h3>Leaderboard Language</h3>
-    <LeaderboardCell v-bind="data" v-for="data in leaderboardLanguage"/>
+    <GridRow>
+    <LeaderboardLanguage :maxCount='maxLanguage' v-bind="data" v-for="data in leaderboardLanguage"/>
+    </GridRow>
 
     <h3>Leaderboard Repositories</h3>
     <LeaderboardCell v-bind="data" v-for="data in leaderboardRepository"/>
@@ -36,16 +38,20 @@ import GithubCard from '@/components/GithubCard.vue'
 import GridCard from '@/components/GridCard.vue'
 import Carousel from '@/components/Carousel.vue'
 import LeaderboardCell from '@/components/LeaderboardCell.vue'
+import LeaderboardLanguage from '@/components/LeaderboardLanguage.vue'
+import GridRow from '@/components/GridRow.vue'
 
 import { RepoApi, UserApi } from '@/apis'
 import { Leaderboard, User } from '@/models'
 
 @Component({
   components: {
+    Carousel,
     GithubCard,
-    LeaderboardCell,
     GridCard,
-    Carousel
+    GridRow,
+    LeaderboardCell,
+    LeaderboardLanguage
   }
 })
 export default class Home extends Vue {
@@ -58,6 +64,7 @@ export default class Home extends Vue {
     leaderboardRepository: Leaderboard[] = []
     leaderboardLanguage: Leaderboard[] = []
     leaderboardUser: Leaderboard[] = []
+    maxLanguage: number = 0
 
     async fetchUsers () {
       try {
@@ -95,6 +102,7 @@ export default class Home extends Vue {
         try {
           const data = await RepoApi.getLeaderboardLanguage()
           this.leaderboardLanguage = data
+          this.maxLanguage = Math.max(...data.map(row => row.count))
         } catch (error) {
           console.log(error)
         }

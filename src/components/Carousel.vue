@@ -20,5 +20,10 @@ export default class Carousel extends Vue {}
   overflow: scroll;
   perspective: 1500px;
   padding: 20px 20px 40px;
+  // Smooth-scrolling on iOS.
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 </style>
