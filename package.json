@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "VUE_APP_GIT_VERSION=$(git rev-parse --short HEAD) vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
@@ -15,7 +15,8 @@
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^7.0.0",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vuex-class": "^0.3.1"
   },
   "devDependencies": {
     "@types/jest": "^23.1.4",

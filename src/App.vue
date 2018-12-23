@@ -1,7 +1,11 @@
 <template>
   <div id="app">
+    name is '{{name}}'
     <header>
-      <span class='brand'>Github</span>&nbsp;<span class='brand-app'>Recommender</span>
+      <span class='brand'>{{brand}}</span>&nbsp;<span class='brand-app'>Recommender</span>
+      <small>
+        version {{version}}
+      </small>
     </header>
     <div id="nav">
       <router-link to="/">Home</router-link> |
@@ -10,6 +14,28 @@
     <router-view/>
   </div>
 </template>
+
+<script lang='ts'>
+import { Vue, Component }  from 'vue-property-decorator'
+import { Action, State } from 'vuex-class'
+
+const namespace: string = 'user'
+
+@Component
+export default class App extends Vue {
+  // HINT: To fetch a key in the rootState.
+  @State('brand') brand?: string;
+  @State('version') version?: string;
+  // HINT: To get from the namespaced module.
+  @State('name', { namespace }) name?: string;
+  @Action('setName', { namespace }) setName: any;
+
+  // HINT: Triggering modules action.
+  mounted() {
+    this.setName('car')
+  }
+}
+</script>
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Montserrat');

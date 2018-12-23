@@ -1,4 +1,10 @@
-import { User, PageInfo, Leaderboard } from '@/models'
+import {
+  User,
+  PageInfo,
+  Leaderboard,
+  UserStat
+} from '@/models'
+
 import { toCamelCaseObject } from '@/helpers/camel-case'
 import { endpoint } from '@/helpers/uri'
 
@@ -35,4 +41,13 @@ export async function getCompanyCount (): Promise<number> {
   }
   const { count } = await response.json()
   return count
+}
+
+export async function getUserStats (login: string): Promise<UserStat> {
+  const response = await window.fetch(endpoint`/v1/userstats/${login}`)
+  if (!response.ok) {
+    throw new Error(await response.text())
+  }
+  const { data } = await response.json()
+  return data
 }

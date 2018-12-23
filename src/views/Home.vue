@@ -5,7 +5,7 @@
     </Carousel>
 
     <h3>User created by Year</h3>
-    <LeaderboardCell v-bind="user" v-for="user in leaderboardUserByYear"/>
+    <LeaderboardCell v-bind="user" v-for="user in userCountByYears"/>
 
     <h3>Company found</h3>
     <div>
@@ -13,14 +13,17 @@
     </div>
 
     <h3>Repositories created by Year</h3>
-    <LeaderboardCell v-bind="data" v-for="data in leaderboardRepositoryByYear"/>
+    <LeaderboardCell v-bind="data" v-for="data in leaderboardRepositoryByYears"/>
 
-    <h3>Leaderboard User</h3>
-    <LeaderboardCell v-bind="data" v-for="data in leaderboardUser"/>
+    <div class='leaderboard-language'>
+      <h3>Leaderboard User</h3>
+      <br/>
+      <LeaderboardUser v-bind="data" v-for="data in leaderboardUser"/>
+    </div>
 
     <h3>Leaderboard Language</h3>
     <GridRow>
-    <LeaderboardLanguage :maxCount='maxLanguage' v-bind="data" v-for="data in leaderboardLanguage"/>
+    <LeaderboardLanguage :maxCount='maxLanguageCount' v-bind="data" v-for="data in leaderboardLanguage"/>
     </GridRow>
 
     <h3>Leaderboard Repositories</h3>
@@ -34,15 +37,18 @@
 // HINT: Add static images. <img alt="Vue logo" src="../assets/logo.png">
 import { Component, Vue } from 'vue-property-decorator'
 
+// Components.
 import GithubCard from '@/components/GithubCard.vue'
 import GridCard from '@/components/GridCard.vue'
 import Carousel from '@/components/Carousel.vue'
 import LeaderboardCell from '@/components/LeaderboardCell.vue'
 import LeaderboardLanguage from '@/components/LeaderboardLanguage.vue'
+import LeaderboardUser from '@/components/LeaderboardUser.vue'
 import GridRow from '@/components/GridRow.vue'
 
-import { RepoApi, UserApi } from '@/apis'
 import { Leaderboard, User } from '@/models'
+import { Action, State } from 'vuex-class'
+import { Namespace } from '@/models'
 
 @Component({
   components: {
@@ -51,88 +57,48 @@ import { Leaderboard, User } from '@/models'
     GridCard,
     GridRow,
     LeaderboardCell,
-    LeaderboardLanguage
+    LeaderboardLanguage,
+    LeaderboardUser
   }
 })
 export default class Home extends Vue {
-    users: User[] = []
-    companyCount: number = 0
+  // Set the default in the modules itself, not here: companyCount = 0;
+  // Will result in permanent value.
+  @State('companyCount', Namespace.user) companyCount?: number;
+  @State('userCountByYears', Namespace.user) userCountByYears?: Leaderboard[];
+  @State('users', Namespace.user) users?: User[];
+  @State('leaderboardRepositoryByYears', Namespace.repo) leaderboardRepositoryByYears?: Leaderboard[];
+  @State('leaderboardRepository', Namespace.repo) leaderboardRepository?: Leaderboard[];
+  @State('leaderboardUser', Namespace.repo) leaderboardUser?: Leaderboard[];
+  @State('leaderboardLanguage', Namespace.repo) leaderboardLanguage?: Leaderboard[];
+  @State('maxLanguageCount', Namespace.repo) maxLanguageCount?: number;
 
-    leaderboardUserByYear: Leaderboard[] = []
-    leaderboardRepositoryByYear: Leaderboard[] = []
+  @Action('fetchUsers', Namespace.user) fetchUsers: any;
+  @Action('fetchCompanyCount', Namespace.user) fetchCompanyCount: any;
+  @Action('fetchUserCountByYears', Namespace.user) fetchUserCountByYears: any;
+  @Action('fetchRepositoriesByYears', Namespace.repo) fetchRepositoriesByYears: any
+  @Action('fetchLeaderboardRepository', Namespace.repo) fetchLeaderboardRepository: any
+  @Action('fetchLeaderboardLanguage', Namespace.repo) fetchLeaderboardLanguage: any
+  @Action('fetchLeaderboardUser', Namespace.repo) fetchLeaderboardUser: any
 
-    leaderboardRepository: Leaderboard[] = []
-    leaderboardLanguage: Leaderboard[] = []
-    leaderboardUser: Leaderboard[] = []
-    maxLanguage: number = 0
+  async mounted() {
+    await this.fetchUsers()
+    await this.fetchUserCountByYears()
 
-    async fetchUsers () {
-      try {
-        const { users, pageInfo } = await UserApi.getUsers()
-        this.users = users
-      } catch(error) {
-        console.log(error)
-      }
-    }
-    async fetchUsersByYears () {
-        try {
-          const data = await UserApi.getUserCountByYears()
-          this.leaderboardUserByYear = data
-        } catch (error) {
-          console.log(error)
-        }
-    }
-    async fetchRepositoriesByYears () {
-        try {
-          const data = await RepoApi.getRepositoryCountByYears()
-          this.leaderboardRepositoryByYear = data
-        } catch (error) {
-          console.log(error)
-        }
-    }
-    async fetchCompanyCount() {
-        try {
-          const count = await UserApi.getCompanyCount()
-          this.companyCount = count
-        } catch (error) {
-          console.log(error)
-        }
-    }
-    async fetchLeaderboardLanguage() {
-        try {
-          const data = await RepoApi.getLeaderboardLanguage()
-          this.leaderboardLanguage = data
-          this.maxLanguage = Math.max(...data.map(row => row.count))
-        } catch (error) {
-          console.log(error)
-        }
-    }
-    async fetchLeaderboardRepository() {
-        try {
-          const data = await RepoApi.getLeaderboardRepository()
-          this.leaderboardRepository = data
-        } catch (error) {
-          console.log(error)
-        }
-    }
-    async fetchLeaderboardUser() {
-        try {
-          const data = await RepoApi.getLeaderboardUser()
-          this.leaderboardUser = data
-        } catch (error) {
-          console.log(error)
-        }
-    }
-    async mounted() {
-      await this.fetchUsers()
-      await this.fetchUsersByYears()
+    await this.fetchRepositoriesByYears()
+    await this.fetchCompanyCount()
 
-      await this.fetchRepositoriesByYears()
-      await this.fetchCompanyCount()
-
-      await this.fetchLeaderboardUser()
-      await this.fetchLeaderboardRepository()
-      await this.fetchLeaderboardLanguage()
-    }
+    await this.fetchLeaderboardUser()
+    await this.fetchLeaderboardRepository()
+    await this.fetchLeaderboardLanguage()
+  }
 }
 </script>
+<style lang='scss'>
+.leaderboard-language {
+  padding: 20px;
+  margin: 20px;
+  box-shadow: 0 10px 25px rgba(black, .15);
+  border-radius: 11px;
+}
+</style>
