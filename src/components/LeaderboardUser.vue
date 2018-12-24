@@ -35,21 +35,27 @@ import * as Color from '@/helpers/color'
 
 @Component
 export default class LeaderboardUser extends Vue {
-  @State('githubUri') githubUri: string;
+  @State('githubUri') githubUri?: string;
   @Prop() private user?: User;
-  @Prop({default: 0}) private repositoryCount!: number;
-  @Prop() private languages?: Leaderboard[];
+  @Prop({ default: 0 }) private repositoryCount!: number;
+  @Prop({ default: [] }) private languages?: Leaderboard[];
 
-  get languageCount (): count {
-    return this.languages.length
+  get languageCount (): number {
+    return this.languages
+      ? this.languages.length
+      : 0
   }
 
   get topThreeLanguage (): Leaderboard[] {
-    return this.languages.slice(0, 3)
+    return this.languages
+      ? this.languages.slice(0, 3)
+      : []
   }
 
   get githubLink (): string {
-    return [this.githubUri, this.user.login].join('/')
+    return this.user
+      ? [this.githubUri, this.user.login].join('/')
+      : ''
   }
 
   percentage (count: number): number {

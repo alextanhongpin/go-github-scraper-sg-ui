@@ -4,26 +4,18 @@
       <img class='image' :src='user.avatarUrl'/>
       <div class='user-info'>
         <Break/>
-        <div class='name'>
-          <b class='login'>{{user.login}}</b>
+        <div class='login'>
+          {{user.login}}
         </div>
-        <Break/>
-        <div v-if='user.name'>{{user.name}}</div>
         <Break px='5'/>
-        <div class='company' v-if='user.company'>
-          @{{user.company}}
-        </div>
-        <Break/>
-        <div class='count-info'>
-          <i class='icon icon-follower'></i> {{user.followers}}
-          <i class='icon icon-repository'></i> {{user.repositories}}
+        <div class='created-at'>
+          Member since {{createdAtFmt}}
         </div>
         <Break/>
       </div>
     </div>
     <div class='back'>
       <div class='user-detail'>
-        <Break/>
         <div class='user-row'>
           <img class='thumbnail' :src='user.avatarUrl'/>
           <div>
@@ -31,19 +23,24 @@
             <div class='user-row__created_at'>Member since {{createdAtFmt}}</div>
           </div>
         </div>
-        <Break/>
-        <p v-if='user.bio'>
+        <div class='bio'>
           {{user.bio}}
-        </p>
-        <Break/>
-        <p v-if='user.location'>
-          Location: {{user.location}}
-        </p>
-        <Break/>
-        <div v-if='user.websiteUrl'>
-          Website: {{user.websiteUrl}}
+          <div class='company' v-if='user.company'>
+            @{{user.company}}
+          </div>
         </div>
-        <Break/>
+        <div class='count-info'>
+          <div>
+            <div class='counter'>
+              {{user.followers}}
+            </div> Followers
+          </div>
+          <div>
+            <div class='counter'>
+              {{user.following}}
+            </div> Following
+          </div>
+        </div>
       </div>
     </div>
   </a>
@@ -69,7 +66,9 @@ export default class GithubCard extends Vue {
     return DateHelper.shortDate(this.user.createdAt)
   }
   get githubLink (): string {
-    return `https://github.com/${this.user.login}`
+    return this.user
+      ? `https://github.com/${this.user.login}`
+      : ''
   }
 }
 </script>
@@ -79,37 +78,38 @@ export default class GithubCard extends Vue {
 @import '@/styles/theme.scss';
 
 .card {
-  display: inline-block;
-  position: relative;
-  transform-style: preserve-3d;
   backface-visibility: hidden;
-  perspective: 1500px;
-  transform-origin: center center;
-  text-decoration: none;
   color: inherit;
+  display: inline-block;
+  perspective: 1500px;
+  position: relative;
+  text-decoration: none;
+  transform-origin: center center;
+  transform-style: preserve-3d;
 }
 
 .card:hover .back {
   transform: rotateY(0deg);
 }
+
 .card:hover .front {
   transform: rotateY(-180deg);
 }
 .card:hover .front,
 .card:hover .back {
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.30);
 }
 
 .front,
 .back {
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  height: 100%;
-  width: 100%;
-  transform-style: preserve-3d;
   backface-visibility: hidden;
-  transition: .134s all ease-out;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.20);
+  height: 100%;
   overflow: hidden;
-  border-radius: 5px;
+  transform-style: preserve-3d;
+  transition: .134s all ease-out;
+  width: 100%;
 }
 
 .back {
@@ -129,11 +129,19 @@ $image-dimension: 240px;
 }
 
 .user-info {
-  padding: 0 10px;
+  padding: 0 16px;
+}
+
+.login {
+  font-weight: 600;
 }
 
 .name {
-  @extend %h4;
+  color: #888;
+}
+
+.created-at {
+  @extend %h6;
 }
 
 .company {
@@ -141,32 +149,51 @@ $image-dimension: 240px;
   color: $color-silver;
 }
 
-.icon {
-  width: 20px;
-  height: 20px;
-  background: $color-gray;
-  display: inline-block;
+.user-detail {
+  padding: $dim-200;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: $dim-500 1fr $dim-300;
+  height: 100%;
+  -ms-flex-pack: distribute;
+  justify-content: space-around;
+  grid-row-gap: $dim-100;
 }
 
-.user-detail {
-  padding: 0 10px;
-  word-break: break-word;
-}
 .thumbnail {
-  height: 40px;
-  width: 40px;
+  height: $dim-500;
+  width: $dim-500;
+  border-radius: 50%;
 }
+
 .user-row {
   display: grid;
   grid-template-columns: 40px 1fr;
   grid-column-gap: 10px;
 }
+
 .user-row__name {
   font-weight: bold;
 }
 .user-row__created_at {
   @extend %h6;
-  color: $color-silver;
 }
 
+.bio {
+  @extend %h6;
+}
+
+.count-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  @extend %h6;
+}
+
+.counter {
+  display: inline-block;
+  padding: 0 $dim-50;
+  background: $color-alto;
+  font-size: $dim-50;
+  border-radius: 5px;
+}
 </style>

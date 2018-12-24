@@ -1,21 +1,38 @@
 <template>
   <div class='carousel-container'>
-    <div class='carousel'>
+    <div class='carousel' v-on:wheel='scroll' ref='carousel'>
       <slot name='carousel'></slot>
     </div>
   </div>
 </template>
 <script lang='ts'>
-import { Component, Vue } from 'vue-property-decorator'
+import { Emit, Component, Vue } from 'vue-property-decorator'
 
 @Component
-export default class Carousel extends Vue {}
+export default class Carousel extends Vue {
+  @Emit('scroll-horizontal')
+  scroll (evt) {
+    const { carousel } = this.$refs
+    if (!carousel) {
+      return false
+    }
+    const maxScrollWidth = carousel.scrollWidth - carousel.offsetWidth
+    if (carousel.scrollLeft === 0) {
+      // console.log('start')
+    }
+    if (carousel.scrollLeft === maxScrollWidth) {
+      // console.log('end')
+      return true
+    }
+    return false
+  }
+}
 </script>
 <style scoped lang='scss'>
 .carousel {
   display: grid;
   max-width: 100vw;
-  grid-template-columns: repeat(20, 240px);
+  grid-auto-flow: column;
   grid-column-gap: 20px;
   overflow: scroll;
   perspective: 1500px;

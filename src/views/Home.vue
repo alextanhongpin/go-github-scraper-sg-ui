@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Carousel>
+    <Carousel v-on:scroll-horizontal='scroll'>
       <GithubCard slot="carousel" :user="user" v-for="user in users"/>
     </Carousel>
 
@@ -65,10 +65,11 @@ import { Namespace } from '@/models'
 export default class Home extends Vue {
   // Set the default in the modules itself, not here: companyCount = 0;
   // Will result in permanent value.
+  @State('nextCursor', Namespace.user) nextCursor?: string;
   @State('companyCount', Namespace.user) companyCount?: number;
   @State('userCountByYears', Namespace.user) userCountByYears?: Leaderboard[];
   @State('users', Namespace.user) users?: User[];
-  @State('userCount', Namespace.user) userCount: number;
+  @State('userCount', Namespace.user) userCount?: number;
   @State('leaderboardRepositoryByYears', Namespace.repo) leaderboardRepositoryByYears?: Leaderboard[];
   @State('leaderboardRepository', Namespace.repo) leaderboardRepository?: Leaderboard[];
   @State('leaderboardUser', Namespace.repo) leaderboardUser?: Leaderboard[];
@@ -85,6 +86,7 @@ export default class Home extends Vue {
 
   @Getter('leaderboardUserWithStats', Namespace.repo) leaderboardUserWithStats: any;
 
+  throttle: any;
   async mounted() {
     await this.fetchUsers()
     await this.fetchUserCountByYears()
@@ -95,6 +97,17 @@ export default class Home extends Vue {
     await this.fetchLeaderboardUser()
     await this.fetchLeaderboardRepository()
     await this.fetchLeaderboardLanguage()
+  }
+  async scroll (scrollEnd: boolean) {
+    if (scrollEnd) {
+      if (this.throttle) {
+        window.clearTimeout(this.throttle)
+      }
+      this.throttle = window.setTimeout(() => {
+        console.log(this.nextCursor, 'throttle')
+        this.fetchUsers(this.nextCursor)
+      }, 250)
+    }
   }
 }
 </script>

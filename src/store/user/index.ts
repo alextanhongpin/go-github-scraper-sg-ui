@@ -9,7 +9,9 @@ export interface UserState {
   pageInfo?: PageInfo
   userCountByYears: Leaderboard[]
   companyCount: number,
-  userCount: number
+  userCount: number,
+  prevCursor: string,
+  nextCursor: string
 }
 
 const namespaced: boolean = true
@@ -19,17 +21,26 @@ const state: UserState = {
   users: [],
   userCountByYears: [],
   companyCount: 0,
-  userCount: 0
+  userCount: 0,
+  prevCursor: '',
+  nextCursor: ''
 }
 
 const actions: ActionTree<UserState, RootState> = {
   setName ({ commit }, name: string) {
     commit('setName', name)
   },
-  async fetchUsers ({ commit }, cursor?: string) {
-    console.log('fetching users')
+  async fetchUsers ({ state, commit }, cursor?: string) {
+    console.log('fetching users', cursor)
+    if (state.prevCursor === cursor) {
+      console.log('already fetching')
+      return
+    }
+    commit('UPDATE_OLD_CURSOR', cursor)
     try {
-      const { users, pageInfo, count } = await UserApi.getUsers()
+      const { users, pageInfo, count } = await UserApi.getUsers(cursor)
+      console.log(pageInfo)
+      commit('SET_CURSOR', pageInfo.endCursor)
       commit('fetchUsersSuccess', { users, pageInfo })
       commit('SET_USER_COUNT', count)
       // HINT: Updates the root state, so that other modules can use the cached
@@ -85,11 +96,17 @@ const mutations: MutationTree<UserState> = {
     state.companyCount = count
   },
   fetchUsersSuccess (state: UserState, { pageInfo, users }) {
-    state.users = users
+    state.users = state.users.concat(users)
     state.pageInfo = pageInfo
   },
   SET_USER_COUNT (state: UserState, count: number) {
     state.userCount = count
+  },
+  UPDATE_OLD_CURSOR (state: UserState, cursor: string) {
+    state.prevCursor = state.nextCursor
+  },
+  SET_CURSOR (state: UserState, cursor: string) {
+    state.nextCursor = cursor
   }
   // fetchUserStatsSuccess (state: UserState, stat: UserStat) {
   //   state.user

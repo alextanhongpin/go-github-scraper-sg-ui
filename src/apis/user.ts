@@ -14,15 +14,30 @@ export interface GetUsersResponse {
   count: number;
 }
 
-export async function getUsers (): Promise<GetUsersResponse> {
-  const response = await window.fetch(endpoint`/v1/users`)
+// function throttle (durationInMs: number) {
+//   let timeout
+//   return function (fn: Function) {
+//     if (timeout) {
+//       window.clearTimeout(timeout)
+//     }
+//     timeout = window.setTimeout(() => {
+//       fn()
+//     }, durationInMs)
+//   }
+// }
+
+export async function getUsers (cursor?: string): Promise<GetUsersResponse> {
+  const withCursor = `/v1/users?cursor=${cursor}`
+  const response = await window.fetch(cursor
+    ? endpoint`${withCursor}`
+    : endpoint`/v1/users`)
   if (!response.ok) {
     throw new Error(await response.text())
   }
   const { count, data, page_info: pageInfo } = await response.json()
   return {
     users: data.map(toCamelCaseObject),
-    pageInfo,
+    pageInfo: toCamelCaseObject(pageInfo),
     count
   }
 }

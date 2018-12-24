@@ -93,15 +93,22 @@ const getters: GetterTree<RepoState, RootState> = {
     getters: GetterTree<RepoState, RootState>,
     rootState: RootState
   ): LeaderboardUserWithStats[] {
-    return state.leaderboardUser.map(({ name, count }: Leaderboard) => {
+    let result: LeaderboardUserWithStats[] = []
+    for (let row of state.leaderboardUser) {
+      const { count, name } = row
       const user = rootState.userCache.get(name)
-      const languages = rootState.userLanguagesCache.get(name) || []
-      return {
-        user,
-        languages,
-        repositoryCount: count
+      const languages = rootState.userLanguagesCache.get(name)
+      if (user && languages) {
+        result = result.concat([
+          {
+            user,
+            languages,
+            repositoryCount: count
+          }
+        ])
       }
-    })
+    }
+    return result
   }
 }
 
