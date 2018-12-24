@@ -7,7 +7,7 @@ import {
 import { RepoApi } from '@/apis'
 
 import RootState from '../state'
-import { Leaderboard } from '@/models'
+import { Leaderboard, LeaderboardUserWithStats } from '@/models'
 
 const namespaced: boolean = true
 
@@ -58,11 +58,11 @@ const actions: ActionTree<RepoState, RootState> = {
   async fetchLeaderboardUser ({ commit, dispatch }) {
     try {
       const data = await RepoApi.getLeaderboardUser()
-      commit('fetchLeaderboardUserSuccess', data)
       for (let user of data) {
         const login = user.name
         await dispatch('user/fetchUserStats', login, { root: true })
       }
+      commit('fetchLeaderboardUserSuccess', data)
     } catch (error) {
       console.log(error)
     }
@@ -87,7 +87,23 @@ const mutations: MutationTree<RepoState> = {
   }
 }
 
-const getters: GetterTree<RepoState, RootState> = {}
+const getters: GetterTree<RepoState, RootState> = {
+  leaderboardUserWithStats (
+    state: RepoState,
+    getters: GetterTree<RepoState, RootState>,
+    rootState: RootState
+  ): LeaderboardUserWithStats[] {
+    return state.leaderboardUser.map(({ name, count }: Leaderboard) => {
+      const user = rootState.userCache.get(name)
+      const languages = rootState.userLanguagesCache.get(name) || []
+      return {
+        user,
+        languages,
+        repositoryCount: count
+      }
+    })
+  }
+}
 
 const repo: Module<RepoState, RootState> = {
   namespaced,

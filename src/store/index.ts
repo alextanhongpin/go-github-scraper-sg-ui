@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Vuex, { StoreOptions } from 'vuex'
+import Vuex, { StoreOptions, GetterTree } from 'vuex'
 
 // State.
 import RootState from './state'
@@ -10,6 +10,15 @@ import repo from './repo'
 import { User, Leaderboard } from '@/models'
 
 Vue.use(Vuex)
+
+const getters: GetterTree<RootState, any> = {
+  getUser (state: RootState, login: string): User|undefined {
+    return state.userCache.get(login)
+  },
+  getUserLanguages (state: RootState, login: string): Leaderboard[] {
+    return state.userLanguagesCache.get(login) || []
+  }
+}
 
 const store: StoreOptions<RootState> = {
   state: {
@@ -31,14 +40,7 @@ const store: StoreOptions<RootState> = {
       state.userLanguagesCache.set(login, languages)
     }
   },
-  getters: {
-    getUser (state: RootState, login: string): User|undefined {
-      return state.userCache.get(login)
-    },
-    getUserLanguages (state: RootState, login: string): Leaderboard[] {
-      return state.userLanguagesCache.get(login) || []
-    }
-  },
+  getters,
   actions: {
   }
 }

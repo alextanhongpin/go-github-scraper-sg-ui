@@ -11,6 +11,7 @@ import { endpoint } from '@/helpers/uri'
 export interface GetUsersResponse {
   users: User[];
   pageInfo: PageInfo;
+  count: number;
 }
 
 export async function getUsers (): Promise<GetUsersResponse> {
@@ -18,10 +19,11 @@ export async function getUsers (): Promise<GetUsersResponse> {
   if (!response.ok) {
     throw new Error(await response.text())
   }
-  const { data, page_info: pageInfo } = await response.json()
+  const { count, data, page_info: pageInfo } = await response.json()
   return {
     users: data.map(toCamelCaseObject),
-    pageInfo
+    pageInfo,
+    count
   }
 }
 

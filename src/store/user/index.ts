@@ -8,7 +8,8 @@ export interface UserState {
   users: User[]
   pageInfo?: PageInfo
   userCountByYears: Leaderboard[]
-  companyCount: number
+  companyCount: number,
+  userCount: number
 }
 
 const namespaced: boolean = true
@@ -17,7 +18,8 @@ const state: UserState = {
   name: 'hello',
   users: [],
   userCountByYears: [],
-  companyCount: 0
+  companyCount: 0,
+  userCount: 0
 }
 
 const actions: ActionTree<UserState, RootState> = {
@@ -27,8 +29,9 @@ const actions: ActionTree<UserState, RootState> = {
   async fetchUsers ({ commit }, cursor?: string) {
     console.log('fetching users')
     try {
-      const { users, pageInfo } = await UserApi.getUsers()
+      const { users, pageInfo, count } = await UserApi.getUsers()
       commit('fetchUsersSuccess', { users, pageInfo })
+      commit('SET_USER_COUNT', count)
       // HINT: Updates the root state, so that other modules can use the cached
       // data rather than fetching them individually.
       for (let user of users) {
@@ -60,7 +63,11 @@ const actions: ActionTree<UserState, RootState> = {
 
       // Update the root.
       commit('setUserCache', response.user, { root: true })
-      commit('setUserLanguagesCache', response.languages, { root: true })
+      const data = {
+        login: response.user.login,
+        languages: response.languages
+      }
+      commit('setUserLanguagesCache', data, { root: true })
     } catch (error) {
       console.log(error)
     }
@@ -80,6 +87,9 @@ const mutations: MutationTree<UserState> = {
   fetchUsersSuccess (state: UserState, { pageInfo, users }) {
     state.users = users
     state.pageInfo = pageInfo
+  },
+  SET_USER_COUNT (state: UserState, count: number) {
+    state.userCount = count
   }
   // fetchUserStatsSuccess (state: UserState, stat: UserStat) {
   //   state.user

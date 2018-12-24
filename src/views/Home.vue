@@ -5,6 +5,7 @@
     </Carousel>
 
     <h3>User created by Year</h3>
+    <div>Total Users Indexed: {{userCount}}</div>
     <LeaderboardCell v-bind="user" v-for="user in userCountByYears"/>
 
     <h3>Company found</h3>
@@ -18,7 +19,7 @@
     <div class='leaderboard-language'>
       <h3>Leaderboard User</h3>
       <br/>
-      <LeaderboardUser v-bind="data" v-for="data in leaderboardUser"/>
+      <LeaderboardUser v-bind="data" v-for="data in leaderboardUserWithStats"/>
     </div>
 
     <h3>Leaderboard Language</h3>
@@ -47,7 +48,7 @@ import LeaderboardUser from '@/components/LeaderboardUser.vue'
 import GridRow from '@/components/GridRow.vue'
 
 import { Leaderboard, User } from '@/models'
-import { Action, State } from 'vuex-class'
+import { Action, Getter, State } from 'vuex-class'
 import { Namespace } from '@/models'
 
 @Component({
@@ -67,6 +68,7 @@ export default class Home extends Vue {
   @State('companyCount', Namespace.user) companyCount?: number;
   @State('userCountByYears', Namespace.user) userCountByYears?: Leaderboard[];
   @State('users', Namespace.user) users?: User[];
+  @State('userCount', Namespace.user) userCount: number;
   @State('leaderboardRepositoryByYears', Namespace.repo) leaderboardRepositoryByYears?: Leaderboard[];
   @State('leaderboardRepository', Namespace.repo) leaderboardRepository?: Leaderboard[];
   @State('leaderboardUser', Namespace.repo) leaderboardUser?: Leaderboard[];
@@ -80,6 +82,8 @@ export default class Home extends Vue {
   @Action('fetchLeaderboardRepository', Namespace.repo) fetchLeaderboardRepository: any
   @Action('fetchLeaderboardLanguage', Namespace.repo) fetchLeaderboardLanguage: any
   @Action('fetchLeaderboardUser', Namespace.repo) fetchLeaderboardUser: any
+
+  @Getter('leaderboardUserWithStats', Namespace.repo) leaderboardUserWithStats: any;
 
   async mounted() {
     await this.fetchUsers()
