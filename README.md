@@ -1,5 +1,9 @@
 # github-scraper-sg
 
+UI for the Github Scraper. 
+
+![preview](./assets/preview.png)
+
 ## Project setup
 ```
 yarn install
