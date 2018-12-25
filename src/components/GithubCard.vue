@@ -19,7 +19,7 @@
         <div class='user-row'>
           <img class='thumbnail' :src='user.avatarUrl'/>
           <div>
-            <div class='user-row__name'>{{user.name}}</div>
+            <div class='user-row__name' :title='user.name'>{{user.name}}</div>
             <div class='user-row__created_at'>Member since {{createdAtFmt}}</div>
           </div>
         </div>
@@ -86,6 +86,7 @@ export default class GithubCard extends Vue {
   text-decoration: none;
   transform-origin: center center;
   transform-style: preserve-3d;
+  word-break: break-word;
 }
 
 .card:hover .back {
@@ -152,11 +153,10 @@ $image-dimension: 240px;
 .user-detail {
   padding: $dim-200;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-auto-flow: row;
   grid-template-rows: $dim-500 1fr $dim-300;
   height: 100%;
   -ms-flex-pack: distribute;
-  justify-content: space-around;
   grid-row-gap: $dim-100;
 }
 
@@ -174,6 +174,11 @@ $image-dimension: 240px;
 
 .user-row__name {
   font-weight: bold;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 160px;
 }
 .user-row__created_at {
   @extend %h6;

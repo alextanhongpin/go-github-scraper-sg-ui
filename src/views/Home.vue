@@ -16,9 +16,14 @@
     <h3>Repositories created by Year</h3>
     <LeaderboardCell v-bind="data" v-for="data in leaderboardRepositoryByYears"/>
 
-    <div class='leaderboard-language'>
-      <h3>Leaderboard User</h3>
-      <br/>
+    <div class='leaderboard-user'>
+      <div class='leaderboard-user__header'>Top Active Users</div>
+      <Break px='5'/>
+      <div class='leaderboard-user__subheader'>
+        IN MALAYSIA AND SINGAPORE
+      </div>
+      <Break px='21'/>
+
       <LeaderboardUser v-bind="data" v-for="data in leaderboardUserWithStats"/>
     </div>
 
@@ -39,6 +44,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 // Components.
+import Break from '@/components/Break.vue'
 import GithubCard from '@/components/GithubCard.vue'
 import GridCard from '@/components/GridCard.vue'
 import Carousel from '@/components/Carousel.vue'
@@ -53,6 +59,7 @@ import { Namespace } from '@/models'
 
 @Component({
   components: {
+    Break,
     Carousel,
     GithubCard,
     GridCard,
@@ -112,10 +119,21 @@ export default class Home extends Vue {
 }
 </script>
 <style lang='scss'>
-.leaderboard-language {
-  padding: 20px;
-  margin: 20px;
-  box-shadow: 0 10px 25px rgba(black, .15);
+@import '@/styles/theme.scss';
+
+.leaderboard-user {
+  padding: $dim-300;
+  margin: $dim-300;
+  box-shadow: 0 5px 15px rgba(black, .2);
   border-radius: 11px;
+}
+.leaderboard-user__header {
+  font-weight: bold;
+  @extend %h5;
+}
+.leaderboard-user__subheader {
+  font-weight: 600; // Semibold;
+  color: #818181;
+  @extend %h6;
 }
 </style>

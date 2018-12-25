@@ -8,21 +8,22 @@
         <div class='name' v-if='user'>
           {{user.login}}
         </div>
-        <div>
-          {{repositoryCount}} repo with {{languageCount}} languages
+        <div class='repo-count'>
+          {{repositoryCount}} REPO
         </div>
       </div>
     </div>
 
     <div class='info'>
       <div class='language' v-for='language in topThreeLanguage'>
-        <div
-          class='icon-language'
-          :style='{background: color(language.name)}'
-        ></div>
-        <div>{{language.count}}</div>
-        <div>{{language.name}}</div>
-        <div>{{percentage(language.count, repositoryCount)}}</div>
+          <div
+            class='language-icon'
+            :style='{background: color(language.name)}'
+            ></div>
+          <span class='language-label'>
+            {{language.name}} ({{percentage(language.count, repositoryCount)}})
+          </span>
+        </div>
       </div>
     </div>
   </a>
@@ -58,8 +59,8 @@ export default class LeaderboardUser extends Vue {
       : ''
   }
 
-  percentage (count: number): number {
-    return count / this.repositoryCount * 100
+  percentage (count: number): string {
+    return (count / this.repositoryCount * 100).toFixed(1) + '%'
   }
 
   color (color: string): string {
@@ -68,6 +69,7 @@ export default class LeaderboardUser extends Vue {
 }
 </script>
 <style scoped lang='scss'>
+@import '@/styles/theme.scss';
 
 .container {
   border-bottom: 1px solid #EEE;
@@ -76,8 +78,25 @@ export default class LeaderboardUser extends Vue {
   grid-column-gap: 10px;
   text-decoration: none;
   color: inherit;
+  padding: $dim-100 0;
+  position: relative;
+}
+$container-hover-color: #EEEEEE;
+.container:hover {
+  background: $container-hover-color;
 }
 
+.container:hover::before {
+  content: '';
+  position: absolute;
+  left: -$dim-100;
+  top: 0;
+  height: 100%;
+  width: $dim-100;
+  background: $container-hover-color;
+  z-index: 1000;
+  border-radius: 5px 0 0 5px;
+}
 .header {
   display: grid;
   grid-template-columns: 40px 1fr;
@@ -92,20 +111,37 @@ export default class LeaderboardUser extends Vue {
   background: #DDD;
 }
 
-.name {
-  font-weight: bold;
+.name { }
+.repo-count {
+  @extend %h6;
+  color: #818181;
+}
+
+.info {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: flex-start;
+  grid-column-gap: $dim-100;
 }
 
 .language {
+  @extend %h6;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: $dim-100 1fr;
+  grid-column-gap: 5px;
+  align-items: center;
 }
 
-.icon-language {
-  height: 20px;
-  width: 20px;
+.language-icon {
+  height: $dim-100;
+  width: $dim-100;
   border-radius: 50%;
   position: relative;
+  display: inline-block;
+}
+
+.language-label {
+  display: inline-block;
 }
 
 </style>

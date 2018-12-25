@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    name is '{{name}}'
     <header>
       <span class='brand'>{{brand}}</span>&nbsp;<span class='brand-app'>Recommender</span>
       <small>
@@ -26,19 +25,12 @@ export default class App extends Vue {
   // HINT: To fetch a key in the rootState.
   @State('brand') brand?: string;
   @State('version') version?: string;
-  // HINT: To get from the namespaced module.
-  @State('name', { namespace }) name?: string;
-  @Action('setName', { namespace }) setName: any;
-
-  // HINT: Triggering modules action.
-  mounted() {
-    this.setName('car')
-  }
 }
 </script>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Montserrat');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700');
+@import '@/styles/reset.scss';
 @import '@/styles/theme.scss';
 
 html {
@@ -57,7 +49,7 @@ img {
 }
 
 #app, input, textarea {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 #app {
   @extend %h5;
@@ -80,7 +72,6 @@ header {
 .brand {
   font-weight: bold;
 }
-.brand-app {
-  @extend %h4;
-}
+
+.brand-app { }
 </style>
