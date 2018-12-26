@@ -1,5 +1,6 @@
 import {
   User,
+  Score,
   PageInfo,
   Leaderboard,
   UserStat
@@ -64,6 +65,16 @@ export async function getUserStats (login: string): Promise<UserStat> {
   const response = await window.fetch(endpoint`/v1/userstats/${login}`)
   if (!response.ok) {
     throw new Error(await response.text())
+  }
+  const { data } = await response.json()
+  return data
+}
+
+export async function getRecommendations (login: string): Promise<Score[]> {
+  const response = await window.fetch(endpoint`/v1/recommendations/${login}`)
+  if (!response.ok) {
+    const { error } = await response.json()
+    return []
   }
   const { data } = await response.json()
   return data

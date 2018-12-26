@@ -1,6 +1,6 @@
 import { GetterTree, MutationTree, ActionTree, Module } from 'vuex'
 import { UserApi } from '@/apis'
-import { Leaderboard, User, PageInfo } from '@/models'
+import { Score, Leaderboard, User, PageInfo } from '@/models'
 import RootState from '../state'
 
 export interface UserState {
@@ -11,7 +11,8 @@ export interface UserState {
   companyCount: number,
   userCount: number,
   prevCursor: string,
-  nextCursor: string
+  nextCursor: string,
+  userRecommendations: Map<string, Score[]>
 }
 
 const namespaced: boolean = true
@@ -23,7 +24,8 @@ const state: UserState = {
   companyCount: 0,
   userCount: 0,
   prevCursor: '',
-  nextCursor: ''
+  nextCursor: '',
+  userRecommendations: new Map()
 }
 
 const actions: ActionTree<UserState, RootState> = {
@@ -39,7 +41,6 @@ const actions: ActionTree<UserState, RootState> = {
     commit('UPDATE_OLD_CURSOR', cursor)
     try {
       const { users, pageInfo, count } = await UserApi.getUsers(cursor)
-      console.log(pageInfo)
       commit('SET_CURSOR', pageInfo.endCursor)
       commit('fetchUsersSuccess', { users, pageInfo })
       commit('SET_USER_COUNT', count)
@@ -82,6 +83,17 @@ const actions: ActionTree<UserState, RootState> = {
     } catch (error) {
       console.log(error)
     }
+  },
+  async fetchRecommendations ({ commit, dispatch }, login: string) {
+    try {
+      const users = await UserApi.getRecommendations(login)
+      for (let user of users) {
+        dispatch('fetchUserStats', user.name)
+      }
+      commit('SET_RECOMMENDATIONS', { login, users })
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
@@ -107,6 +119,9 @@ const mutations: MutationTree<UserState> = {
   },
   SET_CURSOR (state: UserState, cursor: string) {
     state.nextCursor = cursor
+  },
+  SET_RECOMMENDATIONS (state: UserState, { login, users }: { login: string, users: Score[] }) {
+    state.userRecommendations.set(login, users)
   }
   // fetchUserStatsSuccess (state: UserState, stat: UserStat) {
   //   state.user
@@ -116,6 +131,9 @@ const mutations: MutationTree<UserState> = {
 const getters: GetterTree<UserState, RootState> = {
   getName (state: UserState): string {
     return state.name
+  },
+  recommendations: (state: UserState) => (login: string): Score[] => {
+    return state.userRecommendations.get(login) || []
   }
 }
 
