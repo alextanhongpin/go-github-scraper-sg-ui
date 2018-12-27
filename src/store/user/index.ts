@@ -12,7 +12,7 @@ export interface UserState {
   userCount: number,
   prevCursor: string,
   nextCursor: string,
-  userRecommendations: Map<string, Score[]>
+    userRecommendations: Map<string, Score[]>
 }
 
 const namespaced: boolean = true
@@ -33,7 +33,6 @@ const actions: ActionTree<UserState, RootState> = {
     commit('setName', name)
   },
   async fetchUsers ({ state, commit }, cursor?: string) {
-    console.log('fetching users', cursor)
     if (state.prevCursor === cursor) {
       console.log('already fetching')
       return
@@ -87,8 +86,9 @@ const actions: ActionTree<UserState, RootState> = {
   async fetchRecommendations ({ commit, dispatch }, login: string) {
     try {
       const users = await UserApi.getRecommendations(login)
+      await dispatch('fetchUserStats', login)
       for (let user of users) {
-        dispatch('fetchUserStats', user.name)
+        await dispatch('fetchUserStats', user.name)
       }
       commit('SET_RECOMMENDATIONS', { login, users })
     } catch (error) {

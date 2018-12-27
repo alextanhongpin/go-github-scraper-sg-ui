@@ -38,5 +38,14 @@ $dim-700: 67px;
 }
 
 $color-gray: #DDDDDD;
+$color-silverlake: #818181;
 $color-silver: #666666;
 $color-alto: #D8D8D8;
+
+
+%subheader {
+  color: $color-silverlake;
+  font-weight: 600;
+  @extend %h6;
+  text-transform: uppercase;
+}

@@ -16,7 +16,8 @@ export interface RepoState {
   leaderboardLanguage: Leaderboard[]
   leaderboardRepository: Leaderboard[]
   leaderboardUser: Leaderboard[]
-  maxLanguageCount: number
+  maxLanguageCount: number,
+  totalLanguageCount: number
 }
 
 // Initial state.
@@ -25,7 +26,8 @@ const state: RepoState = {
   leaderboardLanguage: [],
   leaderboardRepository: [],
   leaderboardUser: [],
-  maxLanguageCount: 0
+  maxLanguageCount: 0,
+  totalLanguageCount: 0
 }
 
 const actions: ActionTree<RepoState, RootState> = {
@@ -43,6 +45,10 @@ const actions: ActionTree<RepoState, RootState> = {
       commit('fetchLeaderboardLanguageSuccess', data)
       const maxLanguageCount = Math.max(...data.map(row => row.count))
       commit('setMaxLanguageCount', maxLanguageCount)
+      const totalLanguageCount = data.reduce((acc: number, data: Leaderboard) => {
+        return acc + data.count
+      }, 0)
+      commit('SET_TOTAL_LANGUAGE_COUNT', totalLanguageCount)
     } catch (error) {
       console.log(error)
     }
@@ -84,6 +90,9 @@ const mutations: MutationTree<RepoState> = {
   },
   setMaxLanguageCount (state: RepoState, count: number) {
     state.maxLanguageCount = count
+  },
+  SET_TOTAL_LANGUAGE_COUNT (state: RepoState, count: number) {
+    state.totalLanguageCount = count
   }
 }
 

@@ -2,7 +2,9 @@
 
 UI for the Github Scraper. 
 
-![preview](./assets/preview.png)
+![home](./assets/home.png)
+
+![top_users](./assets/top_users.png)
 
 ## Project setup
 ```

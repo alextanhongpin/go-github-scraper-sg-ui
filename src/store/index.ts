@@ -12,7 +12,7 @@ import { User, Leaderboard } from '@/models'
 Vue.use(Vuex)
 
 const getters: GetterTree<RootState, any> = {
-  getUser (state: RootState, login: string): User|undefined {
+  getUser: (state: RootState) => (login: string): User|undefined => {
     return state.userCache.get(login)
   },
   getUserLanguages (state: RootState, login: string): Leaderboard[] {

@@ -67,6 +67,7 @@ export async function getUserStats (login: string): Promise<UserStat> {
     throw new Error(await response.text())
   }
   const { data } = await response.json()
+  data.user = toCamelCaseObject(data.user)
   return data
 }
 

@@ -3,7 +3,7 @@
     <div class='aside'>
       <div class='header'>
         <div class='image'>
-          <img :src='user.avatar_url' width='100%' height='auto'/>
+          <img :src='user.avatarUrl' width='100%' height='auto'/>
         </div>
         <div>
           <div class='name' v-if='user'>
@@ -29,15 +29,13 @@
         <div class='info-header'>
           Top 3 Languages
         </div>
-        <div class='language' v-for='language in topThreeLanguage'>
-          <div
-            class='language-icon'
-            :style='{background: color(language.name)}'
-            ></div>
-          <span class='language-label'>
-            {{language.name}} ({{percentage(language.count, repositoryCount)}})
-          </span>
-        </div>
+        <LanguageCell
+          v-for='language in topThreeLanguage'
+          :label='language.name'
+          class='language'
+        >
+          ({{percentage(language.count, repositoryCount)}})
+        </LanguageCell>
       </div>
       <Break/>
       <div class='counters'>
@@ -61,15 +59,19 @@
   </a>
 </template>
 <script lang='ts'>
-import Break from '@/components/Break'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { User, Leaderboard } from '@/models'
 import { State } from 'vuex-class'
+
+import { User, Leaderboard } from '@/models'
 import * as Color from '@/helpers/color'
+
+import Break from '@/components/Break.vue'
+import LanguageCell from '@/components/LanguageCell.vue'
 
 @Component({
   components: {
-    Break
+    Break,
+    LanguageCell
   }
 })
 export default class LeaderboardUser extends Vue {

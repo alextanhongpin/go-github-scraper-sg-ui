@@ -11,6 +11,29 @@
     </div>
     <Break/>
 
+    <div class='recommend-section' v-if='recommendations(keyword).length'>
+      <GithubCard :user="searchUser"/>
+
+      <div>
+        <div class='recommend-header'><b>Similar Users</b></div>
+        <Break/>
+        <div class='recommendations'>
+          <a
+       class='recommend'
+       target='_blank'
+       v-for='recommendation in recommendations(keyword)'
+       :href='githubLink(recommendation.name)'
+       >
+       <img class='recommend-photo' :src='getUser(recommendation.name) && getUser(recommendation.name).avatarUrl'/>
+       <div class='recommend-info'>
+         <b class='recommend-login'> {{recommendation.name}} </b>
+         <div class='recommend-name'>{{ getUser(recommendation.name) && getUser(recommendation.name).name }}</div>
+       </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
     <Carousel v-on:scroll-horizontal='scroll'>
       <GithubCard slot="carousel" :user="user" v-for="user in users"/>
     </Carousel>
@@ -27,11 +50,7 @@
     <h3>Repositories created by Year</h3>
     <LeaderboardCell v-bind="data" v-for="data in leaderboardRepositoryByYears"/>
 
-    <div class='recommend' v-for='recommendation in recommendations(keyword)'>
-      <div class='recommend-photo'></div>
-      {{recommendation.name}}
-      {{recommendation.score}}
-    </div>
+
 
     <div class='leaderboard-user'>
       <div class='leaderboard-user__header'>Top Active Users</div>
@@ -40,17 +59,16 @@
         IN MALAYSIA AND SINGAPORE
       </div>
       <Break px='12'/>
-
       <LeaderboardUser v-bind="data" v-for="data in leaderboardUserWithStats"/>
     </div>
 
-    <h3>Leaderboard Language</h3>
-    <GridRow>
-    <LeaderboardLanguage :maxCount='maxLanguageCount' v-bind="data" v-for="data in leaderboardLanguage"/>
-    </GridRow>
+    <LeaderboardLanguage
+      :totalCount='totalLanguageCount'
+      :items='leaderboardLanguage'
+    />
 
-    <h3>Leaderboard Repositories</h3>
-    <LeaderboardCell v-bind="data" v-for="data in leaderboardRepository"/>
+    <!-- <h3>Leaderboard Repositories</h3> -->
+    <!-- <LeaderboardCell v-bind="data" v-for="data in leaderboardRepository"/> -->
   </div>
 </template>
 
@@ -99,6 +117,9 @@ export default class Home extends Vue {
   @State('leaderboardUser', Namespace.repo) leaderboardUser?: Leaderboard[];
   @State('leaderboardLanguage', Namespace.repo) leaderboardLanguage?: Leaderboard[];
   @State('maxLanguageCount', Namespace.repo) maxLanguageCount?: number;
+  @State('totalLanguageCount', Namespace.repo) totalLanguageCount?: number;
+
+  @State('githubUri') githubUri?: string;
 
   @Action('fetchUsers', Namespace.user) fetchUsers: any;
   @Action('fetchCompanyCount', Namespace.user) fetchCompanyCount: any;
@@ -112,10 +133,12 @@ export default class Home extends Vue {
 
   @Getter('leaderboardUserWithStats', Namespace.repo) leaderboardUserWithStats: any;
   @Getter('recommendations', Namespace.user) recommendations?: Score[];
+  @Getter('getUser') getUser?: any;
 
   throttle: any;
   throttleSearch: any;
   keyword: string = '';
+  keywordGhost: string = '';
   async mounted() {
     await this.fetchUsers()
     await this.fetchUserCountByYears()
@@ -141,13 +164,22 @@ export default class Home extends Vue {
 
   search (evt: EventTarget) {
     const keyword = evt.currentTarget.value
+    this.keywordGhost = keyword
     if (keyword.trim().length) {
       this.throttleSearch && window.clearTimeout(this.throttleSearch)
       this.throttleSearch = window.setTimeout(async () => {
-        this.keyword = keyword
-        await this.fetchRecommendations(keyword)
+        this.keyword = this.keywordGhost
+        await this.fetchRecommendations(this.keyword)
       }, 250)
     }
+  }
+  get searchUser () : User|undefined {
+    const user = this.getUser(this.keyword)
+    console.log('got', user)
+    return user
+  }
+  githubLink (user: string): string {
+    return [this.githubUri, user].join('/')
   }
 }
 </script>
@@ -185,9 +217,54 @@ $search-half-dim: #{$search-dim/2};
   width: 100%;
   max-width: 360px;
 }
+
+.recommend-section {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-column-gap: $dim-100;
+  align-items: flex-start;
+  margin: 21px;
+}
+.recommend {
+  display: grid;
+  grid-template-columns: $dim-500 1fr;
+  grid-column-gap: $dim-50;
+  padding: $dim-50;
+  border-radius: $dim-50;
+  text-decoration: none;
+  color: inherit;
+}
+.recommend:hover {
+  background: #EEEEEE;
+}
+
 .recommend-photo {
-  width: 40px;
-  height: 40px;
-  background: #818181;
+  height: $dim-500;
+  width: auto;
+  background: $color-silverlake;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+// For ellipsis to work in the grid-layout, apply it to the parent container;
+.recommend-info {
+  overflow: hidden;
+}
+.recommend-name {
+  @extend %h6;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.recommend-header {
+  margin: 0 $dim-100;
+  font-weight: 600;
+  @extend %h4;
+}
+
+.recommendations {
+  display: grid;
+  grid-template-columns: minmax(160px, max-content) repeat(auto-fill, 200px);
+  grid-auto-flow: row;
+  grid-row-gap: $dim-50;
 }
 </style>

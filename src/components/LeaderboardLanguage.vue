@@ -1,66 +1,97 @@
 <template>
-  <div class='container'>
-    <div
-      class='bar'
-      :style='{width: width + "%", background: color}'
-      >
-      <div class='name'>
-        {{name}}
-      </div>
+  <div class='leaderboard-language'>
+    <div class='header'>
+      Top Languages
     </div>
-    <div class='count'>
-      {{count}}
+    <Break px='5'/>
+    <div class='subheader'>
+     Based on the number of repositories
+    </div>
+    <Break px='21'/>
+    <div class='language-cells'>
+
+      <div
+        :label='item.name'
+        v-for='item in items'
+      >
+      <span
+        :style='{background: color(item.name), opacity: opacity(i, item.count)}'
+        v-for='i in percentage(item.count)'
+        class='circle'
+      ></span>
+        {{item.name}}
+        ({{percentage(item.count)}}%) <span class='repo-count'>{{formatCount(item.count)}} repos</span>
+      </div>
     </div>
   </div>
 </template>
 <script lang='ts'>
 import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Leaderboard } from '@/models'
+import LanguageCell from '@/components/LanguageCell.vue'
+import Break from '@/components/Break.vue'
 import * as Color from '@/helpers/color'
 
-@Component
+@Component({
+  components: {
+    Break,
+    LanguageCell
+  }
+})
 export default class LeaderboardLanguage extends Vue {
   @Prop() private name!: string;
-  @Prop({default: 0}) private count!: number;
-  @Prop({default: 0}) private maxCount!: number;
-  get color (): string {
-    return Color.pick(this.name)
+  @Prop({ default: [] }) private items!: Leaderboard[];
+  @Prop({ default: 0 }) private totalCount!: number;
+
+  percentage (count: number): number {
+    return Math.ceil(count / this.totalCount * 100)
   }
-  get width (): number {
-    return Math.ceil(this.count / this.maxCount * 100)
+  formatCount (count: number): string {
+    return count.toLocaleString()
+  }
+  color (label: string): string {
+    return Color.pick(label)
+  }
+  opacity (index: number, count: number): number {
+    const value = this.percentage(count)
+    return (value - index + 1) / value
   }
 }
 </script>
 <style scoped lang='scss'>
 @import '@/styles/theme.scss';
-
-.icon-language {
-  height: $dim-100;
-  width: $dim-100;
+.leaderboard-language {
+  padding: $dim-300;
+  box-shadow: 0 5px 15px rgba(black, 0.2);
+  margin: $dim-300;
+}
+.header {
+  @extend %h5;
+  font-weight: bold;
+}
+.subheader {
+  @extend %subheader;
+}
+.language-cells {
+  @extend %h6;
+  display: grid;
+  grid-auto-flows: columns;
+  grid-row-gap: $dim-50;
+}
+.language-cell {
+  display: grid;
+  grid-template-columns: $dim-50 1fr;
+  align-items: center;
+  grid-column-gap: $dim-50;
+}
+.circle {
   border-radius: 50%;
   display: inline-block;
+  height: 10px;
+  width: 10px;
+  margin: 0 1px;
 }
-.container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-column-gap: 10px;
-  height: $dim-500;
-  line-height: $dim-500;
-  padding: 0 $dim-100;
-}
-
-.bar {
-  height: $dim-300;
-  display: block;
-  background: red;
-  position: relative;
-  border-radius: 3px;
-}
-
-.name {
-  @extend h6;
-  position: absolute;
-  top: -$dim-200;
-  font-weight: bold;
-  white-space: nowrap;
+.repo-count {
+  @extend %subheader;
 }
 </style>

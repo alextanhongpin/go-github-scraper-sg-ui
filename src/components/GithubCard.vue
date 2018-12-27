@@ -1,5 +1,5 @@
 <template>
-  <a class='card' :href='githubLink' target='_blank'>
+  <a class='card' :href='githubLink' target='_blank' v-if='user'>
     <div class='front'>
       <img class='image' :src='user.avatarUrl'/>
       <div class='user-info'>
