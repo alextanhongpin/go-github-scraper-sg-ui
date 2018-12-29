@@ -20,8 +20,6 @@
     <h3>Repositories created by Year</h3>
     <LeaderboardCell v-bind="data" v-for="data in leaderboardRepositoryByYears"/>
 
-
-
     <div class='leaderboard-user'>
       <div class='leaderboard-user__header'>Top Active Users</div>
       <Break px='5'/>

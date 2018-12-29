@@ -48,7 +48,7 @@ img {
   box-sizing: content-box;
 }
 
-#app, input, textarea {
+#app, input, textarea, button {
   font-family: 'Open Sans', sans-serif;
 }
 #app {

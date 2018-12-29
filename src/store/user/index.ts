@@ -4,7 +4,8 @@ import {
   Leaderboard,
   PageInfo,
   Score,
-  User
+  User,
+  UserStat
 } from '@/models'
 import RootState from '../state'
 
@@ -22,7 +23,20 @@ export interface UserState {
   // The metadata of the user that is being search.
   searchUser: User|null,
   // The recommendations of the user that is being search.
-  searchUserRecommendations: User[]
+    searchUserRecommendations: User[],
+    searchUserLanguages: Leaderboard[]
+}
+
+interface UserName {
+  name: string;
+}
+
+interface UserRecommendation {
+  user: User;
+  login: string;
+  users: Score[];
+  recommendations: User[];
+  languages: Leaderboard[];
 }
 
 const namespaced: boolean = true
@@ -39,7 +53,8 @@ const state: UserState = {
   // Feature: Search with recommendations.
   usersWithRecommendations: new Set(),
   searchUser: null,
-  searchUserRecommendations: []
+  searchUserRecommendations: [],
+  searchUserLanguages: []
 }
 
 const actions: ActionTree<UserState, RootState> = {
@@ -81,9 +96,14 @@ const actions: ActionTree<UserState, RootState> = {
       console.log(error)
     }
   },
-  async fetchUserStats ({ commit, state, rootState }, login: string): Promise<User|null> {
+  async fetchUserStats ({ commit, state, rootState }, login: string): Promise<UserStat|null> {
     if (rootState.userCache.has(login)) {
-      return rootState.userCache.get(login)!
+      const user = rootState.userCache.get(login)!
+      const languages = rootState.userLanguagesCache.get(login)!
+      return {
+        user,
+        languages
+      }
     }
 
     try {
@@ -96,29 +116,27 @@ const actions: ActionTree<UserState, RootState> = {
         languages: response.languages
       }
       commit('setUserLanguagesCache', data, { root: true })
-      return response.user
+      return response
     } catch (error) {
       console.log(error)
     }
     return null
   },
-  async fetchRecommendations ({ commit, dispatch, state }, login: string) {
+  async fetchRecommendations ({ commit, dispatch, state, rootState }, login: string) {
     if (!state.usersWithRecommendations.has(login)) {
       return
     }
 
     try {
       const users = await UserApi.getRecommendations(login)
-      const user = await dispatch('fetchUserStats', login)
-      const promises = users.map(({ name }: { name: string }) => {
-        return dispatch('fetchUserStats', name)
+      const { user } = await dispatch('fetchUserStats', login)
+      const promises = users.map(async ({ name }: UserName) => {
+        const { user } = await dispatch('fetchUserStats', name)
+        return user
       })
       const recommendations = await Promise.all(promises)
-
-      // for (let user of users) {
-      //   const stat = await dispatch('fetchUserStats', user.name)
-      // }
-      commit('SET_RECOMMENDATIONS', { login, user, users, recommendations })
+      const languages = rootState.userLanguagesCache.get(login)
+      commit('SET_RECOMMENDATIONS', { login, user, users, recommendations, languages })
       return recommendations
     } catch (error) {
       console.log(error)
@@ -157,10 +175,11 @@ const mutations: MutationTree<UserState> = {
   SET_CURSOR (state: UserState, cursor: string) {
     state.nextCursor = cursor
   },
-  SET_RECOMMENDATIONS (state: UserState, { user, login, users, recommendations }: { user: User, login: string, users: Score[], recommendations: User[] }) {
+  SET_RECOMMENDATIONS (state: UserState, { user, languages, login, users, recommendations }: UserRecommendation) {
     state.userRecommendations.set(login, users)
     state.searchUserRecommendations = recommendations
     state.searchUser = user
+    state.searchUserLanguages = languages
   },
   SET_USERS_WITH_RECOMMENDATIONS (state: UserState, users: string[]) {
     for (let user of users) {
@@ -182,7 +201,6 @@ const getters: GetterTree<UserState, RootState> = {
   },
   usersWithRecommendations: (state: UserState) => (keyword: string): string [] => {
     return Array.from(state.usersWithRecommendations).filter(u => u.startsWith(keyword))
-    // return [...state.usersWithRecommendations]
   }
 }
 
