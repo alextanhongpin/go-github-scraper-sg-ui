@@ -72,10 +72,20 @@ export async function getUserStats (login: string): Promise<UserStat> {
 }
 
 export async function getRecommendations (login: string): Promise<Score[]> {
-  const response = await window.fetch(endpoint`/v1/recommendations/${login}`)
+  const response = await window.fetch(endpoint`/v1/recommendations/users/${login}`)
   if (!response.ok) {
     const { error } = await response.json()
     return []
+  }
+  const { data } = await response.json()
+  return data
+}
+
+export async function getUsersWithRecommendations (): Promise<string[]> {
+  const response = await window.fetch(endpoint`/v1/recommendations/users`)
+  if (!response.ok) {
+    const { error } = await response.json()
+    throw new Error(error)
   }
   const { data } = await response.json()
   return data

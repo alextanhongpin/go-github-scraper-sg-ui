@@ -7,6 +7,7 @@
         type='search'
         placeholder='Enter your Github username'
         @keyup='search'
+        v-model='keywordGhost'
       />
     </div>
     <Break/>
@@ -112,6 +113,7 @@ export default class Home extends Vue {
   @State('userCountByYears', Namespace.user) userCountByYears?: Leaderboard[];
   @State('users', Namespace.user) users?: User[];
   @State('userCount', Namespace.user) userCount?: number;
+
   @State('leaderboardRepositoryByYears', Namespace.repo) leaderboardRepositoryByYears?: Leaderboard[];
   @State('leaderboardRepository', Namespace.repo) leaderboardRepository?: Leaderboard[];
   @State('leaderboardUser', Namespace.repo) leaderboardUser?: Leaderboard[];
@@ -125,6 +127,7 @@ export default class Home extends Vue {
   @Action('fetchCompanyCount', Namespace.user) fetchCompanyCount: any;
   @Action('fetchUserCountByYears', Namespace.user) fetchUserCountByYears: any;
   @Action('fetchRecommendations', Namespace.user) fetchRecommendations: any;
+  @Action('fetchUsersWithRecommendations', Namespace.user) fetchUsersWithRecommendations: any
 
   @Action('fetchRepositoriesByYears', Namespace.repo) fetchRepositoriesByYears: any
   @Action('fetchLeaderboardRepository', Namespace.repo) fetchLeaderboardRepository: any
@@ -139,16 +142,17 @@ export default class Home extends Vue {
   throttleSearch: any;
   keyword: string = '';
   keywordGhost: string = '';
-  async mounted() {
-    await this.fetchUsers()
-    await this.fetchUserCountByYears()
+  mounted() {
+     this.fetchUsers()
+     this.fetchUserCountByYears()
 
-    await this.fetchRepositoriesByYears()
-    await this.fetchCompanyCount()
+     this.fetchRepositoriesByYears()
+     this.fetchCompanyCount()
 
-    await this.fetchLeaderboardUser()
-    await this.fetchLeaderboardRepository()
-    await this.fetchLeaderboardLanguage()
+     this.fetchLeaderboardUser()
+     this.fetchLeaderboardRepository()
+     this.fetchLeaderboardLanguage()
+     this.fetchUsersWithRecommendations()
     // await this.fetchRecommendations('alextanhongpin')
   }
   async scroll (scrollEnd: boolean) {

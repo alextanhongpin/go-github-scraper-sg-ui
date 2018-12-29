@@ -12,7 +12,9 @@ export interface UserState {
   userCount: number,
   prevCursor: string,
   nextCursor: string,
-    userRecommendations: Map<string, Score[]>
+  userRecommendations: Map<string, Score[]>,
+  usersWithRecommendations: Set<string>
+  // usersWithRecommendations: string[]
 }
 
 const namespaced: boolean = true
@@ -25,7 +27,8 @@ const state: UserState = {
   userCount: 0,
   prevCursor: '',
   nextCursor: '',
-  userRecommendations: new Map()
+  userRecommendations: new Map(),
+  usersWithRecommendations: new Set()
 }
 
 const actions: ActionTree<UserState, RootState> = {
@@ -34,7 +37,6 @@ const actions: ActionTree<UserState, RootState> = {
   },
   async fetchUsers ({ state, commit }, cursor?: string) {
     if (state.prevCursor === cursor) {
-      console.log('already fetching')
       return
     }
     commit('UPDATE_OLD_CURSOR', cursor)
@@ -68,7 +70,11 @@ const actions: ActionTree<UserState, RootState> = {
       console.log(error)
     }
   },
-  async fetchUserStats ({ commit }, login: string) {
+  async fetchUserStats ({ commit, state, rootState }, login: string) {
+    if (rootState.userCache.has(login)) {
+      return
+    }
+
     try {
       const response = await UserApi.getUserStats(login)
 
@@ -83,14 +89,26 @@ const actions: ActionTree<UserState, RootState> = {
       console.log(error)
     }
   },
-  async fetchRecommendations ({ commit, dispatch }, login: string) {
+  async fetchRecommendations ({ commit, dispatch, state }, login: string) {
+    if (!state.usersWithRecommendations.has(login)) {
+      return
+    }
+
     try {
       const users = await UserApi.getRecommendations(login)
-      await dispatch('fetchUserStats', login)
+      dispatch('fetchUserStats', login)
       for (let user of users) {
-        await dispatch('fetchUserStats', user.name)
+        dispatch('fetchUserStats', user.name)
       }
       commit('SET_RECOMMENDATIONS', { login, users })
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async fetchUsersWithRecommendations ({ commit }) {
+    try {
+      const users = await UserApi.getUsersWithRecommendations()
+      commit('SET_USERS_WITH_RECOMMENDATIONS', users)
     } catch (error) {
       console.log(error)
     }
@@ -122,6 +140,12 @@ const mutations: MutationTree<UserState> = {
   },
   SET_RECOMMENDATIONS (state: UserState, { login, users }: { login: string, users: Score[] }) {
     state.userRecommendations.set(login, users)
+  },
+  SET_USERS_WITH_RECOMMENDATIONS (state: UserState, users: string[]) {
+    for (let user of users) {
+      // Lowercase makes searching easier.
+      state.usersWithRecommendations.add(user.toLowerCase())
+    }
   }
   // fetchUserStatsSuccess (state: UserState, stat: UserStat) {
   //   state.user
@@ -133,6 +157,9 @@ const getters: GetterTree<UserState, RootState> = {
     return state.name
   },
   recommendations: (state: UserState) => (login: string): Score[] => {
+    if (!state.usersWithRecommendations.has(login)) {
+      return []
+    }
     return state.userRecommendations.get(login) || []
   }
 }
