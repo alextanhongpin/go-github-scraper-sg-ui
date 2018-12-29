@@ -1,6 +1,11 @@
 import { GetterTree, MutationTree, ActionTree, Module } from 'vuex'
 import { UserApi } from '@/apis'
-import { Score, Leaderboard, User, PageInfo } from '@/models'
+import {
+  Leaderboard,
+  PageInfo,
+  Score,
+  User
+} from '@/models'
 import RootState from '../state'
 
 export interface UserState {
@@ -13,8 +18,11 @@ export interface UserState {
   prevCursor: string,
   nextCursor: string,
   userRecommendations: Map<string, Score[]>,
-  usersWithRecommendations: Set<string>
-  // usersWithRecommendations: string[]
+  usersWithRecommendations: Set<string>,
+  // The metadata of the user that is being search.
+  searchUser: User|null,
+  // The recommendations of the user that is being search.
+  searchUserRecommendations: User[]
 }
 
 const namespaced: boolean = true
@@ -28,7 +36,10 @@ const state: UserState = {
   prevCursor: '',
   nextCursor: '',
   userRecommendations: new Map(),
-  usersWithRecommendations: new Set()
+  // Feature: Search with recommendations.
+  usersWithRecommendations: new Set(),
+  searchUser: null,
+  searchUserRecommendations: []
 }
 
 const actions: ActionTree<UserState, RootState> = {
@@ -70,9 +81,9 @@ const actions: ActionTree<UserState, RootState> = {
       console.log(error)
     }
   },
-  async fetchUserStats ({ commit, state, rootState }, login: string) {
+  async fetchUserStats ({ commit, state, rootState }, login: string): Promise<User|null> {
     if (rootState.userCache.has(login)) {
-      return
+      return rootState.userCache.get(login)!
     }
 
     try {
@@ -85,9 +96,11 @@ const actions: ActionTree<UserState, RootState> = {
         languages: response.languages
       }
       commit('setUserLanguagesCache', data, { root: true })
+      return response.user
     } catch (error) {
       console.log(error)
     }
+    return null
   },
   async fetchRecommendations ({ commit, dispatch, state }, login: string) {
     if (!state.usersWithRecommendations.has(login)) {
@@ -96,11 +109,17 @@ const actions: ActionTree<UserState, RootState> = {
 
     try {
       const users = await UserApi.getRecommendations(login)
-      dispatch('fetchUserStats', login)
-      for (let user of users) {
-        dispatch('fetchUserStats', user.name)
-      }
-      commit('SET_RECOMMENDATIONS', { login, users })
+      const user = await dispatch('fetchUserStats', login)
+      const promises = users.map(({ name }: { name: string }) => {
+        return dispatch('fetchUserStats', name)
+      })
+      const recommendations = await Promise.all(promises)
+
+      // for (let user of users) {
+      //   const stat = await dispatch('fetchUserStats', user.name)
+      // }
+      commit('SET_RECOMMENDATIONS', { login, user, users, recommendations })
+      return recommendations
     } catch (error) {
       console.log(error)
     }
@@ -138,8 +157,10 @@ const mutations: MutationTree<UserState> = {
   SET_CURSOR (state: UserState, cursor: string) {
     state.nextCursor = cursor
   },
-  SET_RECOMMENDATIONS (state: UserState, { login, users }: { login: string, users: Score[] }) {
+  SET_RECOMMENDATIONS (state: UserState, { user, login, users, recommendations }: { user: User, login: string, users: Score[], recommendations: User[] }) {
     state.userRecommendations.set(login, users)
+    state.searchUserRecommendations = recommendations
+    state.searchUser = user
   },
   SET_USERS_WITH_RECOMMENDATIONS (state: UserState, users: string[]) {
     for (let user of users) {
@@ -156,11 +177,12 @@ const getters: GetterTree<UserState, RootState> = {
   getName (state: UserState): string {
     return state.name
   },
-  recommendations: (state: UserState) => (login: string): Score[] => {
-    if (!state.usersWithRecommendations.has(login)) {
-      return []
-    }
-    return state.userRecommendations.get(login) || []
+  recommendations (state: UserState, _, rootState: RootState): User[] {
+    return state.searchUserRecommendations
+  },
+  usersWithRecommendations: (state: UserState) => (keyword: string): string [] => {
+    return Array.from(state.usersWithRecommendations).filter(u => u.startsWith(keyword))
+    // return [...state.usersWithRecommendations]
   }
 }
 
