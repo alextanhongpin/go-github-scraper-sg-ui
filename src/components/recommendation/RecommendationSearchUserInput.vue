@@ -26,13 +26,19 @@ import { throttle } from '@/helpers/throttle'
     SearchUserInput
   }
 })
-export default class SearchUserInputWithDropdown extends Vue {
+export default class RecommendationSearchUserInput extends Vue {
   private keyword: string = '';
 
+  @Action('fetchUsersWithRecommendations', Namespace.user) fetchUsersWithRecommendations: any
   @Action('fetchRecommendations', Namespace.user) fetchRecommendations: any;
   @Getter('usersWithRecommendations', Namespace.user) usersWithRecommendations?: string[];
 
   @State('searchUser', Namespace.user) user?: User;
+
+  // Lifecycles.
+  mounted () {
+    this.fetchUsersWithRecommendations()
+  }
 
   // Getters.
   get showDropdown (): boolean {

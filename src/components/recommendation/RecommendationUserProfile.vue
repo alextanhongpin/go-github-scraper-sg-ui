@@ -15,7 +15,7 @@ import {
 // HINT: This container is purely for setting the data - it's similar like
 // a react container.
 @Component
-export default class UserProfileRecommendation extends Vue {
+export default class RecommendationUserProfile extends Vue {
   @State('searchUser', Namespace.user) user?: User;
 }
 </script>

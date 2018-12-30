@@ -53,7 +53,7 @@ import GridCard from '@/components/GridCard.vue'
 import Carousel from '@/components/Carousel.vue'
 import LeaderboardCell from '@/components/LeaderboardCell.vue'
 import LeaderboardLanguage from '@/components/LeaderboardLanguage.vue'
-import Recommendation from '@/components/Recommendation.vue'
+import Recommendation from '@/components/recommendation/Recommendation.vue'
 import LeaderboardUser from '@/components/LeaderboardUser.vue'
 import GridRow from '@/components/GridRow.vue'
 
