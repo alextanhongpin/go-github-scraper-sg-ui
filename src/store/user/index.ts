@@ -7,7 +7,9 @@ import {
   User,
   UserStat
 } from '@/models'
-import RootState from '../state'
+import { Cache } from '@/helpers/cache'
+
+import RootState from '@/store/state'
 
 export interface UserState {
   name: string
@@ -17,29 +19,12 @@ export interface UserState {
   companyCount: number,
   userCount: number,
   prevCursor: string,
-  nextCursor: string,
-  userRecommendations: Map<string, Score[]>,
-  usersWithRecommendations: Set<string>,
-  // The metadata of the user that is being search.
-  searchUser: User|null,
-  // The recommendations of the user that is being search.
-    searchUserRecommendations: User[],
-    searchUserLanguages: Leaderboard[]
+  nextCursor: string
 }
 
-interface UserName {
-  name: string;
+const ApiCache = {
+  getUserStats: Cache(UserApi.getUserStats)
 }
-
-interface UserRecommendation {
-  user: User;
-  login: string;
-  users: Score[];
-  recommendations: User[];
-  languages: Leaderboard[];
-}
-
-const namespaced: boolean = true
 
 const state: UserState = {
   name: 'hello',
@@ -48,13 +33,7 @@ const state: UserState = {
   companyCount: 0,
   userCount: 0,
   prevCursor: '',
-  nextCursor: '',
-  userRecommendations: new Map(),
-  // Feature: Search with recommendations.
-  usersWithRecommendations: new Set(),
-  searchUser: null,
-  searchUserRecommendations: [],
-  searchUserLanguages: []
+  nextCursor: ''
 }
 
 const actions: ActionTree<UserState, RootState> = {
@@ -97,17 +76,17 @@ const actions: ActionTree<UserState, RootState> = {
     }
   },
   async fetchUserStats ({ commit, state, rootState }, login: string): Promise<UserStat|null> {
-    if (rootState.userCache.has(login)) {
-      const user = rootState.userCache.get(login)!
-      const languages = rootState.userLanguagesCache.get(login)!
-      return {
-        user,
-        languages
-      }
-    }
+    // if (rootState.userCache.has(login)) {
+    //   const user = rootState.userCache.get(login)!
+    //   const languages = rootState.userLanguagesCache.get(login)!
+    //   return {
+    //     user,
+    //     languages
+    //   }
+    // }
 
     try {
-      const response = await UserApi.getUserStats(login)
+      const response = await ApiCache.getUserStats(login)
 
       // Update the root.
       commit('setUserCache', response.user, { root: true })
@@ -121,34 +100,6 @@ const actions: ActionTree<UserState, RootState> = {
       console.log(error)
     }
     return null
-  },
-  async fetchRecommendations ({ commit, dispatch, state, rootState }, login: string) {
-    if (!state.usersWithRecommendations.has(login)) {
-      return
-    }
-
-    try {
-      const users = await UserApi.getRecommendations(login)
-      const { user } = await dispatch('fetchUserStats', login)
-      const promises = users.map(async ({ name }: UserName) => {
-        const { user } = await dispatch('fetchUserStats', name)
-        return user
-      })
-      const recommendations = await Promise.all(promises)
-      const languages = rootState.userLanguagesCache.get(login)
-      commit('SET_RECOMMENDATIONS', { login, user, users, recommendations, languages })
-      return recommendations
-    } catch (error) {
-      console.log(error)
-    }
-  },
-  async fetchUsersWithRecommendations ({ commit }) {
-    try {
-      const users = await UserApi.getUsersWithRecommendations()
-      commit('SET_USERS_WITH_RECOMMENDATIONS', users)
-    } catch (error) {
-      console.log(error)
-    }
   }
 }
 
@@ -174,38 +125,17 @@ const mutations: MutationTree<UserState> = {
   },
   SET_CURSOR (state: UserState, cursor: string) {
     state.nextCursor = cursor
-  },
-  SET_RECOMMENDATIONS (state: UserState, { user, languages, login, users, recommendations }: UserRecommendation) {
-    state.userRecommendations.set(login, users)
-    state.searchUserRecommendations = recommendations
-    state.searchUser = user
-    state.searchUserLanguages = languages
-  },
-  SET_USERS_WITH_RECOMMENDATIONS (state: UserState, users: string[]) {
-    for (let user of users) {
-      // Lowercase makes searching easier.
-      state.usersWithRecommendations.add(user.toLowerCase())
-    }
   }
-  // fetchUserStatsSuccess (state: UserState, stat: UserStat) {
-  //   state.user
-  // }
 }
 
 const getters: GetterTree<UserState, RootState> = {
   getName (state: UserState): string {
     return state.name
-  },
-  recommendations (state: UserState, _, rootState: RootState): User[] {
-    return state.searchUserRecommendations
-  },
-  usersWithRecommendations: (state: UserState) => (keyword: string): string [] => {
-    return Array.from(state.usersWithRecommendations).filter(u => u.startsWith(keyword))
   }
 }
 
 const user: Module<UserState, RootState> = {
-  namespaced,
+  namespaced: true,
   state,
   actions,
   mutations,

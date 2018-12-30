@@ -19,7 +19,7 @@ import {
 } from '@/models'
 
 import {
-  Getter
+  State
 } from 'vuex-class'
 
 @Component({
@@ -29,7 +29,7 @@ import {
 })
 export default class RecommendationSimilarUsers extends Vue {
   // Getters.
-  @Getter('recommendations', Namespace.user) users?: User[];
+  @State('recommendations', Namespace.recommendation) users?: User[];
   @Prop() header!: string;
 }
 
@@ -38,7 +38,8 @@ export default class RecommendationSimilarUsers extends Vue {
 @import '@/styles/theme.scss';
 
 .header {
-  font-weight: bold;
+  font-weight: 600;
+  @extend %h4;
 }
 .list {
   display: grid;

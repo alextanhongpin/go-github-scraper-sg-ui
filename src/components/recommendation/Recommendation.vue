@@ -1,17 +1,30 @@
 <template>
-  <div class='component'>
+  <div class='recommendation'>
     <RecommendationSearchUserInput class='search-user-input-section'/>
 
     <Break px='21'/>
 
-    <div class='section'>
+    <div class='section' v-if='user'>
       <div class='aside'>
         <RecommendationUserProfile class='user-profile-section'>
           <UserProfile slot-scope='user' v-bind='user'/>
         </RecommendationUserProfile>
       </div>
       <div class='main'>
-        <RecommendationLanguages/>
+
+        <div v-for='repo in repositories'>
+          <div class='repo-name'>
+            {{repo.nameWithOwner}}
+          </div>
+          <div>
+            {{repo.description}}
+          </div>
+          {{repo.stargazers}} stargazers
+        </div>
+
+        <RecommendationLanguages
+          header='Repository Summary'
+        />
 
         <Break px='21'/>
 
@@ -33,6 +46,7 @@
 </template>
 <script lang='ts'>
 import { Component, Prop, Vue } from 'vue-property-decorator'
+import { State } from 'vuex-class'
 
 // Components.
 import Break from '@/components/Break.vue'
@@ -43,19 +57,7 @@ import RecommendationSearchUserInput from '@/components/recommendation/Recommend
 import RecommendationSimilarUsers from '@/components/recommendation/RecommendationSimilarUsers.vue'
 import RecommendationLanguages from '@/components/recommendation/RecommendationLanguages.vue'
 
-import {
-  User,
-  Namespace,
-  Leaderboard
-} from '@/models'
-
-import {
-  Action,
-  Getter,
-  State
-} from 'vuex-class'
-
-import { shortDate } from '@/helpers/date'
+import { User, Namespace, Repository } from '@/models'
 
 @Component({
   components: {
@@ -70,54 +72,14 @@ import { shortDate } from '@/helpers/date'
   }
 })
 export default class Recommendation extends Vue {
-  displayLanguageCount: number = 5;
-  displayLanguageLabel: string = 'Show All'
-
-  // States.
-  @State('githubUri') githubUri?: string;
-  @State('searchUser', Namespace.user) searchUser?: User;
-  @State('searchUserLanguages', Namespace.user) searchUserLanguages?: Leaderboard[];
-
-  // Methods.
-
-  githubLink (user: string): string {
-    return [this.githubUri, user].join('/')
-  }
-
-  formatDate (dateStr: string): string {
-    return shortDate(dateStr)
-  }
-
-  formatPercentage (count: number): string {
-    return (count / this.totalRepositoryCount * 100).toFixed(1)
-  }
-
-  toggleLanguage () {
-    const totalCount = this.searchUserLanguages.length
-    const isPartial = this.displayLanguageCount === this.maxShowCount
-    this.displayLanguageCount = isPartial
-      ? totalCount
-      : this.maxShowCount
-    this.displayLanguageLabel = isPartial
-      ? 'Show Less'
-      : 'Show All'
-  }
-
-  // Getters.
-  get totalRepositoryCount (): number {
-    return this.searchUserLanguages.reduce((acc: number, item: Leaderboard) => {
-      return acc + item.count
-    }, 0)
-  }
-
-  get maxShowCount (): number {
-    return 5
-  }
+  @State('user', Namespace.recommendation) user?: User;
+  @State('repositories', Namespace.recommendation) repositories?: Repository[];
 }
-
 </script>
 <style lang='scss' scoped>
 @import '@/styles/theme.scss';
+.recommendation {
+}
 
 .search-user-input-section {
   margin: 0 $dim-300;
@@ -127,7 +89,7 @@ export default class Recommendation extends Vue {
 .section {
   margin: 0 $dim-300;
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 240px 1fr;
   grid-column-gap: $dim-300;
 }
 
@@ -145,6 +107,10 @@ export default class Recommendation extends Vue {
     border-bottom: 1px solid #EEEEEE;
     text-align: center;
   }
+}
+
+.repo-name {
+  font-weight: 600;
 }
 </style>
 

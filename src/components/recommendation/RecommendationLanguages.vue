@@ -1,24 +1,24 @@
 <template>
   <div class='component' v-if='user'>
-    <div class='languages-header'>Repository</div>
+    <div class='languages-header'>{{header}}</div>
     <Break/>
     <div class='languages-subheader'>
-      <Counter>{{userLanguages.length}}</Counter> languages
+      <Counter>{{languages.length}}</Counter> languages
       &nbsp;&nbsp;
       <Counter>{{user.repositories}}</Counter> repositories
     </div>
     <Break/>
     <div class='languages-body'>
       <LanguageCell
-      v-for='item in userLanguages.slice(0,displayLanguageCount)'
-      :label='item.name'
-      class='language'
+        v-for='item in filteredLanguages'
+        :label='item.name'
+        class='language'
       >
-      ({{formatPercentage(item.count)}}%)
+        ({{formatPercentage(item.count)}}%)
 
-      <span class='language-count'>
-        {{item.count}} {{ item.count === 1 ? 'repo' : 'repos'}}
-      </span>
+        <span class='language-count'>
+          {{item.count}} {{ repoLabel(item.count) }}
+        </span>
 
       </LanguageCell>
     </div>
@@ -26,7 +26,7 @@
     <div class='language-footer'>
       <button
         class='language-button-toggle'
-        v-if='userLanguages.length > maxShowCount'
+        v-if='hasMoreThanMax'
         @click='toggleLanguage'
         >
         {{displayLanguageLabel}}
@@ -35,6 +35,7 @@
   </div>
 </template>
 <script lang='ts'>
+import { Action, Getter, State } from 'vuex-class'
 import { Component, Prop, Vue } from 'vue-property-decorator'
 
 // Components.
@@ -48,9 +49,6 @@ import {
   Leaderboard
 } from '@/models'
 
-import { Action, Getter, State } from 'vuex-class'
-
-
 @Component({
   components: {
     Break,
@@ -61,10 +59,11 @@ import { Action, Getter, State } from 'vuex-class'
 export default class RecommendationLanguages extends Vue {
   displayLanguageCount: number = 5;
   displayLanguageLabel: string = 'Show All'
+  @Prop() header!: string;
 
   // States.
-  @State('searchUser', Namespace.user) user?: User;
-  @State('searchUserLanguages', Namespace.user) userLanguages?: Leaderboard[];
+  @State('user', Namespace.recommendation) user?: User;
+  @State('languages', Namespace.recommendation) languages?: Leaderboard[];
 
   // Methods.
   formatPercentage (count: number): string {
@@ -72,7 +71,7 @@ export default class RecommendationLanguages extends Vue {
   }
 
   toggleLanguage () {
-    const totalCount = this.userLanguages.length
+    const totalCount = this.languages.length
     const isPartial = this.displayLanguageCount === this.maxShowCount
     this.displayLanguageCount = isPartial
       ? totalCount
@@ -82,15 +81,29 @@ export default class RecommendationLanguages extends Vue {
       : 'Show All'
   }
 
+  repoLabel (count: number): string {
+    return count === 1
+      ? 'repo'
+      : 'repos'
+  }
+
   // Getters.
   get totalRepositoryCount (): number {
-    return this.userLanguages.reduce((acc: number, item: Leaderboard) => {
+    return this.languages.reduce((acc: number, item: Leaderboard) => {
       return acc + item.count
     }, 0)
   }
 
   get maxShowCount (): number {
     return 5
+  }
+
+  get filteredLanguages (): Leaderboard[] {
+    return this.languages.slice(0, this.displayLanguageCount)
+  }
+
+  get hasMoreThanMax (): boolean {
+    return this.languages.length > this.maxShowCount
   }
 }
 

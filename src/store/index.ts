@@ -6,6 +6,7 @@ import RootState from './state'
 
 // Modules.
 import user from './user'
+import recommendation from './recommendation'
 import repo from './repo'
 import { User, Leaderboard } from '@/models'
 
@@ -30,7 +31,8 @@ const store: StoreOptions<RootState> = {
   },
   modules: {
     user,
-    repo
+    repo,
+    recommendation
   },
   mutations: {
     setUserCache (state: RootState, user: User) {

@@ -1,23 +1,22 @@
 <template functional>
-  <div class='component'>
+  <div class='dropdown'>
     <div
       class='item'
       v-for='item in props.items'
       :key='item'
     >
-      {{item}}
+      <slot :item='item'>{{item}}</slot>
     </div>
   </div>
 </template>
 <style lang='scss' scoped>
 @import '@/styles/theme.scss';
 
-.component {
+.dropdown {
   width: 100%;
   box-shadow: 0 5px 15px rgba(black, 0.2);
   padding: 0 $dim-100;
   border-radius: $dim-100;
-  padding: 5px 0;
   text-align: left;
 
   position: absolute;
@@ -34,8 +33,8 @@
 
 .item {
   border-bottom: 1px solid #EEEEEE;
-  height: $dim-500;
-  line-height: $dim-500;
+  height: $dim-600;
+  line-height: $dim-600;
   padding: 0 $dim-100;
   width: 100%;
 }

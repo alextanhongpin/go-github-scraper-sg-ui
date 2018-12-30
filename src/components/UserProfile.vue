@@ -10,11 +10,11 @@
         :href='githubLink(login)'
         target='_blank'
         >{{login}}</a>
-      <div class='user-name'>({{name}})</div>
+      <div class='user-name' v-if='name'>({{name}})</div>
       <div class='user-created-at'>Member since {{formatDate(createdAt)}}</div>
       <Break/>
 
-      <div class='user-bio'>{{bio}}</div>
+      <div class='user-bio' v-if='bio'>{{bio}}</div>
       <Break/>
 
       <div class='counters'>

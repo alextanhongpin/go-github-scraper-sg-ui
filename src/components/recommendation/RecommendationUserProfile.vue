@@ -16,6 +16,6 @@ import {
 // a react container.
 @Component
 export default class RecommendationUserProfile extends Vue {
-  @State('searchUser', Namespace.user) user?: User;
+  @State('user', Namespace.recommendation) user?: User;
 }
 </script>

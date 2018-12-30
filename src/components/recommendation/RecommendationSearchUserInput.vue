@@ -29,15 +29,17 @@ import { throttle } from '@/helpers/throttle'
 export default class RecommendationSearchUserInput extends Vue {
   private keyword: string = '';
 
-  @Action('fetchUsersWithRecommendations', Namespace.user) fetchUsersWithRecommendations: any
-  @Action('fetchRecommendations', Namespace.user) fetchRecommendations: any;
-  @Getter('usersWithRecommendations', Namespace.user) usersWithRecommendations?: string[];
+  // Actions.
+  @Action('fetchUsersWithRecommendations', Namespace.recommendation) fetchUsersWithRecommendations: any
+  @Action('fetchRecommendationsForUser', Namespace.recommendation) fetchRecommendations: any;
 
-  @State('searchUser', Namespace.user) user?: User;
+  // States.
+  @State('usersWithRecommendations', Namespace.recommendation) usersWithRecommendations?: string[];
+  @State('user', Namespace.recommendation) user?: User;
 
   // Lifecycles.
-  mounted () {
-    this.fetchUsersWithRecommendations()
+  async mounted () {
+    await this.fetchUsersWithRecommendations()
   }
 
   // Getters.
@@ -47,8 +49,9 @@ export default class RecommendationSearchUserInput extends Vue {
     const hasMatches = keyword.toLowerCase() === (user && user.login.toLowerCase())
     return hasKeyword && !hasMatches
   }
+
   get suggestions (): string[] {
-    return this.usersWithRecommendations(this.keyword)
+    return this.usersWithRecommendations.filter(name => name.toLowerCase().startsWith(this.keyword.toLowerCase()))
   }
 
   // Methods.

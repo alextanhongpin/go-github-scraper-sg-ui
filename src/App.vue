@@ -10,7 +10,9 @@
     <!--   <router-link to="/">Home</router-link> | -->
     <!--   <router-link to="/about">About</router-link> -->
     <!-- </div> -->
-    <router-view/>
+    <main class='app-main'>
+      <router-view/>
+    </main>
   </div>
 </template>
 
@@ -74,4 +76,10 @@ header {
 }
 
 .brand-app { }
+
+.app-main {
+  max-width: 1140px;
+  width: 100%;
+  margin: auto;
+}
 </style>
