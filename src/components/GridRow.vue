@@ -10,7 +10,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 export default class GridRow extends Vue {
 }
 </script>
-<style scoped lang='scss'>
+<style lang='scss' scoped>
 .grid {
   display: grid;
   grid-template-columns: 1fr;

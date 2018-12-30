@@ -10,7 +10,7 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class GridCard extends Vue {
 }
 </script>
-<style scoped lang='scss'>
+<style lang='scss' scoped>
 .grid-card {
   display: grid;
   grid-template-columns: repeat(auto-fill, 240px);

@@ -58,7 +58,7 @@ export default class LeaderboardLanguage extends Vue {
   }
 }
 </script>
-<style scoped lang='scss'>
+<style lang='scss' scoped>
 @import '@/styles/theme.scss';
 .leaderboard-language {
   padding: $dim-300;

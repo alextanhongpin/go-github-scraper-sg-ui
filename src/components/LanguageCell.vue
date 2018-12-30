@@ -18,7 +18,7 @@ export default class LanguageCell extends Vue {
   }
 }
 </script>
-<style scoped lang='scss'>
+<style lang='scss' scoped>
 @import '@/styles/theme.scss';
 
 .icon {

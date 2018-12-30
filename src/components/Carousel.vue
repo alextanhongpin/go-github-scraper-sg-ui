@@ -27,7 +27,7 @@ export default class Carousel extends Vue {
   }
 }
 </script>
-<style scoped lang='scss'>
+<style lang='scss' scoped>
 .carousel-container {
   position: relative;
 }

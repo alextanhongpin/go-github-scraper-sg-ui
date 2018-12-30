@@ -2,25 +2,16 @@
   <div class=''>
     <Break px='21'/>
 
-    <div class='search-wrapper'>
-      <input
-      class='search'
-      type='search'
-      placeholder='Enter your Github username'
-      @keyup='search'
-      />
-      <div class='suggestions' v-if='showSearchSuggestions'>
-        <div
-          v-for='user in usersWithRecommendations(keyword)'
-          class='suggestion'
-        >{{user}}</div>
-      </div>
-    </div>
+    <SearchUserInputWithDropdown/>
 
     <Break/>
 
+    <UserProfileRecommendation class='user-profile-section'>
+      <UserProfile slot-scope='user' v-bind='user'/>
+    </UserProfileRecommendation>
+
     <div class='info-section'>
-    <UserProfile :user='searchUser' class='user-profile'/>
+
 
     <div class='recommend-section' v-if='searchUser'>
 
@@ -90,8 +81,9 @@ import Counter from '@/components/Counter.vue'
 import LeaderboardUser from '@/components/LeaderboardUser.vue'
 import LanguageCell from '@/components/LanguageCell.vue'
 import UserProfile from '@/components/UserProfile.vue'
+import UserProfileRecommendation from '@/components/UserProfileRecommendation.vue'
+import SearchUserInputWithDropdown from '@/components/SearchUserInputWithDropdown.vue'
 
-import { throttle } from '@/helpers/throttle'
 import {
   User,
   Namespace,
@@ -112,11 +104,12 @@ import { shortDate } from '@/helpers/date'
     Counter,
     LeaderboardUser,
     LanguageCell,
-    UserProfile
+    UserProfile,
+    UserProfileRecommendation,
+    SearchUserInputWithDropdown
   }
 })
 export default class Recommendation extends Vue {
-  keyword: string = '';
   displayLanguageCount: number = 5;
   displayLanguageLabel: string = 'Show All'
 
@@ -139,17 +132,6 @@ export default class Recommendation extends Vue {
   }
 
   // Methods.
-  search (evt: EventTarget) {
-    this.keyword = evt.target.value
-    if (this.keyword.trim().length) {
-      this.throttleFetch(this.keyword)
-    }
-  }
-
-  @throttle(250)
-  throttleFetch(keyword: string) {
-      this.fetchRecommendations(keyword)
-  }
 
   githubLink (user: string): string {
     return [this.githubUri, user].join('/')
@@ -184,17 +166,18 @@ export default class Recommendation extends Vue {
   get maxShowCount (): number {
     return 5
   }
-
-  get showSearchSuggestions (): boolean {
-    const hasKeyword = this.keyword.trim().length > 0
-    const hasMatches = this.keyword.toLowerCase() === (this.searchUser && this.searchUser.login.toLowerCase())
-    return hasKeyword && !hasMatches
-  }
 }
 
 </script>
-<style scoped lang='scss'>
+<style lang='scss' scoped>
 @import '@/styles/theme.scss';
+
+
+$user-profile-section-width: 280px;
+.user-profile-section {
+  margin: $dim-300;
+  max-width: $user-profile-section-width;
+}
 
 .recommend-section {
   display: grid;
@@ -249,60 +232,6 @@ export default class Recommendation extends Vue {
   display: grid;
   grid-template-columns: minmax(160px, max-content) repeat(auto-fill, 200px);
   grid-auto-flow: row;
-}
-
-
-$search-dim: $dim-600;
-$search-half-dim: #{$search-dim/2};
-
-.search-wrapper {
-  text-align: center;
-  position: relative;
-  max-width: 320px;
-  width: 100%;
-  margin: 0 $dim-300;
-
-  .search {
-    height: $search-dim;
-    border: none;
-    background: $color-gray;
-    border-radius: $search-half-dim;
-    padding: 0 $search-half-dim;
-    @extend %h5;
-    width: 100%;
-  }
-}
-
-.suggestions {
-  display: grid;
-  grid-auto-flows: column;
-  text-align: left;
-
-  width: 100%;
-  box-shadow: 0 5px 15px rgba(black, 0.2);
-  padding: 0 $dim-100;
-  border-radius: $dim-100;
-
-  grid-row-gap: 5px;
-  max-height: #{$dim-500 * 10};
-  overflow: scroll;
-  background: white;
-  z-index: 1000;
-
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  .suggestion {
-    height: $dim-500;
-    line-height: $dim-500;
-    border-bottom: 1px solid #EEEEEE;
-  }
-}
-
-.user-profile {
-  margin: $dim-300;
-  max-width: 240px;
 }
 
 .languages {

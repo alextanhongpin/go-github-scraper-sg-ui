@@ -19,8 +19,6 @@
         <div>
           {{user.location}}
         </div>
-
-
       </h6>
     </div>
 
@@ -113,7 +111,7 @@ export default class LeaderboardUser extends Vue {
   }
 }
 </script>
-<style scoped lang='scss'>
+<style lang='scss' scoped>
 @import '@/styles/theme.scss';
 
 .container {

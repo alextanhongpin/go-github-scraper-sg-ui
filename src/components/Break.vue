@@ -9,7 +9,8 @@ export default class Break extends Vue {
   @Prop() private px?: number;
 }
 </script>
-<style scoped lang='scss'>
+<style lang='scss' scoped>
+// The scoped must be at the end.
 .break {
   display: block;
   // For debugging.

@@ -1,30 +1,30 @@
 <template>
   <div class='user-profile'>
     <div class='user-grid-aside'>
-      <img class='user-photo' :src='user.avatarUrl'/>
+      <img class='user-photo' :src='avatarUrl'/>
     </div>
 
     <div class='user-grid-main'>
       <a
         class='user-login'
-        :href='githubLink(user.login)'
+        :href='githubLink(login)'
         target='_blank'
-        >{{user.login}}</a>
-      <div class='user-name'>({{user.name}})</div>
-      <div class='user-created-at'>Member since {{formatDate(user.createdAt)}}</div>
+        >{{login}}</a>
+      <div class='user-name'>({{name}})</div>
+      <div class='user-created-at'>Member since {{formatDate(createdAt)}}</div>
       <Break/>
 
-      <div class='user-bio'>{{user.bio}}</div>
+      <div class='user-bio'>{{bio}}</div>
       <Break/>
 
       <div class='counters'>
         <div>
-          <Counter>{{user.followers}}</Counter>
+          <Counter>{{followers}}</Counter>
           followers
         </div>
 
         <div>
-          <Counter>{{user.following}}</Counter>
+          <Counter>{{following}}</Counter>
           following
         </div>
       </div>
@@ -39,6 +39,7 @@ import {
 import Break from '@/components/Break.vue'
 import Counter from '@/components/Counter.vue'
 import { shortDate } from '@/helpers/date'
+import { State } from 'vuex-class'
 
 @Component({
   components: {
@@ -47,7 +48,15 @@ import { shortDate } from '@/helpers/date'
   }
 })
 export default class UserProfile extends Vue {
-  @Prop() user?: User;
+  @Prop() private avatarUrl!: string;
+  @Prop() private login!: string;
+  @Prop() private name!: string;
+  @Prop() private createdAt!: string;
+  @Prop() private bio!: string;
+  @Prop() private followers!: number;
+  @Prop() private following!: number;
+
+  @State('githubUri') githubUri?: string;
 
   githubLink (user: string): string {
     return [this.githubUri, user].join('/')
@@ -58,7 +67,7 @@ export default class UserProfile extends Vue {
   }
 }
 </script>
-<style scoped lang='scss'>
+<style lang='scss' scoped>
 @import '@/styles/theme.scss';
 .user-profile {
   .user-photo {
