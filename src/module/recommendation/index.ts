@@ -10,9 +10,9 @@ import {
   getRecommendations,
   getUsersWithRecommendations,
   getRepositoriesByUser
-} from '@/store/recommendation/api'
+} from '@/module/recommendation/api'
 import { Cache } from '@/helpers/cache'
-import RootState from '@/store/state'
+import RootState from '@/module/state'
 
 // Api with cache layer for getters. Can decorate with retries too.
 const ApiCache = {

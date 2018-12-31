@@ -9,3 +9,7 @@ export const repo = {
 export const recommendation = {
   namespace: 'recommendation'
 }
+
+export const language = {
+  namespace: 'language'
+}

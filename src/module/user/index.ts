@@ -1,5 +1,5 @@
 import { GetterTree, MutationTree, ActionTree, Module } from 'vuex'
-import * as UserApi from '@/store/user/api'
+import * as UserApi from '@/module/user/api'
 import {
   Leaderboard,
   PageInfo,
@@ -8,7 +8,7 @@ import {
   UserStat
 } from '@/models'
 import { Cache } from '@/helpers/cache'
-import RootState from '@/store/state'
+import RootState from '@/module/state'
 
 export interface UserState {
   users: User[]

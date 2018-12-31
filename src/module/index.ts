@@ -8,6 +8,8 @@ import RootState from './state'
 import user from './user'
 import recommendation from './recommendation'
 import repo from './repo'
+import language from './language'
+
 import { User, Leaderboard } from '@/models'
 
 Vue.use(Vuex)
@@ -24,7 +26,8 @@ const store: StoreOptions<RootState> = {
   modules: {
     user,
     repo,
-    recommendation
+    recommendation,
+    language
   },
   getters,
   mutations: {},

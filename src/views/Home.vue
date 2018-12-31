@@ -9,6 +9,8 @@
       <GithubCard slot="carousel" :user="user" v-for="user in users"/>
     </Carousel>
 
+    <LanguageSection/>
+
     <h3>User created by Year</h3>
     <div>Total Users Indexed: {{userCount}}</div>
     <LeaderboardCell v-bind="user" v-for="user in userCountByYears"/>
@@ -57,6 +59,7 @@ import LeaderboardLanguage from '@/components/LeaderboardLanguage.vue'
 import Recommendation from '@/components/recommendation/Recommendation.vue'
 import LeaderboardUser from '@/components/LeaderboardUser.vue'
 import GridRow from '@/components/GridRow.vue'
+import LanguageSection from '@/components/language/LanguageSection.vue'
 
 import { Score, Leaderboard, User } from '@/models'
 import { Action, Getter, State } from 'vuex-class'
@@ -72,7 +75,8 @@ import { Namespace } from '@/models'
     LeaderboardCell,
     LeaderboardLanguage,
     LeaderboardUser,
-    Recommendation
+    Recommendation,
+    LanguageSection
   }
 })
 export default class Home extends Vue {

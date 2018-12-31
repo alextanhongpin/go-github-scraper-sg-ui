@@ -4,9 +4,9 @@ import {
   Module,
   MutationTree
 } from 'vuex'
-import * as RepoApi from '@/store/repo/api'
+import * as RepoApi from '@/module/repo/api'
 
-import RootState from '@/store/state'
+import RootState from '@/module/state'
 import { Leaderboard, LeaderboardUserWithStats, User } from '@/models'
 
 export interface RepoState {
