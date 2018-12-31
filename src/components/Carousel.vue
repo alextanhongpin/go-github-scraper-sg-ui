@@ -28,9 +28,32 @@ export default class Carousel extends Vue {
 }
 </script>
 <style lang='scss' scoped>
+@import '@/styles/theme.scss';
 .carousel-container {
   position: relative;
 }
+
+.carousel-container:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: $dim-100;
+  background: linear-gradient(90deg, white, rgba(255, 255, 255, 0.2));
+  z-index: 1000;
+}
+.carousel-container:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: $dim-100;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), white);
+  z-index: 1000;
+}
+
 .carousel {
   display: grid;
   max-width: 100vw;

@@ -22,17 +22,17 @@
 
         <Break px='21'/>
 
-        <RecommendationSimilarUsers
-          header='Similar Users'
-        >
-          <UserList
-            slot-scope='user'
-            :key='user.login'
-            :login='user.login'
-            :name='user.name'
-            :avatarUrl='user.avatarUrl'
-          />
-        </RecommendationSimilarUsers>
+        <!-- <RecommendationSimilarUsers -->
+        <!--   header='Similar Users' -->
+        <!-- > -->
+        <!--   <UserList -->
+        <!--     slot-scope='user' -->
+        <!--     :key='user.login' -->
+        <!--     :login='user.login' -->
+        <!--     :name='user.name' -->
+        <!--     :avatarUrl='user.avatarUrl' -->
+        <!--   /> -->
+        <!-- </RecommendationSimilarUsers> -->
 
       </div>
     </div>

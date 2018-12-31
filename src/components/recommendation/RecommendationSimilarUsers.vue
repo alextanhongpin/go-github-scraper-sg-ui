@@ -3,7 +3,11 @@
     <div class='header'>{{header}}</div>
     <Break/>
     <div class='list'>
-    <slot class='list' v-for='user in users' v-bind='user'></slot>
+    <!-- <slot class='list' v-for='user in users' v-bind='user'></slot> -->
+
+      <Carousel>
+        <GithubCard slot="carousel" :user="user" v-for="user in users"/>
+      </Carousel>
     </div>
   </div>
 </template>
@@ -12,6 +16,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 
 // Components.
 import Break from '@/components/Break.vue'
+import Carousel from '@/components/Carousel.vue'
+import GithubCard from '@/components/GithubCard.vue'
 
 import {
   User,
@@ -24,7 +30,9 @@ import {
 
 @Component({
   components: {
-    Break
+    Break,
+    Carousel,
+    GithubCard
   }
 })
 export default class RecommendationSimilarUsers extends Vue {
@@ -41,7 +49,7 @@ export default class RecommendationSimilarUsers extends Vue {
   font-weight: 600;
   @extend %h4;
 }
-.list {
+.list-x {
   display: grid;
   // grid-template-columns: minmax(160px, max-content) repeat(auto-fill, 200px);
   grid-template-columns: repeat(auto-fill, 200px);

@@ -4,6 +4,7 @@
 
     <Recommendation/>
 
+    <div>Similar Users</div>
     <Carousel v-on:scroll-horizontal='scroll'>
       <GithubCard slot="carousel" :user="user" v-for="user in users"/>
     </Carousel>
@@ -80,7 +81,8 @@ export default class Home extends Vue {
   @State('nextCursor', Namespace.user) nextCursor?: string;
   @State('companyCount', Namespace.user) companyCount?: number;
   @State('userCountByYears', Namespace.user) userCountByYears?: Leaderboard[];
-  @State('users', Namespace.user) users?: User[];
+  // @State('users', Namespace.user) users?: User[];
+  @State('recommendations', Namespace.recommendation) users?: User[];
   @State('userCount', Namespace.user) userCount?: number;
 
   @State('leaderboardRepositoryByYears', Namespace.repo) leaderboardRepositoryByYears?: Leaderboard[];
