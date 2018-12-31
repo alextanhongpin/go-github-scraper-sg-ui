@@ -1,4 +1,4 @@
-import { Leaderboard } from './leaderboard'
+import { Leaderboard, LeaderboardUserLanguage } from './leaderboard'
 import { PageInfo } from './page-info'
 import { User } from './user'
 import { Repository } from './repository'
@@ -11,6 +11,7 @@ import * as Namespace from './namespace'
 export {
   Score,
   Leaderboard,
+  LeaderboardUserLanguage,
   PageInfo,
   User,
   Repository,

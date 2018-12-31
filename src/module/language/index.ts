@@ -5,13 +5,14 @@ import {
   Module
 } from 'vuex'
 
-import { Leaderboard } from '@/models'
+import { LeaderboardUserLanguage, User, Leaderboard } from '@/models'
 import {
   getLanguages,
   getLeaderboardUserByLanguage
 } from '@/module/language/api'
 import { Cache } from '@/helpers/cache'
 import RootState from '@/module/state'
+
 
 // Api with cache layer for getters. Can decorate with retries too.
 const ApiCache = {
@@ -23,7 +24,7 @@ export interface LanguageState {
   // Faster checking, also eliminates the lowercase search issue.
   languages: string[],
   languageSet: Set<string>,
-  users: Leaderboard[]
+  users: LeaderboardUserLanguage[]
 }
 
 const state: LanguageState = {
@@ -41,10 +42,19 @@ const actions: ActionTree<LanguageState, RootState> = {
       console.log(error)
     }
   },
-  async fetchLeaderboardUserByLanguage ({ commit }, language: string) {
+  async fetchLeaderboardUserByLanguage ({ commit, dispatch }, language: string) {
     try {
       const response = await ApiCache.getLeaderboardUserByLanguage(language)
-      commit('SET_USERS', response)
+
+      const promises = response.map(async (item: Leaderboard) => {
+        const result = await dispatch('user/fetchUserStats', item.name, { root: true })
+        return {
+          user: result.user,
+          count: item.count
+        }
+      })
+      const data = await Promise.all(promises)
+      commit('SET_USERS', data)
     } catch (error) {
       console.log(error)
     }
@@ -56,7 +66,7 @@ const mutations: MutationTree<LanguageState> = {
     state.languageSet = new Set(languages.map(str => str.toLowerCase()))
     state.languages = languages
   },
-  SET_USERS (state: LanguageState, users: Leaderboard[]) {
+  SET_USERS (state: LanguageState, users: LeaderboardUserLanguage[]) {
     state.users = users
   }
 }
