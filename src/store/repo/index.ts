@@ -4,20 +4,24 @@ import {
   Module,
   MutationTree
 } from 'vuex'
-import { RepoApi } from '@/apis'
+import * as RepoApi from '@/store/repo/api'
 
-import RootState from '../state'
-import { Leaderboard, LeaderboardUserWithStats } from '@/models'
-
-const namespaced: boolean = true
+import RootState from '@/store/state'
+import { Leaderboard, LeaderboardUserWithStats, User } from '@/models'
 
 export interface RepoState {
   leaderboardRepositoryByYears: Leaderboard[]
   leaderboardLanguage: Leaderboard[]
   leaderboardRepository: Leaderboard[]
-  leaderboardUser: Leaderboard[]
+  leaderboardUser: LeaderboardUser[]
   maxLanguageCount: number,
   totalLanguageCount: number
+}
+
+export interface LeaderboardUser {
+  user: User;
+  languages: Leaderboard[];
+  count: number;
 }
 
 // Initial state.
@@ -44,7 +48,7 @@ const actions: ActionTree<RepoState, RootState> = {
       const data = await RepoApi.getLeaderboardLanguage()
       commit('fetchLeaderboardLanguageSuccess', data)
       const maxLanguageCount = Math.max(...data.map(row => row.count))
-      commit('setMaxLanguageCount', maxLanguageCount)
+      commit('SET_MAX_LANGUAGE_COUNT', maxLanguageCount)
       const totalLanguageCount = data.reduce((acc: number, data: Leaderboard) => {
         return acc + data.count
       }, 0)
@@ -64,11 +68,12 @@ const actions: ActionTree<RepoState, RootState> = {
   async fetchLeaderboardUser ({ commit, dispatch }) {
     try {
       const data = await RepoApi.getLeaderboardUser()
-      for (let user of data) {
-        const login = user.name
-        await dispatch('user/fetchUserStats', login, { root: true })
-      }
-      commit('fetchLeaderboardUserSuccess', data)
+      const promises = data.map(async ({ name, count }) => {
+        const result = await dispatch('user/fetchUserStats', name, { root: true })
+        return { ...result, count }
+      })
+      const response = await Promise.all(promises)
+      commit('fetchLeaderboardUserSuccess', response)
     } catch (error) {
       console.log(error)
     }
@@ -82,13 +87,13 @@ const mutations: MutationTree<RepoState> = {
   fetchLeaderboardRepositorySuccess (state: RepoState, data: Leaderboard[]) {
     state.leaderboardRepository = data
   },
-  fetchLeaderboardUserSuccess (state: RepoState, data: Leaderboard[]) {
+  SET_LEADERBOARD_USER (state: RepoState, data: LeaderboardUser[]) {
     state.leaderboardUser = data
   },
   fetchLeaderboardLanguageSuccess (state: RepoState, data: Leaderboard[]) {
     state.leaderboardLanguage = data
   },
-  setMaxLanguageCount (state: RepoState, count: number) {
+  SET_MAX_LANGUAGE_COUNT (state: RepoState, count: number) {
     state.maxLanguageCount = count
   },
   SET_TOTAL_LANGUAGE_COUNT (state: RepoState, count: number) {
@@ -96,33 +101,10 @@ const mutations: MutationTree<RepoState> = {
   }
 }
 
-const getters: GetterTree<RepoState, RootState> = {
-  leaderboardUserWithStats (
-    state: RepoState,
-    getters: GetterTree<RepoState, RootState>,
-    rootState: RootState
-  ): LeaderboardUserWithStats[] {
-    let result: LeaderboardUserWithStats[] = []
-    for (let row of state.leaderboardUser) {
-      const { count, name } = row
-      const user = rootState.userCache.get(name)
-      const languages = rootState.userLanguagesCache.get(name)
-      if (user && languages) {
-        result = result.concat([
-          {
-            user,
-            languages,
-            repositoryCount: count
-          }
-        ])
-      }
-    }
-    return result
-  }
-}
+const getters: GetterTree<RepoState, RootState> = {}
 
 const repo: Module<RepoState, RootState> = {
-  namespaced,
+  namespaced: true,
   state,
   actions,
   mutations,

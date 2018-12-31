@@ -1,5 +1,5 @@
 import { GetterTree, MutationTree, ActionTree, Module } from 'vuex'
-import { UserApi } from '@/apis'
+import * as UserApi from '@/store/user/api'
 import {
   Leaderboard,
   PageInfo,
@@ -8,32 +8,28 @@ import {
   UserStat
 } from '@/models'
 import { Cache } from '@/helpers/cache'
-
 import RootState from '@/store/state'
 
 export interface UserState {
-  name: string
   users: User[]
-  pageInfo?: PageInfo
   userCountByYears: Leaderboard[]
   companyCount: number,
-  userCount: number,
-  prevCursor: string,
-  nextCursor: string
+  userCount: number
 }
 
 const ApiCache = {
   getUserStats: Cache(UserApi.getUserStats)
 }
 
+const ApiGenerator = {
+  getUsers: UserApi.getUsersGenerator()
+}
+
 const state: UserState = {
-  name: 'hello',
   users: [],
   userCountByYears: [],
   companyCount: 0,
-  userCount: 0,
-  prevCursor: '',
-  nextCursor: ''
+  userCount: 0
 }
 
 const actions: ActionTree<UserState, RootState> = {
@@ -41,20 +37,11 @@ const actions: ActionTree<UserState, RootState> = {
     commit('setName', name)
   },
   async fetchUsers ({ state, commit }, cursor?: string) {
-    if (state.prevCursor === cursor) {
-      return
-    }
-    commit('UPDATE_OLD_CURSOR', cursor)
     try {
-      const { users, pageInfo, count } = await UserApi.getUsers(cursor)
-      commit('SET_CURSOR', pageInfo.endCursor)
-      commit('fetchUsersSuccess', { users, pageInfo })
+      const { value } = await ApiGenerator.getUsers.next()
+      const { users, count } = value
+      commit('SET_USERS', users)
       commit('SET_USER_COUNT', count)
-      // HINT: Updates the root state, so that other modules can use the cached
-      // data rather than fetching them individually.
-      for (let user of users) {
-        commit('setUserCache', user, { root: true })
-      }
     } catch (error) {
       console.log(error)
     }
@@ -76,25 +63,12 @@ const actions: ActionTree<UserState, RootState> = {
     }
   },
   async fetchUserStats ({ commit, state, rootState }, login: string): Promise<UserStat|null> {
-    // if (rootState.userCache.has(login)) {
-    //   const user = rootState.userCache.get(login)!
-    //   const languages = rootState.userLanguagesCache.get(login)!
-    //   return {
-    //     user,
-    //     languages
-    //   }
-    // }
-
     try {
       const response = await ApiCache.getUserStats(login)
-
-      // Update the root.
-      commit('setUserCache', response.user, { root: true })
       const data = {
         login: response.user.login,
         languages: response.languages
       }
-      commit('setUserLanguagesCache', data, { root: true })
       return response
     } catch (error) {
       console.log(error)
@@ -104,34 +78,21 @@ const actions: ActionTree<UserState, RootState> = {
 }
 
 const mutations: MutationTree<UserState> = {
-  setName (state: UserState, name: string) {
-    state.name = name
-  },
   fetchUserCountByYearsSuccess (state: UserState, data: Leaderboard[]) {
     state.userCountByYears = data
   },
   fetchCompanyCountSuccess (state: UserState, count: number) {
     state.companyCount = count
   },
-  fetchUsersSuccess (state: UserState, { pageInfo, users }) {
+  SET_USERS (state: UserState, users: User[]) {
     state.users = state.users.concat(users)
-    state.pageInfo = pageInfo
   },
   SET_USER_COUNT (state: UserState, count: number) {
     state.userCount = count
-  },
-  UPDATE_OLD_CURSOR (state: UserState, cursor: string) {
-    state.prevCursor = state.nextCursor
-  },
-  SET_CURSOR (state: UserState, cursor: string) {
-    state.nextCursor = cursor
   }
 }
 
 const getters: GetterTree<UserState, RootState> = {
-  getName (state: UserState): string {
-    return state.name
-  }
 }
 
 const user: Module<UserState, RootState> = {

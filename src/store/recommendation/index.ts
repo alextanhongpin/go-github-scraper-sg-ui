@@ -10,10 +10,9 @@ import {
   getRecommendations,
   getUsersWithRecommendations,
   getRepositoriesByUser
-} from './api'
+} from '@/store/recommendation/api'
 import { Cache } from '@/helpers/cache'
-
-import RootState from '../state'
+import RootState from '@/store/state'
 
 // Api with cache layer for getters. Can decorate with retries too.
 const ApiCache = {
@@ -23,7 +22,7 @@ const ApiCache = {
 }
 
 export interface RecommendationState {
-  user: User|null,
+  user: User | null,
   // Faster checking, also eliminates the lowercase search issue.
   usersWithRecommendationsSet: Set<string>,
   usersWithRecommendations: string[],

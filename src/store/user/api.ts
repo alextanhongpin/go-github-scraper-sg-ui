@@ -11,7 +11,6 @@ import { endpoint } from '@/helpers/uri'
 
 export interface GetUsersResponse {
   users: User[];
-  pageInfo: PageInfo;
   count: number;
 }
 
@@ -27,19 +26,30 @@ export interface GetUsersResponse {
 //   }
 // }
 
-export async function getUsers (cursor?: string): Promise<GetUsersResponse> {
-  const withCursor = `/v1/users?cursor=${cursor}`
-  const response = await window.fetch(cursor
-    ? endpoint`${withCursor}`
-    : endpoint`/v1/users`)
-  if (!response.ok) {
-    throw new Error(await response.text())
+export async function * getUsersGenerator (): AsyncIterator<GetUsersResponse> {
+  let prevPageInfo: PageInfo = {
+    startCursor: '',
+    endCursor: '',
+    hasPreviousPage: false,
+    hasNextPage: true
   }
-  const { count, data, page_info: pageInfo } = await response.json()
-  return {
-    users: data.map(toCamelCaseObject),
-    pageInfo: toCamelCaseObject(pageInfo),
-    count
+  while (prevPageInfo.hasNextPage) {
+    const hasCursor = prevPageInfo && prevPageInfo.endCursor.length > 0
+    const withCursor = `/v1/users?cursor=${prevPageInfo.endCursor}`
+    const response = await window.fetch(hasCursor
+      ? endpoint`${withCursor}`
+      : endpoint`/v1/users`)
+    if (!response.ok) {
+      throw new Error(await response.text())
+    }
+    const { count, data, page_info: pageInfo } = await response.json()
+    const result = {
+      users: data.map(toCamelCaseObject),
+      count
+      // pageInfo: toCamelCaseObject(pageInfo)
+    }
+    prevPageInfo = { ...prevPageInfo, ...toCamelCaseObject(pageInfo) }
+    yield result
   }
 }
 
@@ -70,4 +80,3 @@ export async function getUserStats (login: string): Promise<UserStat> {
   data.user = toCamelCaseObject(data.user)
   return data
 }
-
