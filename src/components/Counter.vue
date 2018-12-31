@@ -8,9 +8,13 @@
 
 .counter {
   display: inline-block;
-  padding: 0 $dim-50;
+  padding: 0 $dim-100;
   background: $color-alto;
-  font-size: $dim-50;
+  @extend %h6;
   border-radius: 5px;
+  font-weight: 600;
+  height: $dim-300;
+  line-height: $dim-300;
+  border-radius: #{$dim-300/2};
 }
 </style>

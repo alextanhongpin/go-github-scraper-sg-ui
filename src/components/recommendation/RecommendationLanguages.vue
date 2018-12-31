@@ -1,11 +1,9 @@
 <template>
-  <div class='component' v-if='user'>
+  <div class='component'>
     <div class='languages-header'>{{header}}</div>
     <Break/>
     <div class='languages-subheader'>
       <Counter>{{languages.length}}</Counter> languages
-      &nbsp;&nbsp;
-      <Counter>{{user.repositories}}</Counter> repositories
     </div>
     <Break/>
     <div class='languages-body'>
@@ -44,7 +42,6 @@ import Counter from '@/components/Counter.vue'
 import LanguageCell from '@/components/LanguageCell.vue'
 
 import {
-  User,
   Namespace,
   Leaderboard
 } from '@/models'
@@ -62,7 +59,6 @@ export default class RecommendationLanguages extends Vue {
   @Prop() header!: string;
 
   // States.
-  @State('user', Namespace.recommendation) user?: User;
   @State('languages', Namespace.recommendation) languages?: Leaderboard[];
 
   // Methods.
@@ -87,13 +83,6 @@ export default class RecommendationLanguages extends Vue {
       : 'repos'
   }
 
-  // Getters.
-  get totalRepositoryCount (): number {
-    return this.languages.reduce((acc: number, item: Leaderboard) => {
-      return acc + item.count
-    }, 0)
-  }
-
   get maxShowCount (): number {
     return 5
   }
@@ -104,6 +93,11 @@ export default class RecommendationLanguages extends Vue {
 
   get hasMoreThanMax (): boolean {
     return this.languages.length > this.maxShowCount
+  }
+  get totalRepositoryCount (): number {
+    return this.languages.reduce((acc: number, { count }) => {
+      return acc + count
+    }, 0)
   }
 }
 

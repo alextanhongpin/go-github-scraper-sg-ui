@@ -12,15 +12,9 @@
       </div>
       <div class='main'>
 
-        <div v-for='repo in repositories'>
-          <div class='repo-name'>
-            {{repo.nameWithOwner}}
-          </div>
-          <div>
-            {{repo.description}}
-          </div>
-          {{repo.stargazers}} stargazers
-        </div>
+        <RecommendationRepositories/>
+
+        <Break px='21'/>
 
         <RecommendationLanguages
           header='Repository Summary'
@@ -56,8 +50,9 @@ import RecommendationUserProfile from '@/components/recommendation/Recommendatio
 import RecommendationSearchUserInput from '@/components/recommendation/RecommendationSearchUserInput.vue'
 import RecommendationSimilarUsers from '@/components/recommendation/RecommendationSimilarUsers.vue'
 import RecommendationLanguages from '@/components/recommendation/RecommendationLanguages.vue'
+import RecommendationRepositories from '@/components/recommendation/RecommendationRepositories.vue'
 
-import { User, Namespace, Repository } from '@/models'
+import { User, Namespace } from '@/models'
 
 @Component({
   components: {
@@ -68,12 +63,12 @@ import { User, Namespace, Repository } from '@/models'
     RecommendationUserProfile,
     RecommendationSearchUserInput,
     RecommendationSimilarUsers,
-    RecommendationLanguages
+    RecommendationLanguages,
+    RecommendationRepositories
   }
 })
 export default class Recommendation extends Vue {
   @State('user', Namespace.recommendation) user?: User;
-  @State('repositories', Namespace.recommendation) repositories?: Repository[];
 }
 </script>
 <style lang='scss' scoped>
@@ -109,8 +104,5 @@ export default class Recommendation extends Vue {
   }
 }
 
-.repo-name {
-  font-weight: 600;
-}
 </style>
 
