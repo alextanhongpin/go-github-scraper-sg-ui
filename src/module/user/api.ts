@@ -53,6 +53,15 @@ export async function * getUsersGenerator (): AsyncIterator<GetUsersResponse> {
   }
 }
 
+export async function getUserCount (): Promise<number> {
+  const response = await window.fetch(endpoint`/v1/users?count_only=true`)
+  if (!response.ok) {
+    throw new Error(await response.text())
+  }
+  const { count } = await response.json()
+  return count
+}
+
 export async function getUserCountByYears (): Promise<Leaderboard[]> {
   const response = await window.fetch(endpoint`/v1/years/users`)
   if (!response.ok) {

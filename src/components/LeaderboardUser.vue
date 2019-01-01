@@ -10,7 +10,7 @@
             {{user.login}}
           </div>
           <div class='repo-count' title='Repositories that are not forked'>
-            {{repositoryCount}} repos
+            {{count}} repos
           </div>
         </div>
       </div>
@@ -32,7 +32,7 @@
           :label='language.name'
           class='language'
         >
-          ({{percentage(language.count, repositoryCount)}})
+          ({{percentage(language.count, count)}})
         </LanguageCell>
       </div>
       <Break/>
@@ -76,7 +76,7 @@ export default class LeaderboardUser extends Vue {
   @State('githubUri') githubUri?: string;
   @Prop() private user?: User;
   @Prop({ default: [] }) private languages?: Leaderboard[];
-  @Prop({ default: 0 }) private repositoryCount?: number;
+  @Prop({ default: 0 }) private count?: number;
 
   get languageCount (): number {
     return this.languages
@@ -98,12 +98,12 @@ export default class LeaderboardUser extends Vue {
 
   get forkedRepoCount (): number {
     return this.user
-      ? this.user.repositories - this.repositoryCount
+      ? this.user.repositories - this.count
       : 0
   }
 
   percentage (count: number): string {
-    return (count / this.repositoryCount * 100).toFixed(1) + '%'
+    return (count / this.count * 100).toFixed(1) + '%'
   }
 
   color (color: string): string {

@@ -4,5 +4,5 @@ import { Leaderboard } from './leaderboard'
 export interface LeaderboardUserWithStats {
   user: User,
   languages: Leaderboard[],
-  repositoryCount: number
+  count: number
 }

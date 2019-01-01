@@ -73,7 +73,7 @@ const actions: ActionTree<RepoState, RootState> = {
         return { ...result, count }
       })
       const response = await Promise.all(promises)
-      commit('fetchLeaderboardUserSuccess', response)
+      commit('SET_LEADERBOARD_USER', response)
     } catch (error) {
       console.log(error)
     }
@@ -101,7 +101,11 @@ const mutations: MutationTree<RepoState> = {
   }
 }
 
-const getters: GetterTree<RepoState, RootState> = {}
+const getters: GetterTree<RepoState, RootState> = {
+  leaderboardUserWithStats (state: RepoState) {
+    return state.leaderboardUser
+  }
+}
 
 const repo: Module<RepoState, RootState> = {
   namespaced: true,

@@ -62,6 +62,14 @@ const actions: ActionTree<UserState, RootState> = {
       console.log(error)
     }
   },
+  async fetchUserCount ({ commit }) {
+    try {
+      const count = await UserApi.getUserCount()
+      commit('SET_USER_COUNT', count)
+    } catch (error) {
+      console.log(error)
+    }
+  },
   async fetchUserStats ({ commit, state, rootState }, login: string): Promise<UserStat|null> {
     try {
       const response = await ApiCache.getUserStats(login)

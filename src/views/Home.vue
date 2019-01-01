@@ -4,24 +4,19 @@
 
     <Recommendation/>
 
-    <div>Similar Users</div>
-    <Carousel v-on:scroll-horizontal='scroll'>
+    <Carousel v-on:scroll-horizontal='scroll' v-if='users.length'>
       <GithubCard slot="carousel" :user="user" v-for="user in users"/>
     </Carousel>
 
     <LanguageSection/>
 
-    <h3>User created by Year</h3>
-    <div>Total Users Indexed: {{userCount}}</div>
-    <LeaderboardCell v-bind="user" v-for="user in userCountByYears"/>
+    <LeaderboardBarChartUser/>
+    <LeaderboardBarChartRepository/>
 
-    <h3>Company found</h3>
-    <div>
-      {{companyCount}}
-    </div>
-
-    <h3>Repositories created by Year</h3>
-    <LeaderboardCell v-bind="data" v-for="data in leaderboardRepositoryByYears"/>
+    <!-- <h3>Company found</h3> -->
+    <!-- <div> -->
+    <!--   {{companyCount}} -->
+    <!-- </div> -->
 
     <div class='leaderboard-user'>
       <div class='leaderboard-user__header'>Top Active Users</div>
@@ -56,8 +51,11 @@ import GridCard from '@/components/GridCard.vue'
 import Carousel from '@/components/Carousel.vue'
 import LeaderboardCell from '@/components/LeaderboardCell.vue'
 import LeaderboardLanguage from '@/components/LeaderboardLanguage.vue'
-import Recommendation from '@/components/recommendation/Recommendation.vue'
 import LeaderboardUser from '@/components/LeaderboardUser.vue'
+import Recommendation from '@/components/recommendation/Recommendation.vue'
+
+import LeaderboardBarChartUser from '@/components/leaderboard/LeaderboardBarChartUser.vue'
+import LeaderboardBarChartRepository from '@/components/leaderboard/LeaderboardBarChartRepository.vue'
 import GridRow from '@/components/GridRow.vue'
 import LanguageSection from '@/components/language/LanguageSection.vue'
 
@@ -73,8 +71,10 @@ import { Namespace } from '@/models'
     GridCard,
     GridRow,
     LeaderboardCell,
-    LeaderboardLanguage,
     LeaderboardUser,
+    LeaderboardLanguage,
+    LeaderboardBarChartUser,
+    LeaderboardBarChartRepository,
     Recommendation,
     LanguageSection
   }
@@ -84,12 +84,8 @@ export default class Home extends Vue {
   // Will result in permanent value.
   @State('nextCursor', Namespace.user) nextCursor?: string;
   @State('companyCount', Namespace.user) companyCount?: number;
-  @State('userCountByYears', Namespace.user) userCountByYears?: Leaderboard[];
-  // @State('users', Namespace.user) users?: User[];
   @State('recommendations', Namespace.recommendation) users?: User[];
-  @State('userCount', Namespace.user) userCount?: number;
 
-  @State('leaderboardRepositoryByYears', Namespace.repo) leaderboardRepositoryByYears?: Leaderboard[];
   @State('leaderboardRepository', Namespace.repo) leaderboardRepository?: Leaderboard[];
   @State('leaderboardUser', Namespace.repo) leaderboardUser?: Leaderboard[];
   @State('leaderboardLanguage', Namespace.repo) leaderboardLanguage?: Leaderboard[];
@@ -100,9 +96,7 @@ export default class Home extends Vue {
 
   @Action('fetchUsers', Namespace.user) fetchUsers: any;
   @Action('fetchCompanyCount', Namespace.user) fetchCompanyCount: any;
-  @Action('fetchUserCountByYears', Namespace.user) fetchUserCountByYears: any;
 
-  @Action('fetchRepositoriesByYears', Namespace.repo) fetchRepositoriesByYears: any
   @Action('fetchLeaderboardRepository', Namespace.repo) fetchLeaderboardRepository: any
   @Action('fetchLeaderboardLanguage', Namespace.repo) fetchLeaderboardLanguage: any
   @Action('fetchLeaderboardUser', Namespace.repo) fetchLeaderboardUser: any
@@ -113,9 +107,7 @@ export default class Home extends Vue {
   throttle: any;
   mounted() {
      this.fetchUsers()
-     this.fetchUserCountByYears()
 
-     this.fetchRepositoriesByYears()
      this.fetchCompanyCount()
 
      this.fetchLeaderboardUser()
@@ -139,7 +131,7 @@ export default class Home extends Vue {
   }
 }
 </script>
-<style lang='scss'>
+<style lang='scss' scoped>
 @import '@/styles/theme.scss';
 
 .leaderboard-user {
