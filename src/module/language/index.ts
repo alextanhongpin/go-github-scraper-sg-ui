@@ -13,7 +13,6 @@ import {
 import { Cache } from '@/helpers/cache'
 import RootState from '@/module/state'
 
-
 // Api with cache layer for getters. Can decorate with retries too.
 const ApiCache = {
   getLanguages: Cache(getLanguages, () => '$_getLanguages'),
