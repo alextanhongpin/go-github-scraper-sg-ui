@@ -1,6 +1,6 @@
 # github-scraper-sg
 
-UI for the Github Scraper. 
+UI for the Github Scraper. The backend is available [here](https://github.com/alextanhongpin/go-github-scraper-sg)
 
 ![preview](./assets/preview_v2.png)
 
