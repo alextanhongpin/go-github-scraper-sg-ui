@@ -1,47 +1,45 @@
 <template>
-  <div class='language-section' @click.self='toggleDropdown'>
-    <div class='language-section-header'>
+  <div class="language-section" @click.self="toggleDropdown">
+    <div class="language-section-header">
       Most Repos by Language
     </div>
-    <Break/>
-    <div class='languages'>
+    <Break />
+    <div class="languages">
       <div>
-        <input class='search' type='search' :value='language' @keyup='search'/>
+        <input class="search" type="search" :value="language" @keyup="search" />
       </div>
-      <Dropdown
-        v-if='showDropdown'
-        :items='searchLanguages'
-      >
-      <div slot-scope='{item}' @click.self='select(item)'>{{item}}</div>
+      <Dropdown v-if="showDropdown" :items="searchLanguages">
+        <div slot-scope="{ item }" @click.self="select(item)">{{ item }}</div>
       </Dropdown>
     </div>
-    <div class='users'>
+    <div class="users">
       <a
-        v-for='(user, i) in users.slice(0, 10)'
-        class='user'
-        target='_blank'
-        :href='"https://github.com/" + user.user.login'
-        >
-        <div class='user-position'>#{{i+1}}</div>
-        <div class='user-info'>
+        v-for="(user, i) in users.slice(0, 10)"
+        class="user"
+        target="_blank"
+        :href="'https://github.com/' + user.user.login"
+      >
+        <div class="user-position">#{{ i + 1 }}</div>
+        <div class="user-info">
           <div>
-            <img class='user-photo' :src='user.user.avatarUrl'/>
-            <div class='user-name'>
-              {{user.user.login}}
+            <img class="user-photo" :src="user.user.avatarUrl" />
+            <div class="user-name">
+              {{ user.user.login }}
             </div>
           </div>
-          <Counter class='counter'>
-            {{user.count}}
+          <Counter class="counter">
+            {{ user.count }}
           </Counter>
         </div>
       </a>
     </div>
   </div>
 </template>
-<script lang='ts'>
+<script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { Action, State } from 'vuex-class'
-import { LeaderboardUserLanguage, Namespace } from '@/models'
+import { LeaderboardUserLanguage } from '@/types'
+import Namespace from '@/models/namespace'
 
 import Break from '@/components/Break.vue'
 import Counter from '@/components/Counter.vue'
@@ -55,12 +53,13 @@ import Dropdown from '@/components/Dropdown.vue'
   }
 })
 export default class LanguageSection extends Vue {
-  language: string = 'JavaScript';
+  language: string = 'JavaScript'
 
-  @Action('fetchLanguages', Namespace.language) fetchLanguages: any;
-  @Action('fetchLeaderboardUserByLanguage', Namespace.language) fetchLeaderboardUserByLanguage: any;
-  @State('languages', Namespace.language) languages?: string[];
-  @State('users', Namespace.language) users?: Leaderboard[];
+  @Action('fetchLanguages', Namespace.language) fetchLanguages: any
+  @Action('fetchLeaderboardUserByLanguage', Namespace.language)
+  fetchLeaderboardUserByLanguage: any
+  @State('languages', Namespace.language) languages?: string[]
+  @State('users', Namespace.language) users?: Leaderboard[]
 
   mounted () {
     this.fetchLanguages()
@@ -80,28 +79,34 @@ export default class LanguageSection extends Vue {
     const keyword = evt.target.value
 
     const language = this.filterLanguage(keyword)
-    if (language.length > 0 && language[0].toLowerCase() === keyword.toLowerCase()) {
+    if (
+      language.length > 0 &&
+      language[0].toLowerCase() === keyword.toLowerCase()
+    ) {
       this.language = language[0]
       this.fetchUsers()
       return
     }
     this.language = keyword
   }
+
   filterLanguage (language: string): string[] {
     return this.languages.filter(s => {
       return s.toLowerCase().startsWith(language.toLowerCase())
     })
   }
+
   get searchLanguages (): string[] {
     return this.filterLanguage(this.language)
   }
+
   get showDropdown () {
     const hasLanguage = this.languages.includes(this.language)
     return !hasLanguage && this.language
   }
 }
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import '@/styles/theme.scss';
 // The scoped must be at the end.
 .language-section {
@@ -127,7 +132,7 @@ export default class LanguageSection extends Vue {
   @extend %h6;
   width: 100%;
   height: $dim-500;
-  background: #DDD;
+  background: #ddd;
   border: none;
   border-radius: #{$dim-500/2};
   padding: 0 #{$dim-500/2};
@@ -147,11 +152,11 @@ export default class LanguageSection extends Vue {
   grid-template-columns: $dim-500 minmax(max-content, 1fr);
 }
 
-$colors: #C98910, #A8A8A8, #965A38;
+$colors: #c98910, #a8a8a8, #965a38;
 @for $i from 1 through 3 {
   .user:nth-child(#{$i}) .user-info {
     color: nth($colors, $i);
-    background: rgba(nth($colors, $i), .15);
+    background: rgba(nth($colors, $i), 0.15);
     font-weight: 600;
     .counter {
       background: nth($colors, $i);
@@ -177,8 +182,8 @@ $colors: #C98910, #A8A8A8, #965A38;
     margin: 0 $dim-100;
   }
 }
-.user:nth-child(2n+1) {
-  background: #F7F7F7;
+.user:nth-child(2n + 1) {
+  background: #f7f7f7;
 }
 
 .user-photo {

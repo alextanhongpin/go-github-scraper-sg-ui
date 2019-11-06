@@ -1,17 +1,22 @@
 <template>
-  <div class='component' v-if='users.length'>
-    <div class='header'>{{header}}</div>
-    <Break/>
-    <div class='list'>
-    <!-- <slot class='list' v-for='user in users' v-bind='user'></slot> -->
+  <div class="component" v-if="users.length">
+    <div class="header">{{ header }}</div>
+    <Break />
+    <div class="list">
+      <!-- <slot class='list' v-for='user in users' v-bind='user'></slot> -->
 
       <Carousel>
-        <GithubCard slot="carousel" :user="user" v-for="user in users"/>
+        <GithubCard
+          slot="carousel"
+          :user="user"
+          v-for="user in users"
+          :key="user.login"
+        />
       </Carousel>
     </div>
   </div>
 </template>
-<script lang='ts'>
+<script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 
 // Components.
@@ -19,14 +24,10 @@ import Break from '@/components/Break.vue'
 import Carousel from '@/components/Carousel.vue'
 import GithubCard from '@/components/GithubCard.vue'
 
-import {
-  User,
-  Namespace
-} from '@/models'
+import { User } from '@/types'
+import Namespace from '@/models/namespace'
 
-import {
-  State
-} from 'vuex-class'
+import { State } from 'vuex-class'
 
 @Component({
   components: {
@@ -37,12 +38,11 @@ import {
 })
 export default class RecommendationSimilarUsers extends Vue {
   // Getters.
-  @State('recommendations', Namespace.recommendation) users?: User[];
-  @Prop() header!: string;
+  @State('recommendations', Namespace.match) users?: User[]
+  @Prop() header!: string
 }
-
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import '@/styles/theme.scss';
 
 .header {

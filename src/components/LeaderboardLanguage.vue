@@ -1,33 +1,33 @@
 <template>
-  <div class='leaderboard-language'>
-    <div class='header'>
+  <div class="leaderboard-language">
+    <div class="header">
       Top Languages
     </div>
-    <Break px='5'/>
-    <div class='subheader'>
-     Based on the number of repositories
+    <Break px="5" />
+    <div class="subheader">
+      Based on the number of repositories
     </div>
-    <Break px='21'/>
-    <div class='language-cells'>
-
-      <div
-        :label='item.name'
-        v-for='item in items'
-      >
-      <span
-        :style='{background: color(item.name), opacity: opacity(i, item.count)}'
-        v-for='i in percentage(item.count)'
-        class='circle'
-      ></span>
-        {{item.name}}
-        ({{percentage(item.count)}}%) <span class='repo-count'>{{formatCount(item.count)}} repos</span>
+    <Break px="21" />
+    <div class="language-cells">
+      <div :label="item.name" v-for="item in items">
+        <span
+          :style="{
+            background: color(item.name),
+            opacity: opacity(i, item.count)
+          }"
+          v-for="i in percentage(item.count)"
+          class="circle"
+        ></span>
+        {{ item.name }}
+        ({{ percentage(item.count) }}%)
+        <span class="repo-count">{{ formatCount(item.count) }} repos</span>
       </div>
     </div>
   </div>
 </template>
-<script lang='ts'>
+<script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { Leaderboard } from '@/models'
+import { Leaderboard } from '@/types'
 import LanguageCell from '@/components/LanguageCell.vue'
 import Break from '@/components/Break.vue'
 import * as Color from '@/helpers/color'
@@ -39,12 +39,12 @@ import * as Color from '@/helpers/color'
   }
 })
 export default class LeaderboardLanguage extends Vue {
-  @Prop() private name!: string;
-  @Prop({ default: [] }) private items!: Leaderboard[];
-  @Prop({ default: 0 }) private totalCount!: number;
+  @Prop() private name!: string
+  @Prop({ default: [] }) private items!: Leaderboard[]
+  @Prop({ default: 0 }) private totalCount!: number
 
   percentage (count: number): number {
-    return Math.ceil(count / this.totalCount * 100)
+    return Math.ceil((count / this.totalCount) * 100)
   }
   formatCount (count: number): string {
     return count.toLocaleString()
@@ -58,7 +58,7 @@ export default class LeaderboardLanguage extends Vue {
   }
 }
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import '@/styles/theme.scss';
 .leaderboard-language {
   padding: $dim-300;

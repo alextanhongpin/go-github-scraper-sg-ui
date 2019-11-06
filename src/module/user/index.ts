@@ -1,19 +1,21 @@
 import { GetterTree, MutationTree, ActionTree, Module } from 'vuex'
 import * as UserApi from '@/module/user/api'
+import { Cache } from '@/helpers/cache'
+
+// Types.
 import {
+  User,
   Leaderboard,
   PageInfo,
   Score,
-  User,
-  UserStat
-} from '@/models'
-import { Cache } from '@/helpers/cache'
-import RootState from '@/module/state'
+  UserStat,
+  RootState
+} from '@/types'
 
 export interface UserState {
   users: User[]
   userCountByYears: Leaderboard[]
-  companyCount: number,
+  companyCount: number
   userCount: number
 }
 
@@ -70,7 +72,10 @@ const actions: ActionTree<UserState, RootState> = {
       console.log(error)
     }
   },
-  async fetchUserStats ({ commit, state, rootState }, login: string): Promise<UserStat|null> {
+  async fetchUserStats (
+    { commit, state, rootState },
+    login: string
+  ): Promise<UserStat | null> {
     try {
       const response = await ApiCache.getUserStats(login)
       const data = {
@@ -100,8 +105,7 @@ const mutations: MutationTree<UserState> = {
   }
 }
 
-const getters: GetterTree<UserState, RootState> = {
-}
+const getters: GetterTree<UserState, RootState> = {}
 
 const user: Module<UserState, RootState> = {
   namespaced: true,

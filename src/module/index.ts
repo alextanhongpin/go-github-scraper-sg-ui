@@ -2,20 +2,19 @@ import Vue from 'vue'
 import Vuex, { StoreOptions, GetterTree } from 'vuex'
 
 // State.
-import RootState from './state'
+import RootState from '@/types/root-state'
 
 // Modules.
 import user from './user'
-import recommendation from './recommendation'
+import match from './match'
 import repo from './repo'
 import language from './language'
 
-import { User, Leaderboard } from '@/models'
+import { User, Leaderboard } from '@/types'
 
 Vue.use(Vuex)
 
-const getters: GetterTree<RootState, any> = {
-}
+const getters: GetterTree<RootState, any> = {}
 
 const store: StoreOptions<RootState> = {
   state: {
@@ -26,7 +25,7 @@ const store: StoreOptions<RootState> = {
   modules: {
     user,
     repo,
-    recommendation,
+    match,
     language
   },
   getters,

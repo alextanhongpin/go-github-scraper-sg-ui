@@ -1,27 +1,21 @@
-import {
-  ActionTree,
-  GetterTree,
-  Module,
-  MutationTree
-} from 'vuex'
+import { ActionTree, GetterTree, Module, MutationTree } from 'vuex'
 import * as RepoApi from '@/module/repo/api'
 
-import RootState from '@/module/state'
-import { Leaderboard, LeaderboardUserWithStats, User } from '@/models'
+import { Leaderboard, LeaderboardUserWithStats, User, RootState } from '@/types'
 
 export interface RepoState {
   leaderboardRepositoryByYears: Leaderboard[]
   leaderboardLanguage: Leaderboard[]
   leaderboardRepository: Leaderboard[]
   leaderboardUser: LeaderboardUser[]
-  maxLanguageCount: number,
+  maxLanguageCount: number
   totalLanguageCount: number
 }
 
 export interface LeaderboardUser {
-  user: User;
-  languages: Leaderboard[];
-  count: number;
+  user: User
+  languages: Leaderboard[]
+  count: number
 }
 
 // Initial state.
@@ -49,27 +43,32 @@ const actions: ActionTree<RepoState, RootState> = {
       commit('fetchLeaderboardLanguageSuccess', data)
       const maxLanguageCount = Math.max(...data.map(row => row.count))
       commit('SET_MAX_LANGUAGE_COUNT', maxLanguageCount)
-      const totalLanguageCount = data.reduce((acc: number, data: Leaderboard) => {
-        return acc + data.count
-      }, 0)
+      const totalLanguageCount = data.reduce(
+        (acc: number, data: Leaderboard) => {
+          return acc + data.count
+        },
+        0
+      )
       commit('SET_TOTAL_LANGUAGE_COUNT', totalLanguageCount)
     } catch (error) {
       console.log(error)
     }
   },
   async fetchLeaderboardRepository ({ commit }) {
-    try {
-      const data = await RepoApi.getLeaderboardRepository()
-      commit('fetchLeaderboardRepositorySuccess', data)
-    } catch (error) {
-      console.log(error)
-    }
+    // try {
+    //   const data = await RepoApi.getLeaderboardRepository()
+    //   commit('fetchLeaderboardRepositorySuccess', data)
+    // } catch (error) {
+    //   console.log(error)
+    // }
   },
   async fetchLeaderboardUser ({ commit, dispatch }) {
     try {
       const data = await RepoApi.getLeaderboardUser()
       const promises = data.map(async ({ name, count }) => {
-        const result = await dispatch('user/fetchUserStats', name, { root: true })
+        const result = await dispatch('user/fetchUserStats', name, {
+          root: true
+        })
         return { ...result, count }
       })
       const response = await Promise.all(promises)

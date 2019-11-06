@@ -1,23 +1,25 @@
 <template>
   <div>
-    <SearchUserInput @keyup='search'>
+    <SearchUserInput @keyup="search">
       <!--Display suggestions-->
-      <Dropdown
-        v-if='showDropdown'
-        :items='suggestions'
-      />
+      <Dropdown v-if="showDropdown" :items="suggestions" @click="selectItem" />
     </SearchUserInput>
   </div>
 </template>
-<script lang='ts'>
+<script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Action, Getter, State } from 'vuex-class'
+
+// Components.
 import Dropdown from '@/components/Dropdown.vue'
 import SearchUserInput from '@/components/SearchUserInput.vue'
-import { Action, Getter, State } from 'vuex-class'
-import {
-  User,
-  Namespace
-} from '@/models'
+
+// Types.
+import { User } from '@/types'
+
+// Models.
+import Namespace from '@/models/namespace'
+
 import { throttle } from '@/helpers/throttle'
 
 @Component({
@@ -27,15 +29,18 @@ import { throttle } from '@/helpers/throttle'
   }
 })
 export default class RecommendationSearchUserInput extends Vue {
-  private keyword: string = '';
+  private keyword: string = ''
 
   // Actions.
-  @Action('fetchUsersWithRecommendations', Namespace.recommendation) fetchUsersWithRecommendations: any
-  @Action('fetchRecommendationsForUser', Namespace.recommendation) fetchRecommendations: any;
+  @Action('fetchUsersWithRecommendations', Namespace.match)
+  fetchUsersWithRecommendations: any
+  @Action('fetchRecommendationsForUser', Namespace.match)
+  fetchRecommendations: any
 
   // States.
-  @State('usersWithRecommendations', Namespace.recommendation) usersWithRecommendations?: string[];
-  @State('user', Namespace.recommendation) user?: User;
+  @State('usersWithRecommendations', Namespace.match)
+  usersWithRecommendations?: string[]
+  @State('user', Namespace.match) user?: User
 
   // Lifecycles.
   async mounted () {
@@ -46,12 +51,15 @@ export default class RecommendationSearchUserInput extends Vue {
   get showDropdown (): boolean {
     const { user, keyword } = this
     const hasKeyword = keyword.trim().length > 0
-    const hasMatches = keyword.toLowerCase() === (user && user.login.toLowerCase())
+    const hasMatches =
+      keyword.toLowerCase() === (user && user.login.toLowerCase())
     return hasKeyword && !hasMatches
   }
 
   get suggestions (): string[] {
-    return this.usersWithRecommendations.filter(name => name.toLowerCase().startsWith(this.keyword.toLowerCase()))
+    return this.usersWithRecommendations.filter(name =>
+      name.toLowerCase().startsWith(this.keyword.toLowerCase())
+    )
   }
 
   // Methods.
@@ -62,11 +70,16 @@ export default class RecommendationSearchUserInput extends Vue {
     }
   }
 
+  selectItem (evt) {
+    const name = evt.currentTarget.getAttribute('name')
+    this.keyword = name
+    this.search(this.keyword)
+  }
+
   @throttle(250)
-  throttleFetch(keyword: string) {
+  throttleFetch (keyword: string) {
     this.fetchRecommendations(keyword)
   }
 }
 </script>
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>

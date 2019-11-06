@@ -1,17 +1,11 @@
-import {
-  User,
-  Score,
-  PageInfo,
-  Leaderboard,
-  UserStat
-} from '@/models'
+import { User, Score, PageInfo, Leaderboard, UserStat } from '@/types'
 
 import { toCamelCaseObject } from '@/helpers/camel-case'
 import { endpoint } from '@/helpers/uri'
 
 export interface GetUsersResponse {
-  users: User[];
-  count: number;
+  users: User[]
+  count: number
 }
 
 // function throttle (durationInMs: number) {
@@ -36,9 +30,9 @@ export async function * getUsersGenerator (): AsyncIterator<GetUsersResponse> {
   while (prevPageInfo.hasNextPage) {
     const hasCursor = prevPageInfo && prevPageInfo.endCursor.length > 0
     const withCursor = `/v1/users?cursor=${prevPageInfo.endCursor}`
-    const response = await window.fetch(hasCursor
-      ? endpoint`${withCursor}`
-      : endpoint`/v1/users`)
+    const response = await window.fetch(
+      hasCursor ? endpoint`${withCursor}` : endpoint`/v1/users`
+    )
     if (!response.ok) {
       throw new Error(await response.text())
     }
@@ -54,7 +48,7 @@ export async function * getUsersGenerator (): AsyncIterator<GetUsersResponse> {
 }
 
 export async function getUserCount (): Promise<number> {
-  const response = await window.fetch(endpoint`/v1/users?count_only=true`)
+  const response = await window.fetch(endpoint`/v1/users`)
   if (!response.ok) {
     throw new Error(await response.text())
   }
@@ -63,7 +57,7 @@ export async function getUserCount (): Promise<number> {
 }
 
 export async function getUserCountByYears (): Promise<Leaderboard[]> {
-  const response = await window.fetch(endpoint`/v1/years/users`)
+  const response = await window.fetch(endpoint`/v1/user/stats`)
   if (!response.ok) {
     throw new Error(await response.text())
   }
@@ -81,7 +75,7 @@ export async function getCompanyCount (): Promise<number> {
 }
 
 export async function getUserStats (login: string): Promise<UserStat> {
-  const response = await window.fetch(endpoint`/v1/userstats/${login}`)
+  const response = await window.fetch(endpoint`/v1/users/${login}`)
   if (!response.ok) {
     throw new Error(await response.text())
   }

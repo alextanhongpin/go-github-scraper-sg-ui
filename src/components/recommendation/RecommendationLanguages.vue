@@ -1,38 +1,37 @@
 <template>
-  <div class='component'>
-    <div class='languages-header'>{{header}}</div>
-    <Break/>
-    <div class='languages-subheader'>
-      <Counter>{{languages.length}}</Counter> languages
+  <div class="component">
+    <div class="languages-header">{{ header }}</div>
+    <Break />
+    <div class="languages-subheader">
+      <Counter>{{ languages.length }}</Counter> languages
     </div>
-    <Break/>
-    <div class='languages-body'>
+    <Break />
+    <div class="languages-body">
       <LanguageCell
-        v-for='item in filteredLanguages'
-        :label='item.name'
-        class='language'
+        v-for="item in filteredLanguages"
+        :label="item.name"
+        class="language"
       >
-        ({{formatPercentage(item.count)}}%)
+        ({{ formatPercentage(item.count) }}%)
 
-        <span class='language-count'>
-          {{item.count}} {{ repoLabel(item.count) }}
+        <span class="language-count">
+          {{ item.count }} {{ repoLabel(item.count) }}
         </span>
-
       </LanguageCell>
     </div>
-    <Break/>
-    <div class='language-footer'>
+    <Break />
+    <div class="language-footer">
       <button
-        class='language-button-toggle'
-        v-if='hasMoreThanMax'
-        @click='toggleLanguage'
-        >
-        {{displayLanguageLabel}}
+        class="language-button-toggle"
+        v-if="hasMoreThanMax"
+        @click="toggleLanguage"
+      >
+        {{ displayLanguageLabel }}
       </button>
     </div>
   </div>
 </template>
-<script lang='ts'>
+<script lang="ts">
 import { Action, Getter, State } from 'vuex-class'
 import { Component, Prop, Vue } from 'vue-property-decorator'
 
@@ -41,10 +40,8 @@ import Break from '@/components/Break.vue'
 import Counter from '@/components/Counter.vue'
 import LanguageCell from '@/components/LanguageCell.vue'
 
-import {
-  Namespace,
-  Leaderboard
-} from '@/models'
+import { Leaderboard } from '@/types'
+import Namespace from '@/models/namespace'
 
 @Component({
   components: {
@@ -54,33 +51,27 @@ import {
   }
 })
 export default class RecommendationLanguages extends Vue {
-  displayLanguageCount: number = 5;
+  displayLanguageCount: number = 5
   displayLanguageLabel: string = 'Show All'
-  @Prop() header!: string;
+  @Prop() header!: string
 
   // States.
-  @State('languages', Namespace.recommendation) languages?: Leaderboard[];
+  @State('languages', Namespace.match) languages?: Leaderboard[]
 
   // Methods.
   formatPercentage (count: number): string {
-    return (count / this.totalRepositoryCount * 100).toFixed(1)
+    return ((count / this.totalRepositoryCount) * 100).toFixed(1)
   }
 
   toggleLanguage () {
     const totalCount = this.languages.length
     const isPartial = this.displayLanguageCount === this.maxShowCount
-    this.displayLanguageCount = isPartial
-      ? totalCount
-      : this.maxShowCount
-    this.displayLanguageLabel = isPartial
-      ? 'Show Less'
-      : 'Show All'
+    this.displayLanguageCount = isPartial ? totalCount : this.maxShowCount
+    this.displayLanguageLabel = isPartial ? 'Show Less' : 'Show All'
   }
 
   repoLabel (count: number): string {
-    return count === 1
-      ? 'repo'
-      : 'repos'
+    return count === 1 ? 'repo' : 'repos'
   }
 
   get maxShowCount (): number {
@@ -100,9 +91,8 @@ export default class RecommendationLanguages extends Vue {
     }, 0)
   }
 }
-
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import '@/styles/theme.scss';
 
 .languages-header {

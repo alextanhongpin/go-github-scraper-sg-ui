@@ -5,13 +5,13 @@ import {
   Module
 } from 'vuex'
 
-import { LeaderboardUserLanguage, User, Leaderboard } from '@/models'
+import { LeaderboardUserLanguage, User, Leaderboard } from '@/types'
 import {
   getLanguages,
   getLeaderboardUserByLanguage
 } from '@/module/language/api'
 import { Cache } from '@/helpers/cache'
-import RootState from '@/module/state'
+import RootState from '@/types/root-state'
 
 // Api with cache layer for getters. Can decorate with retries too.
 const ApiCache = {

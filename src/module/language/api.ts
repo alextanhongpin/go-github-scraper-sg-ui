@@ -1,9 +1,9 @@
-import { Leaderboard } from '@/models'
+import { Leaderboard } from '@/types'
 import { endpoint } from '@/helpers/uri'
 import { toCamelCaseObject } from '@/helpers/camel-case'
 
 export async function getLanguages (): Promise<string[]> {
-  const response = await window.fetch(endpoint`/v1/languages`)
+  const response = await window.fetch(endpoint`/v1/repository/languages`)
   if (!response.ok) {
     const { error } = await response.json()
     return []
@@ -12,8 +12,10 @@ export async function getLanguages (): Promise<string[]> {
   return data
 }
 
-export async function getLeaderboardUserByLanguage (language: string): Promise<Leaderboard[]> {
-  const path = `/v1/leaderboards/languages/${language}`
+export async function getLeaderboardUserByLanguage (
+  language: string
+): Promise<Leaderboard[]> {
+  const path = `/v1/repository/stats/language?language=${language}`
   const response = await window.fetch(endpoint`${path}`)
   if (!response.ok) {
     const { error } = await response.json()

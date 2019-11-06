@@ -1,15 +1,15 @@
 <template>
-  <div class='break' :style='{height: px + "px"}'></div>
+  <div class="break" :style="{ height: px + 'px' }"></div>
 </template>
-<script lang='ts'>
+<script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
 export default class Break extends Vue {
-  @Prop() private px?: number;
+  @Prop() private px?: number
 }
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 // The scoped must be at the end.
 .break {
   display: block;

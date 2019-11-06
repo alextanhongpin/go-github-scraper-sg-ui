@@ -1,32 +1,26 @@
 <template>
   <div id="app">
-    <header>
-      <span class='brand'>{{brand}}</span>&nbsp;<span class='brand-app'>Recommender</span>
-      <small>
-        version {{version}}
-      </small>
+    <header class="header">
+      <span class="brand">{{ brand }}</span
+      >&nbsp;<span class="brand-app">Recommender</span>
+      <small> version {{ version }} </small>
     </header>
-    <!-- <div id="nav"> -->
-    <!--   <router-link to="/">Home</router-link> | -->
-    <!--   <router-link to="/about">About</router-link> -->
-    <!-- </div> -->
-    <main class='app-main'>
-      <router-view/>
+
+    <main class="app-main">
+      <router-view />
     </main>
   </div>
 </template>
 
-<script lang='ts'>
-import { Vue, Component }  from 'vue-property-decorator'
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator'
 import { Action, State } from 'vuex-class'
-
-const namespace: string = 'user'
 
 @Component
 export default class App extends Vue {
   // HINT: To fetch a key in the rootState.
-  @State('brand') brand?: string;
-  @State('version') version?: string;
+  @State('brand') brand?: string
+  @State('version') version?: string
 }
 </script>
 
@@ -50,7 +44,10 @@ img {
   box-sizing: content-box;
 }
 
-#app, input, textarea, button {
+#app,
+input,
+textarea,
+button {
   font-family: 'Open Sans', sans-serif;
 }
 #app {
@@ -64,18 +61,19 @@ small {
   @extend %h6;
 }
 
-header {
-  height: 60px;
-  line-height: 60px;
+.header {
+  height: 80px;
+  line-height: 80px;
   @extend %h3;
-  padding: 0 10px;
+  padding: 0 30px;
 }
 
 .brand {
   font-weight: bold;
 }
 
-.brand-app { }
+.brand-app {
+}
 
 .app-main {
   max-width: 1140px;

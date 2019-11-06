@@ -1,15 +1,8 @@
-export const user = {
-  namespace: 'user'
+const Namespace = {
+  repo: { namespace: 'repo' },
+  user: { namespace: 'user' },
+  match: { namespace: 'match' },
+  language: { namespace: 'language' }
 }
 
-export const repo = {
-  namespace: 'repo'
-}
-
-export const recommendation = {
-  namespace: 'recommendation'
-}
-
-export const language = {
-  namespace: 'language'
-}
+export default Namespace

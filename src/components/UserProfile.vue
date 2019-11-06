@@ -35,7 +35,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import {
   User
-} from '@/models'
+} from '@/types'
 import Break from '@/components/Break.vue'
 import Counter from '@/components/Counter.vue'
 import { shortDate } from '@/helpers/date'

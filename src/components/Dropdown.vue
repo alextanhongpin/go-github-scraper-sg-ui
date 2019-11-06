@@ -1,15 +1,23 @@
-<template functional>
-  <div class='dropdown'>
-    <div
-      class='item'
-      v-for='item in props.items'
-      :key='item'
-    >
-      <slot :item='item'>{{item}}</slot>
+<template>
+  <div class="dropdown">
+    <div class="item" v-for="item in items" :key="item">
+      <slot>
+        <div :item="item" @click="$emit('click', $event)" :name="item">
+          {{ item }}
+        </div>
+      </slot>
     </div>
   </div>
 </template>
-<style lang='scss' scoped>
+<script lang="ts">
+import { Emit, Component, Vue, Prop } from 'vue-property-decorator'
+
+@Component
+export default class Dropdown extends Vue {
+  @Prop() items: string[]
+}
+</script>
+<style lang="scss" scoped>
 @import '@/styles/theme.scss';
 
 .dropdown {
@@ -32,7 +40,7 @@
 }
 
 .item {
-  border-bottom: 1px solid #EEEEEE;
+  border-bottom: 1px solid #eeeeee;
   height: $dim-600;
   line-height: $dim-600;
   padding: 0 $dim-100;

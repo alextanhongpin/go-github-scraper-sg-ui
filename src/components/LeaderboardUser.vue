@@ -1,66 +1,67 @@
 <template>
-  <a class='container' :href='githubLink' target='_blank'>
-    <div class='aside'>
-      <div class='header'>
-        <div class='image'>
-          <img :src='user.avatarUrl' width='100%' height='auto'/>
+  <a class="container" :href="githubLink" target="_blank">
+    <div class="aside">
+      <div class="header">
+        <div class="image">
+          <img :src="user && user.avatarUrl" width="100%" height="auto" />
         </div>
         <div>
-          <div class='name' v-if='user'>
-            {{user.login}}
+          <div class="name" v-if="user">
+            {{ user.login }}
           </div>
-          <div class='repo-count' title='Repositories that are not forked'>
-            {{count}} repos
+          <div class="repo-count" title="Repositories that are not forked">
+            {{ count }} repos
           </div>
         </div>
       </div>
-      <Break/>
+      <Break />
       <h6>
-        <div>
-          {{user.location}}
+        <div v-if="user">
+          {{ user.location }}
         </div>
       </h6>
     </div>
 
     <div>
-      <div class='info'>
-        <div class='info-header'>
+      <div class="info">
+        <div class="info-header">
           Top 3 Languages
         </div>
         <LanguageCell
-          v-for='language in topThreeLanguage'
-          :label='language.name'
-          class='language'
+          v-for="language in topThreeLanguage"
+          :label="language.name"
+          class="language"
+          :key="language.name"
         >
-          ({{percentage(language.count, count)}})
+          ({{ percentage(language.count, count) }})
         </LanguageCell>
       </div>
-      <Break/>
-      <div class='counters'>
-        <div class='counter-item'>
-          <i class='counter'>{{languageCount}}</i> languages
+      <Break />
+      <div class="counters">
+        <div class="counter-item">
+          <i class="counter">{{ languageCount }}</i> languages
         </div>
-        <div class='counter-item'>
-          <i class='counter'>{{user.gists}}</i> gists
+        <div class="counter-item">
+          <i class="counter">{{ user.gists }}</i> gists
         </div>
-        <div class='counter-item'>
-          <i class='counter'>{{forkedRepoCount}}</i> forked repos
+        <div class="counter-item">
+          <i class="counter">{{ forkedRepoCount }}</i> forked repos
         </div>
-        <div class='counter-item'>
-          <i class='counter'>{{user.followers}}</i> followers
+        <div class="counter-item">
+          <i class="counter">{{ user.followers }}</i> followers
         </div>
-        <div class='counter-item'>
-          <i class='counter'>{{user.following}}</i> following
+        <div class="counter-item">
+          <i class="counter">{{ user.following }}</i> following
         </div>
       </div>
     </div>
   </a>
 </template>
-<script lang='ts'>
+<script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { State } from 'vuex-class'
 
-import { User, Leaderboard } from '@/models'
+import { User, Leaderboard } from '@/types'
 import * as Color from '@/helpers/color'
 
 import Break from '@/components/Break.vue'
@@ -73,37 +74,29 @@ import LanguageCell from '@/components/LanguageCell.vue'
   }
 })
 export default class LeaderboardUser extends Vue {
-  @State('githubUri') githubUri?: string;
-  @Prop() private user?: User;
-  @Prop({ default: [] }) private languages?: Leaderboard[];
-  @Prop({ default: 0 }) private count?: number;
+  @State('githubUri') githubUri?: string
+  @Prop() private user?: User
+  @Prop({ default: [] }) private languages?: Leaderboard[]
+  @Prop({ default: 0 }) private count?: number
 
   get languageCount (): number {
-    return this.languages
-      ? this.languages.length
-      : 0
+    return this.languages ? this.languages.length : 0
   }
 
   get topThreeLanguage (): Leaderboard[] {
-    return this.languages
-      ? this.languages.slice(0, 3)
-      : []
+    return this.languages ? this.languages.slice(0, 3) : []
   }
 
   get githubLink (): string {
-    return this.user
-      ? [this.githubUri, this.user.login].join('/')
-      : ''
+    return this.user ? [this.githubUri, this.user.login].join('/') : ''
   }
 
   get forkedRepoCount (): number {
-    return this.user
-      ? this.user.repositories - this.count
-      : 0
+    return this.user ? this.user.repositories - this.count : 0
   }
 
   percentage (count: number): string {
-    return (count / this.count * 100).toFixed(1) + '%'
+    return ((count / this.count) * 100).toFixed(1) + '%'
   }
 
   color (color: string): string {
@@ -111,11 +104,11 @@ export default class LeaderboardUser extends Vue {
   }
 }
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import '@/styles/theme.scss';
 
 .container {
-  border-bottom: 1px solid #EEE;
+  border-bottom: 1px solid #eee;
   display: grid;
   grid-template-columns: minmax(120px, 240px) 1fr;
   grid-column-gap: 10px;
@@ -124,7 +117,7 @@ export default class LeaderboardUser extends Vue {
   padding: $dim-100 0;
   position: relative;
 }
-$container-hover-color: #EEEEEE;
+$container-hover-color: #eeeeee;
 .container:hover {
   background: $container-hover-color;
 }
@@ -151,10 +144,11 @@ $container-hover-color: #EEEEEE;
   width: 40px;
   border-radius: 50%;
   overflow: hidden;
-  background: #DDD;
+  background: #ddd;
 }
 
-.name { }
+.name {
+}
 .repo-count {
   @extend %h6;
   color: #818181;

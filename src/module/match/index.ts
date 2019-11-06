@@ -1,33 +1,30 @@
-import {
-  GetterTree,
-  MutationTree,
-  ActionTree,
-  Module
-} from 'vuex'
+import { GetterTree, MutationTree, ActionTree, Module } from 'vuex'
 
-import { User, Leaderboard, Repository } from '@/models'
+import { User, Leaderboard, Repository, RootState } from '@/types'
 import {
   getRecommendations,
   getUsersWithRecommendations,
   getRepositoriesByUser
-} from '@/module/recommendation/api'
+} from '@/module/match/api'
 import { Cache } from '@/helpers/cache'
-import RootState from '@/module/state'
 
 // Api with cache layer for getters. Can decorate with retries too.
 const ApiCache = {
   getRecommendations: Cache(getRecommendations),
-  getUsersWithRecommendations: Cache(getUsersWithRecommendations, () => '$_getUsersWithRecommendations'),
+  getUsersWithRecommendations: Cache(
+    getUsersWithRecommendations,
+    () => '$_getUsersWithRecommendations'
+  ),
   getRepositoriesByUser: Cache(getRepositoriesByUser)
 }
 
 export interface RecommendationState {
-  user: User | null,
+  user: User | null
   // Faster checking, also eliminates the lowercase search issue.
-  usersWithRecommendationsSet: Set<string>,
-  usersWithRecommendations: string[],
-  recommendations: User[],
-  languages: Leaderboard[],
+  usersWithRecommendationsSet: Set<string>
+  usersWithRecommendations: string[]
+  recommendations: User[]
+  languages: Leaderboard[]
   repositories: Repository[]
 }
 
@@ -50,7 +47,10 @@ const actions: ActionTree<RecommendationState, RootState> = {
       console.log(error)
     }
   },
-  async fetchRecommendationsForUser ({ commit, rootState, state, dispatch }, name: string) {
+  async fetchRecommendationsForUser (
+    { commit, rootState, state, dispatch },
+    name: string
+  ) {
     // If the current user is not in the list, skip.
     if (!state.usersWithRecommendationsSet.has(name.toLowerCase())) {
       return
@@ -59,13 +59,17 @@ const actions: ActionTree<RecommendationState, RootState> = {
     try {
       const response = await ApiCache.getRecommendations(name)
       // Fetch the stats of the target user.
-      const { user, languages } = await dispatch('user/fetchUserStats', name, { root: true })
+      const { user, languages } = await dispatch('user/fetchUserStats', name, {
+        root: true
+      })
       commit('SET_USER', user)
       commit('SET_LANGUAGES', languages)
 
       // For each recommended users, fetch the stats.
       const promises = response.map(async ({ name }: { name: string }) => {
-        const { user } = await dispatch('user/fetchUserStats', name, { root: true })
+        const { user } = await dispatch('user/fetchUserStats', name, {
+          root: true
+        })
         return user
       })
 
@@ -85,12 +89,13 @@ const actions: ActionTree<RecommendationState, RootState> = {
       console.log(error)
     }
   }
-
 }
 
 const mutations: MutationTree<RecommendationState> = {
   SET_USERS_WITH_RECOMMENDATIONS (state: RecommendationState, users: string[]) {
-    state.usersWithRecommendationsSet = new Set(users.map(str => str.toLowerCase()))
+    state.usersWithRecommendationsSet = new Set(
+      users.map(str => str.toLowerCase())
+    )
     state.usersWithRecommendations = users
   },
   SET_LANGUAGES (state: RecommendationState, languages: Leaderboard[]) {
@@ -107,8 +112,7 @@ const mutations: MutationTree<RecommendationState> = {
   }
 }
 
-const getters: GetterTree<RecommendationState, RootState> = {
-}
+const getters: GetterTree<RecommendationState, RootState> = {}
 
 export const recommendation: Module<RecommendationState, RootState> = {
   namespaced: true,

@@ -1,23 +1,19 @@
 <template functional>
-  <div class='bar-chart'>
-    <div
-      v-for='item in props.items'
-      class='bars'
-    >
-      <slot name='label' :item='item'>{{item.name}}</slot>
-      <slot
-        name='bar'
-        :max='props.max'
-        :count='item.count'
+  <div class="bar-chart">
+    <div v-for="item in props.items" class="bars" :key="item.id">
+      <slot name="label" :item="item">{{ item.name }}</slot>
+      <slot name="bar" :max="props.max" :count="item.count">
+        <div
+          class="bar"
+          :style="{ width: (item.count / props.max) * 100 + '%' }"
         >
-        <div class='bar'
-          :style='{width: (item.count/props.max * 100) + "%"}'
-          >{{item.count}}</div>
+          {{ item.count }}
+        </div>
       </slot>
     </div>
   </div>
 </template>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import '@/styles/theme.scss';
 .bar-chart {
   display: grid;

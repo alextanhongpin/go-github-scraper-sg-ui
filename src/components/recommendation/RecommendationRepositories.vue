@@ -1,66 +1,66 @@
 <template>
-  <div class='recommendation-repositories'>
-    <Break/>
-    <div class='recommendation-repositories-header' v-if='user'>
-      <div class='repo-counter'>
-        <Counter>{{user.repositories}}</Counter>
+  <div class="recommendation-repositories">
+    <Break />
+    <div class="recommendation-repositories-header" v-if="user">
+      <div class="repo-counter">
+        <Counter>{{ user.repositories }}</Counter>
         Repositories
       </div>
-      <div class='repo-counter'>
-        <Counter>{{user.gists}}</Counter>
+      <div class="repo-counter">
+        <Counter>{{ user.gists }}</Counter>
         Gists
       </div>
-      <div class='repo-counter'>
-        <Counter>{{user.pullRequests}}</Counter>
+      <div class="repo-counter">
+        <Counter>{{ user.pullRequests }}</Counter>
         Pull Requests
       </div>
-      <div class='repo-counter'>
-        <Counter>{{user.starredRepositories}}</Counter>
+      <div class="repo-counter">
+        <Counter>{{ user.starredRepositories }}</Counter>
         Starred Repositories
       </div>
     </div>
 
-    <Break/>
+    <Break />
 
-    <div class='repositories'>
-      <a v-for='(repo, i) in repositories.slice(0, 6)'
-        class='repository'
-        :href='repo.url'
-        target='_blank'
-        >
-        <div class='repo-header'>
-          <div class='repo-name'>
-            {{repo.name}}
+    <div class="repositories">
+      <a
+        v-for="(repo, i) in repositories.slice(0, 6)"
+        class="repository"
+        :href="repo.url"
+        target="_blank"
+      >
+        <div class="repo-header">
+          <div class="repo-name">
+            {{ repo.name }}
           </div>
-        <Break px='5'/>
-        <div class='repo-created-at'>
-          Created {{formatDate(repo.createdAt)}}
+          <Break px="5" />
+          <div class="repo-created-at">
+            Created {{ formatDate(repo.createdAt) }}
+          </div>
+          <Break />
+          <div class="repo-description" v-if="repo.description">
+            {{ repo.description }}
+          </div>
+          <Break />
+          <div class="repo-topic" v-for="topic in repo.topics">{{ topic }}</div>
+          <Break />
         </div>
-        <Break/>
-        <div class='repo-description' v-if='repo.description'>
-          {{repo.description}}
-        </div>
-        <Break/>
-        <div class='repo-topic' v-for='topic in repo.topics'>{{topic}}</div>
-        <Break/>
-        </div>
-        <div class='repo-stats'>
+        <div class="repo-stats">
           <LanguageCell
-          :label='repo.primaryLanguage'
-          class='repo-language'
+            :label="repo.primaryLanguage"
+            class="repo-language"
           ></LanguageCell>
-          <div class='repo-stargazers'>
-            ★ {{repo.stargazers}}
-          </div>
+          <div class="repo-stargazers">★ {{ repo.stargazers }}</div>
         </div>
       </a>
     </div>
   </div>
 </template>
-<script lang='ts'>
+<script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { State } from 'vuex-class'
-import { Leaderboard, Namespace, Repository } from '@/models'
+import { User, Leaderboard, Repository } from '@/types'
+import Namespace from '@/models/namespace'
 
 // Components.
 import Break from '@/components/Break.vue'
@@ -77,15 +77,15 @@ import { shortDate } from '@/helpers/date'
   }
 })
 export default class RecommendationRepositories extends Vue {
-  @State('user', Namespace.recommendation) user?: User;
-  @State('repositories', Namespace.recommendation) repositories?: Repository[];
-  @State('languages', Namespace.recommendation) languages?: Leaderboard[];
+  @State('user', Namespace.match) user?: User
+  @State('repositories', Namespace.match) repositories?: Repository[]
+  @State('languages', Namespace.match) languages?: Leaderboard[]
   formatDate (dateStr: string): string {
     return shortDate(dateStr)
   }
 }
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import '@/styles/theme.scss';
 
 .recommendation-repositories-header {
@@ -109,7 +109,7 @@ export default class RecommendationRepositories extends Vue {
   grid-template-columns: 1fr 1fr;
 }
 .repository {
-  border: 1px solid #DDDDDD;
+  border: 1px solid #dddddd;
   padding: $dim-300;
   text-decoration: none;
   color: inherit;
@@ -120,7 +120,7 @@ export default class RecommendationRepositories extends Vue {
   justify-content: space-between;
   grid-template-rows: 1fr $dim-300;
   height: 100%;
-  transition: .134s all ease-out;
+  transition: 0.134s all ease-out;
 }
 .repository:hover {
   box-shadow: 0 5px 15px rgba(black, 0.2);
@@ -156,7 +156,7 @@ export default class RecommendationRepositories extends Vue {
 $dim-topic: #{$dim-300/2};
 .repo-topic {
   @extend %h6;
-  background: #EEE;
+  background: #eee;
   display: inline-block;
   margin: 0 5px 0 0;
   padding: 0 $dim-topic;

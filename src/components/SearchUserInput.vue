@@ -1,21 +1,21 @@
 <template>
-    <div class='component'>
-      <input
-        class='search'
-        type='search'
-        placeholder='Enter your Github username'
-        @input="$emit('keyup', $event.target.value)"
-      />
-      <slot></slot>
-    </div>
+  <div class="component">
+    <input
+      class="search"
+      type="search"
+      placeholder="Enter your Github username"
+      @input="$emit('keyup', $event.target.value)"
+      autocomplete
+    />
+    <slot></slot>
+  </div>
 </template>
 <script>
 import { Vue, Component } from 'vue-property-decorator'
 @Component
 export default class SearchUserInput extends Vue {}
 </script>
-<style lang='scss' scoped>
-
+<style lang="scss" scoped>
 @import '@/styles/theme.scss';
 $search-dim: $dim-600;
 $search-half-dim: #{$search-dim/2};

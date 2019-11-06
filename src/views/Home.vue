@@ -1,36 +1,36 @@
 <template>
   <div class="home">
-    <Break/>
+    <Break />
 
-    <Recommendation/>
+    <Recommendation />
 
-    <Carousel v-on:scroll-horizontal='scroll' v-if='users.length'>
-      <GithubCard slot="carousel" :user="user" v-for="user in users"/>
+    <Carousel v-on:scroll-horizontal="scroll" v-if="users.length">
+      <GithubCard slot="carousel" :user="user" v-for="user in users" />
     </Carousel>
 
-    <LanguageSection/>
+    <LanguageSection />
 
-    <LeaderboardBarChartUser/>
-    <LeaderboardBarChartRepository/>
+    <LeaderboardBarChartUser />
+    <LeaderboardBarChartRepository />
 
     <!-- <h3>Company found</h3> -->
     <!-- <div> -->
     <!--   {{companyCount}} -->
     <!-- </div> -->
 
-    <div class='leaderboard-user'>
-      <div class='leaderboard-user__header'>Top Active Users</div>
-      <Break px='5'/>
-      <div class='leaderboard-user__subheader'>
+    <div class="leaderboard-user">
+      <div class="leaderboard-user__header">Top Active Users</div>
+      <Break px="5" />
+      <div class="leaderboard-user__subheader">
         IN MALAYSIA AND SINGAPORE
       </div>
-      <Break px='12'/>
-      <LeaderboardUser v-bind="data" v-for="data in leaderboardUserWithStats"/>
+      <Break px="12" />
+      <LeaderboardUser v-bind="data" v-for="data in leaderboardUserWithStats" />
     </div>
 
     <LeaderboardLanguage
-      :totalCount='totalLanguageCount'
-      :items='leaderboardLanguage'
+      :totalCount="totalLanguageCount"
+      :items="leaderboardLanguage"
     />
 
     <!-- <h3>Leaderboard Repositories</h3> -->
@@ -59,9 +59,9 @@ import LeaderboardBarChartRepository from '@/components/leaderboard/LeaderboardB
 import GridRow from '@/components/GridRow.vue'
 import LanguageSection from '@/components/language/LanguageSection.vue'
 
-import { Score, Leaderboard, User } from '@/models'
+import { Score, Leaderboard, User } from '@/types'
 import { Action, Getter, State } from 'vuex-class'
-import { Namespace } from '@/models'
+import Namespace from '@/models/namespace'
 
 @Component({
   components: {
@@ -82,37 +82,42 @@ import { Namespace } from '@/models'
 export default class Home extends Vue {
   // Set the default in the modules itself, not here: companyCount = 0;
   // Will result in permanent value.
-  @State('nextCursor', Namespace.user) nextCursor?: string;
-  @State('companyCount', Namespace.user) companyCount?: number;
-  @State('recommendations', Namespace.recommendation) users?: User[];
+  @State('nextCursor', Namespace.user) nextCursor?: string
+  @State('companyCount', Namespace.user) companyCount?: number
+  @State('recommendations', Namespace.match) users?: User[]
 
-  @State('leaderboardRepository', Namespace.repo) leaderboardRepository?: Leaderboard[];
-  @State('leaderboardUser', Namespace.repo) leaderboardUser?: Leaderboard[];
-  @State('leaderboardLanguage', Namespace.repo) leaderboardLanguage?: Leaderboard[];
-  @State('maxLanguageCount', Namespace.repo) maxLanguageCount?: number;
-  @State('totalLanguageCount', Namespace.repo) totalLanguageCount?: number;
+  @State('leaderboardRepository', Namespace.repo)
+  leaderboardRepository?: Leaderboard[]
+  @State('leaderboardUser', Namespace.repo) leaderboardUser?: Leaderboard[]
+  @State('leaderboardLanguage', Namespace.repo)
+  leaderboardLanguage?: Leaderboard[]
+  @State('maxLanguageCount', Namespace.repo) maxLanguageCount?: number
+  @State('totalLanguageCount', Namespace.repo) totalLanguageCount?: number
 
-  @State('githubUri') githubUri?: string;
+  @State('githubUri') githubUri?: string
 
-  @Action('fetchUsers', Namespace.user) fetchUsers: any;
-  @Action('fetchCompanyCount', Namespace.user) fetchCompanyCount: any;
+  @Action('fetchUsers', Namespace.user) fetchUsers: any
+  @Action('fetchCompanyCount', Namespace.user) fetchCompanyCount: any
 
-  @Action('fetchLeaderboardRepository', Namespace.repo) fetchLeaderboardRepository: any
-  @Action('fetchLeaderboardLanguage', Namespace.repo) fetchLeaderboardLanguage: any
+  @Action('fetchLeaderboardRepository', Namespace.repo)
+  fetchLeaderboardRepository: any
+  @Action('fetchLeaderboardLanguage', Namespace.repo)
+  fetchLeaderboardLanguage: any
   @Action('fetchLeaderboardUser', Namespace.repo) fetchLeaderboardUser: any
 
-  @Getter('leaderboardUserWithStats', Namespace.repo) leaderboardUserWithStats: any;
-  @Getter('getUser') getUser?: any;
+  @Getter('leaderboardUserWithStats', Namespace.repo)
+  leaderboardUserWithStats: any
+  @Getter('getUser') getUser?: any
 
-  throttle: any;
-  mounted() {
-     this.fetchUsers()
+  throttle: any
+  mounted () {
+    this.fetchUsers()
 
-     this.fetchCompanyCount()
+    this.fetchCompanyCount()
 
-     this.fetchLeaderboardUser()
-     this.fetchLeaderboardRepository()
-     this.fetchLeaderboardLanguage()
+    this.fetchLeaderboardUser()
+    this.fetchLeaderboardRepository()
+    this.fetchLeaderboardLanguage()
     // await this.fetchRecommendations('alextanhongpin')
   }
   async scroll (scrollEnd: boolean) {
@@ -131,13 +136,13 @@ export default class Home extends Vue {
   }
 }
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import '@/styles/theme.scss';
 
 .leaderboard-user {
   padding: $dim-300;
   margin: $dim-300;
-  box-shadow: 0 5px 15px rgba(black, .2);
+  box-shadow: 0 5px 15px rgba(black, 0.2);
   border-radius: 11px;
 }
 .leaderboard-user__header {
@@ -149,5 +154,4 @@ export default class Home extends Vue {
   color: #818181;
   @extend %h6;
 }
-
 </style>

@@ -1,44 +1,44 @@
 <template>
-  <a class='card' :href='githubLink' target='_blank' v-if='user'>
-    <div class='front'>
-      <img class='image' :src='user.avatarUrl'/>
-      <div class='user-info'>
-        <Break/>
-        <div class='login'>
-          {{user.login}}
+  <a class="card" :href="githubLink" target="_blank" v-if="user">
+    <div class="front">
+      <img class="image" :src="user.avatarUrl" />
+      <div class="user-info">
+        <Break />
+        <div class="login">
+          {{ user.login }}
         </div>
-        <Break px='5'/>
-        <div class='created-at'>
-          Member since {{createdAtFmt}}
-        </div>
-        <Break/>
+        <Break px="5" />
+        <div class="created-at">Member since {{ createdAtFmt }}</div>
+        <Break />
       </div>
     </div>
-    <div class='back'>
-      <div class='user-detail'>
-        <div class='user-row'>
-          <img class='thumbnail' :src='user.avatarUrl'/>
+    <div class="back">
+      <div class="user-detail">
+        <div class="user-row">
+          <img class="thumbnail" :src="user.avatarUrl" />
           <div>
-            <div class='user-row__name' :title='user.name'>{{user.name}}</div>
-            <div class='user-row__created_at'>Member since {{createdAtFmt}}</div>
+            <div class="user-row__name" :title="user.name">{{ user.name }}</div>
+            <div class="user-row__created_at">
+              Member since {{ createdAtFmt }}
+            </div>
           </div>
         </div>
-        <div class='bio'>
-          {{user.bio}}
-          <div class='company' v-if='user.company'>
-            @{{user.company}}
-          </div>
+        <div class="bio">
+          {{ user.bio }}
+          <div class="company" v-if="user.company">@{{ user.company }}</div>
         </div>
-        <div class='count-info'>
+        <div class="count-info">
           <div>
-            <div class='counter'>
-              {{user.followers}}
-            </div> Followers
+            <div class="counter">
+              {{ user.followers }}
+            </div>
+            Followers
           </div>
           <div>
-            <div class='counter'>
-              {{user.following}}
-            </div> Following
+            <div class="counter">
+              {{ user.following }}
+            </div>
+            Following
           </div>
         </div>
       </div>
@@ -48,7 +48,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { User } from '@/models'
+import { User } from '@/types'
 import Break from '@/components/Break.vue'
 import * as DateHelper from '@/helpers/date'
 
@@ -58,7 +58,7 @@ import * as DateHelper from '@/helpers/date'
   }
 })
 export default class GithubCard extends Vue {
-  @Prop() private user?: User;
+  @Prop() private user?: User
   get createdAtFmt (): string {
     if (!this.user) {
       return ''
@@ -66,15 +66,13 @@ export default class GithubCard extends Vue {
     return DateHelper.shortDate(this.user.createdAt)
   }
   get githubLink (): string {
-    return this.user
-      ? `https://github.com/${this.user.login}`
-      : ''
+    return this.user ? `https://github.com/${this.user.login}` : ''
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import '@/styles/theme.scss';
 
 .card {
@@ -98,18 +96,18 @@ export default class GithubCard extends Vue {
 }
 .card:hover .front,
 .card:hover .back {
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.30);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
 }
 
 .front,
 .back {
   backface-visibility: hidden;
   border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.20);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   height: 100%;
   overflow: hidden;
   transform-style: preserve-3d;
-  transition: .134s all ease-out;
+  transition: 0.134s all ease-out;
   width: 100%;
 }
 

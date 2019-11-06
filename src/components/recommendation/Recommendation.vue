@@ -1,26 +1,23 @@
 <template>
-  <div class='recommendation'>
-    <RecommendationSearchUserInput class='search-user-input-section'/>
+  <div class="recommendation">
+    <RecommendationSearchUserInput class="search-user-input-section" />
 
-    <Break px='21'/>
+    <Break px="21" />
 
-    <div class='section' v-if='user'>
-      <div class='aside'>
-        <RecommendationUserProfile class='user-profile-section'>
-          <UserProfile slot-scope='user' v-bind='user'/>
+    <div class="section" v-if="user">
+      <div class="aside">
+        <RecommendationUserProfile class="user-profile-section">
+          <UserProfile slot-scope="user" v-bind="user" />
         </RecommendationUserProfile>
       </div>
-      <div class='main'>
+      <div class="main">
+        <RecommendationRepositories />
 
-        <RecommendationRepositories/>
+        <Break px="21" />
 
-        <Break px='21'/>
+        <RecommendationLanguages header="Repository Summary" />
 
-        <RecommendationLanguages
-          header='Repository Summary'
-        />
-
-        <Break px='21'/>
+        <Break px="21" />
 
         <!-- <RecommendationSimilarUsers -->
         <!--   header='Similar Users' -->
@@ -33,12 +30,11 @@
         <!--     :avatarUrl='user.avatarUrl' -->
         <!--   /> -->
         <!-- </RecommendationSimilarUsers> -->
-
       </div>
     </div>
   </div>
 </template>
-<script lang='ts'>
+<script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { State } from 'vuex-class'
 
@@ -52,7 +48,8 @@ import RecommendationSimilarUsers from '@/components/recommendation/Recommendati
 import RecommendationLanguages from '@/components/recommendation/RecommendationLanguages.vue'
 import RecommendationRepositories from '@/components/recommendation/RecommendationRepositories.vue'
 
-import { User, Namespace } from '@/models'
+import { User } from '@/types'
+import Namespace from '@/models/namespace'
 
 @Component({
   components: {
@@ -68,10 +65,10 @@ import { User, Namespace } from '@/models'
   }
 })
 export default class Recommendation extends Vue {
-  @State('user', Namespace.recommendation) user?: User;
+  @State('user', Namespace.match) user?: User
 }
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import '@/styles/theme.scss';
 .recommendation {
 }
@@ -99,10 +96,8 @@ export default class Recommendation extends Vue {
   }
   .aside {
     padding: 0 0 $dim-300 0;
-    border-bottom: 1px solid #EEEEEE;
+    border-bottom: 1px solid #eeeeee;
     text-align: center;
   }
 }
-
 </style>
-
