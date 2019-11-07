@@ -1,40 +1,52 @@
 $dim-50: 9px;
-$dim-100: 12px;
-$dim-200: 16px;
-$dim-300: 21px;
-$dim-400: 28px;
-$dim-500: 37px;
-$dim-600: 50px;
-$dim-700: 67px;
+$dim-100: 11px;
+$dim-200: 14px;
+$dim-300: 18px;
+$dim-400: 23px;
+$dim-500: 29px;
+$dim-600: 37px;
+// $dim-100: 12px;
+// $dim-200: 16px;
+// $dim-300: 21px;
+// $dim-400: 28px;
+// $dim-500: 37px;
+// $dim-600: 50px;
+// $dim-700: 67px;
 
+b {
+	font-weight: 700;
+}
 %h6, h6 {
 	font-size: $dim-100;
-	line-height: $dim-300;
+	line-height: 22px;
 }
 
-%h5, h5 {
+%h5, h5, p {
 	font-size: $dim-200;
-	line-height: $dim-300;
+	line-height: 27px;
 }
 
 %h4, h4 {
 	font-size: $dim-300;
-	line-height: $dim-500;
+	line-height: 32px;
 }
 
 %h3, h3 {
 	font-size: $dim-400;
-	line-height: $dim-500;
+	line-height: 40px;
+	font-weight: bold;
 }
 
 %h2, h2 {
 	font-size: $dim-500;
-	line-height: $dim-700;
+	line-height: 48px;
+	font-weight: bold;
 }
 
 %h1, h1 {
 	font-size: $dim-600;
-	line-height: $dim-700;
+	line-height: 59px;
+	font-weight: bold;
 }
 
 $color-gray: #DDDDDD;

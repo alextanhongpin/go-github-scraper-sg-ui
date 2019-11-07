@@ -31,7 +31,7 @@ $search-half-dim: #{$search-dim/2};
   @extend %h5;
   background: $color-gray;
   border-radius: $search-half-dim;
-  border: none;
+  border: 1px solid $color-alto;
   height: $search-dim;
   padding: 0 $search-half-dim;
   width: 100%;

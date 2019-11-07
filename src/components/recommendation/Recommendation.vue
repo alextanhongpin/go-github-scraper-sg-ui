@@ -1,36 +1,17 @@
 <template>
   <div class="recommendation">
     <RecommendationSearchUserInput class="search-user-input-section" />
-
-    <Break px="21" />
+    <Break :px="33" />
 
     <div class="section" v-if="user">
-      <div class="aside">
-        <RecommendationUserProfile class="user-profile-section">
-          <UserProfile slot-scope="user" v-bind="user" />
-        </RecommendationUserProfile>
-      </div>
-      <div class="main">
-        <RecommendationRepositories />
+      <UserProfile v-bind="user" />
+      <Break :px="33" />
 
-        <Break px="21" />
+      <h3>Your Top Repositories</h3>
+      <RecommendationRepositories />
+      <Break :px="33" />
 
-        <RecommendationLanguages header="Repository Summary" />
-
-        <Break px="21" />
-
-        <!-- <RecommendationSimilarUsers -->
-        <!--   header='Similar Users' -->
-        <!-- > -->
-        <!--   <UserList -->
-        <!--     slot-scope='user' -->
-        <!--     :key='user.login' -->
-        <!--     :login='user.login' -->
-        <!--     :name='user.name' -->
-        <!--     :avatarUrl='user.avatarUrl' -->
-        <!--   /> -->
-        <!-- </RecommendationSimilarUsers> -->
-      </div>
+      <RecommendationLanguages header="Repository Summary" />
     </div>
   </div>
 </template>
@@ -42,7 +23,6 @@ import { State } from 'vuex-class'
 import Break from '@/components/Break.vue'
 import UserList from '@/components/UserList.vue'
 import UserProfile from '@/components/UserProfile.vue'
-import RecommendationUserProfile from '@/components/recommendation/RecommendationUserProfile.vue'
 import RecommendationSearchUserInput from '@/components/recommendation/RecommendationSearchUserInput.vue'
 import RecommendationSimilarUsers from '@/components/recommendation/RecommendationSimilarUsers.vue'
 import RecommendationLanguages from '@/components/recommendation/RecommendationLanguages.vue'
@@ -57,7 +37,6 @@ import Namespace from '@/models/namespace'
     UserProfile,
     UserList,
 
-    RecommendationUserProfile,
     RecommendationSearchUserInput,
     RecommendationSimilarUsers,
     RecommendationLanguages,
@@ -74,30 +53,6 @@ export default class Recommendation extends Vue {
 }
 
 .search-user-input-section {
-  margin: 0 $dim-300;
   max-width: 360px;
-}
-
-.section {
-  margin: 0 $dim-300;
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  grid-column-gap: $dim-300;
-}
-
-@media (max-width: 640px) {
-  .search-user-input-section {
-    max-width: 100%;
-  }
-  .section {
-    grid-auto-flow: row;
-    grid-row-gap: $dim-300;
-    grid-template-columns: 1fr;
-  }
-  .aside {
-    padding: 0 0 $dim-300 0;
-    border-bottom: 1px solid #eeeeee;
-    text-align: center;
-  }
 }
 </style>

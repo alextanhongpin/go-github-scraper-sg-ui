@@ -3,12 +3,25 @@
     <div class="front">
       <img class="image" :src="user.avatarUrl" />
       <div class="user-info">
-        <Break />
-        <div class="login">
+        <h4 class="login">
           {{ user.login }}
+        </h4>
+        <Break></Break>
+
+        <div class="count-info">
+          <div>
+            <b>
+              {{ user.followers }}
+            </b>
+            Followers
+          </div>
+          <div>
+            <b>
+              {{ user.following }}
+            </b>
+            Following
+          </div>
         </div>
-        <Break px="5" />
-        <div class="created-at">Member since {{ createdAtFmt }}</div>
         <Break />
       </div>
     </div>
@@ -17,29 +30,16 @@
         <div class="user-row">
           <img class="thumbnail" :src="user.avatarUrl" />
           <div>
-            <div class="user-row__name" :title="user.name">{{ user.name }}</div>
-            <div class="user-row__created_at">
+            <p class="user-row__name" :title="user.name">{{ user.name }}</p>
+            <h6 class="user-row__created_at">
               Member since {{ createdAtFmt }}
-            </div>
+            </h6>
           </div>
         </div>
+
         <div class="bio">
           {{ user.bio }}
           <div class="company" v-if="user.company">@{{ user.company }}</div>
-        </div>
-        <div class="count-info">
-          <div>
-            <div class="counter">
-              {{ user.followers }}
-            </div>
-            Followers
-          </div>
-          <div>
-            <div class="counter">
-              {{ user.following }}
-            </div>
-            Following
-          </div>
         </div>
       </div>
     </div>
@@ -132,7 +132,7 @@ $image-dimension: 240px;
 }
 
 .login {
-  font-weight: 600;
+  font-weight: bold;
 }
 
 .name {
@@ -152,15 +152,15 @@ $image-dimension: 240px;
   padding: $dim-200;
   display: grid;
   grid-auto-flow: row;
-  grid-template-rows: $dim-500 1fr $dim-300;
+  grid-template-rows: max-content 1fr;
   height: 100%;
   -ms-flex-pack: distribute;
-  grid-row-gap: $dim-100;
+  grid-row-gap: $dim-200;
 }
 
 .thumbnail {
-  height: $dim-500;
-  width: $dim-500;
+  height: 40px;
+  width: 40px;
   border-radius: 50%;
 }
 
@@ -168,6 +168,7 @@ $image-dimension: 240px;
   display: grid;
   grid-template-columns: 40px 1fr;
   grid-column-gap: 10px;
+  align-items: center;
 }
 
 .user-row__name {
@@ -178,9 +179,6 @@ $image-dimension: 240px;
   overflow: hidden;
   max-width: 160px;
 }
-.user-row__created_at {
-  @extend %h6;
-}
 
 .bio {
   @extend %h6;
@@ -188,8 +186,8 @@ $image-dimension: 240px;
 
 .count-info {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  @extend %h6;
+  grid-template-columns: max-content max-content;
+  grid-column-gap: 11px;
 }
 
 .counter {

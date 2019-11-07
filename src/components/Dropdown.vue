@@ -45,5 +45,9 @@ export default class Dropdown extends Vue {
   line-height: $dim-600;
   padding: 0 $dim-100;
   width: 100%;
+  cursor: pointer;
+}
+.item:hover {
+  background: #eee;
 }
 </style>

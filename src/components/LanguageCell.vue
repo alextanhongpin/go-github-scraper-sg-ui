@@ -1,24 +1,22 @@
 <template>
-  <div class='language-cell'>
-    <div class='icon' :style='{background: color}'></div>
-    <span class='label'>
-      {{label}} <slot></slot>
-    </span>
+  <div class="language-cell">
+    <div class="icon" :style="{ background: color }"></div>
+    <span class="label"> {{ label }} <slot></slot> </span>
   </div>
 </template>
-<script lang='ts'>
+<script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import * as Color from '@/helpers/color'
 
 @Component
 export default class LanguageCell extends Vue {
-  @Prop({ default: '' }) private label!: string;
+  @Prop({ default: '' }) private label!: string
   get color (): string {
     return Color.pick(this.label)
   }
 }
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import '@/styles/theme.scss';
 
 .icon {
@@ -28,5 +26,4 @@ export default class LanguageCell extends Vue {
   position: relative;
   display: inline-block;
 }
-
 </style>

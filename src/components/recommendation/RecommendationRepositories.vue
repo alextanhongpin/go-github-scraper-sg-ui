@@ -3,23 +3,22 @@
     <Break />
     <div class="recommendation-repositories-header" v-if="user">
       <div class="repo-counter">
-        <Counter>{{ user.repositories }}</Counter>
+        <b>{{ user.repositories }}</b>
         Repositories
       </div>
       <div class="repo-counter">
-        <Counter>{{ user.gists }}</Counter>
+        <b>{{ user.gists }}</b>
         Gists
       </div>
       <div class="repo-counter">
-        <Counter>{{ user.pullRequests }}</Counter>
+        <b>{{ user.pullRequests }}</b>
         Pull Requests
       </div>
       <div class="repo-counter">
-        <Counter>{{ user.starredRepositories }}</Counter>
+        <b>{{ user.starredRepositories }}</b>
         Starred Repositories
       </div>
     </div>
-
     <Break />
 
     <div class="repositories">
@@ -30,19 +29,20 @@
         target="_blank"
       >
         <div class="repo-header">
-          <div class="repo-name">
-            {{ repo.name }}
-          </div>
-          <Break px="5" />
           <div class="repo-created-at">
             Created {{ formatDate(repo.createdAt) }}
           </div>
+          <h4 class="repo-name">
+            {{ repo.name }}
+          </h4>
           <Break />
-          <div class="repo-description" v-if="repo.description">
+          <p class="repo-description" v-if="repo.description">
             {{ repo.description }}
-          </div>
+          </p>
           <Break />
-          <div class="repo-topic" v-for="topic in repo.topics">{{ topic }}</div>
+          <div class="repo-topic" v-for="topic in repo.topics" :key="topic">
+            {{ topic }}
+          </div>
           <Break />
         </div>
         <div class="repo-stats">
@@ -90,16 +90,12 @@ export default class RecommendationRepositories extends Vue {
 
 .recommendation-repositories-header {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, max-content));
+  grid-template-columns: repeat(4, max-content);
   grid-column-gap: $dim-300;
-  font-weight: 600;
-}
-
-.repo-counter {
-  align-content: center;
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  grid-column-gap: 5px;
+  background: #eee;
+  height: 48px;
+  line-height: 48px;
+  padding: 0 $dim-100;
 }
 
 .repositories {
@@ -115,7 +111,7 @@ export default class RecommendationRepositories extends Vue {
   color: inherit;
   background: white;
   min-height: 240px;
-  border-radius: $dim-100;
+  border-radius: 7px;
   display: grid;
   justify-content: space-between;
   grid-template-rows: 1fr $dim-300;
@@ -158,9 +154,9 @@ $dim-topic: #{$dim-300/2};
   @extend %h6;
   background: #eee;
   display: inline-block;
-  margin: 0 5px 0 0;
+  margin: 0 8px 5px 0;
   padding: 0 $dim-topic;
   border-radius: $dim-topic;
-  height: $dim-300;
+  height: $dim-400;
 }
 </style>

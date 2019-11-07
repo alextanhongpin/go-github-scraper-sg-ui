@@ -19,8 +19,8 @@ import { Action, State } from 'vuex-class'
 @Component
 export default class App extends Vue {
   // HINT: To fetch a key in the rootState.
-  @State('brand') brand?: string
-  @State('version') version?: string
+  @State brand?: string
+  @State version?: string
 }
 </script>
 
@@ -54,7 +54,7 @@ button {
   @extend %h5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+  color: #345;
 }
 
 small {

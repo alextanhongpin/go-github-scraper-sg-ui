@@ -10,11 +10,12 @@ export default class Break extends Vue {
 }
 </script>
 <style lang="scss" scoped>
+@import '@/styles/theme.scss';
 // The scoped must be at the end.
 .break {
   display: block;
   // For debugging.
   // background: red;
-  height: 10px;
+  height: 11px;
 }
 </style>
