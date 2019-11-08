@@ -1,16 +1,18 @@
 <template>
   <div class="dropdown">
     <div class="item" v-for="item in items" :key="item">
-      <slot>
+      <slot :item="item">
+        <!--
         <div :item="item" @click="$emit('click', $event)" :name="item">
           {{ item }}
         </div>
+      -->
       </slot>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { Emit, Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 
 @Component
 export default class Dropdown extends Vue {

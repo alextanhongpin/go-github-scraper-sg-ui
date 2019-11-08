@@ -1,8 +1,10 @@
 <template>
-  <SearchUserInput @keyup="search">
+  <search-input @keyup="search">
     <!--Display suggestions-->
-    <Dropdown v-if="showDropdown" :items="suggestions" @click="selectItem" />
-  </SearchUserInput>
+    <dropdown v-if="showDropdown" :items="suggestions">
+      <div slot-scope="{ item }" @click.self="selectItem(item)">{{ item }}</div>
+    </dropdown>
+  </search-input>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
@@ -10,7 +12,7 @@ import { Action, Getter, State } from 'vuex-class'
 
 // Components.
 import Dropdown from '@/components/Dropdown.vue'
-import SearchUserInput from '@/components/SearchUserInput.vue'
+import SearchInput from '@/components/SearchUserInput.vue'
 
 // Types.
 import { User } from '@/types'
@@ -23,7 +25,7 @@ import { throttle } from '@/helpers/throttle'
 @Component({
   components: {
     Dropdown,
-    SearchUserInput
+    SearchInput
   }
 })
 export default class RecommendationSearchUserInput extends Vue {
@@ -70,10 +72,9 @@ export default class RecommendationSearchUserInput extends Vue {
     }
   }
 
-  selectItem (evt) {
-    const name = evt.currentTarget.getAttribute('name')
-    this.inputKeyword(name)
-    this.search(name)
+  selectItem (item) {
+    this.inputKeyword(item)
+    this.search(item)
   }
 
   @throttle(250)

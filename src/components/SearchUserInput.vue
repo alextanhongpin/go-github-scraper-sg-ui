@@ -37,9 +37,9 @@ $search-half-dim: #{$search-dim/2};
 
 .search-input {
   @extend %h5;
-  background: $color-gray;
+  background: #eee;
   border-radius: $search-half-dim;
-  border: 1px solid $color-alto;
+  border: 1px solid #ddd;
   height: $search-dim;
   padding: 0 $search-half-dim;
   width: 100%;

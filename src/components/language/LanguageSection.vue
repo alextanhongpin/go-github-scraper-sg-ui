@@ -1,25 +1,29 @@
 <template>
   <div class="language-section" @click.self="toggleDropdown">
-    <div class="language-section-header">
+    <h3>
       Most Repos by Language
-    </div>
-    <Break />
+    </h3>
+
     <div class="languages">
       <div>
         <input class="search" type="search" :value="language" @keyup="search" />
       </div>
-      <Dropdown v-if="showDropdown" :items="searchLanguages">
+      <dropdown v-if="showDropdown" :items="searchLanguages">
         <div slot-scope="{ item }" @click.self="select(item)">{{ item }}</div>
-      </Dropdown>
+      </dropdown>
     </div>
+
     <div class="users">
       <a
         v-for="(user, i) in users.slice(0, 10)"
         class="user"
         target="_blank"
         :href="'https://github.com/' + user.user.login"
+        :key="user.user.login"
       >
-        <div class="user-position">#{{ i + 1 }}</div>
+        <div class="user-position">
+          <i class="fa fa-trophy" v-if="i < 3"></i>
+        </div>
         <div class="user-info">
           <div>
             <img class="user-photo" :src="user.user.avatarUrl" />
@@ -27,9 +31,9 @@
               {{ user.user.login }}
             </div>
           </div>
-          <Counter class="counter">
+          <b class="counter">
             {{ user.count }}
-          </Counter>
+          </b>
         </div>
       </a>
     </div>
@@ -42,13 +46,11 @@ import { LeaderboardUserLanguage } from '@/types'
 import Namespace from '@/models/namespace'
 
 import Break from '@/components/Break.vue'
-import Counter from '@/components/Counter.vue'
 import Dropdown from '@/components/Dropdown.vue'
 
 @Component({
   components: {
     Break,
-    Counter,
     Dropdown
   }
 })
@@ -61,21 +63,21 @@ export default class LanguageSection extends Vue {
   @State('languages', Namespace.language) languages?: string[]
   @State('users', Namespace.language) users?: Leaderboard[]
 
-  mounted() {
+  mounted () {
     this.fetchLanguages()
     this.fetchUsers()
   }
 
-  fetchUsers() {
+  fetchUsers () {
     this.fetchLeaderboardUserByLanguage(this.language)
   }
 
-  select(language: string) {
+  select (language: string) {
     this.language = language
     this.fetchUsers()
   }
 
-  search(evt: KeyboardEvent) {
+  search (evt: KeyboardEvent) {
     const keyword = evt.target.value
 
     const language = this.filterLanguage(keyword)
@@ -90,17 +92,17 @@ export default class LanguageSection extends Vue {
     this.language = keyword
   }
 
-  filterLanguage(language: string): string[] {
+  filterLanguage (language: string): string[] {
     return this.languages.filter(s => {
       return s.toLowerCase().startsWith(language.toLowerCase())
     })
   }
 
-  get searchLanguages(): string[] {
+  get searchLanguages (): string[] {
     return this.filterLanguage(this.language)
   }
 
-  get showDropdown() {
+  get showDropdown () {
     const hasLanguage = this.languages.includes(this.language)
     return !hasLanguage && this.language
   }
@@ -129,46 +131,39 @@ export default class LanguageSection extends Vue {
 }
 
 .search {
-  @extend %h6;
+  @extend %h5;
   width: 100%;
-  height: $dim-500;
-  background: #ddd;
-  border: none;
-  border-radius: #{$dim-500/2};
-  padding: 0 #{$dim-500/2};
+  height: $dim-600;
+  background: #eee;
+  border: 1px solid #ddd;
+  border-radius: #{$dim-600/2};
+  padding: 0 #{$dim-600/2};
 }
 
 .users {
   display: grid;
-  grid-column-gap: $dim-50;
-  grid-row-gap: $dim-50;
+  grid-column-gap: $dim-100;
 }
 .user {
   text-decoration: none;
   color: inherit;
-  border-radius: 11px;
+  border-radius: 3px;
 
   display: grid;
-  grid-template-columns: $dim-500 minmax(max-content, 1fr);
+  grid-template-columns: max-content minmax(max-content, 1fr);
 }
 
 $colors: #c98910, #a8a8a8, #965a38;
 @for $i from 1 through 3 {
-  .user:nth-child(#{$i}) .user-info {
+  .user:nth-child(#{$i}) .user-position {
     color: nth($colors, $i);
-    background: rgba(nth($colors, $i), 0.15);
-    font-weight: 600;
-    .counter {
-      background: nth($colors, $i);
-      color: white;
-    }
   }
 }
 
 .user-position {
-  width: $dim-500;
-  height: $dim-500;
-  line-height: $dim-500;
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
   text-align: center;
 }
 

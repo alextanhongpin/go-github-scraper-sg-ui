@@ -46,7 +46,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import Break from '@/components/Break.vue'
 import Counter from '@/components/Counter.vue'
 import LanguageCell from '@/components/LanguageCell.vue'
-import PieChart from './Pie.vue'
+import PieChart from './PieChart.vue'
 
 import { Leaderboard } from '@/types'
 import Namespace from '@/models/namespace'

@@ -1,41 +1,24 @@
 <template>
   <div class="leaderboard-language">
-    <div class="header">
+    <h3>
       Top Languages
-    </div>
-    <Break px="5" />
-    <div class="subheader">
+    </h3>
+
+    <p class="subheader">
       Based on the number of repositories
-    </div>
-    <Break px="21" />
-    <div class="language-cells">
-      <div :label="item.name" v-for="item in items">
-        <span
-          :style="{
-            background: color(item.name),
-            opacity: opacity(i, item.count)
-          }"
-          v-for="i in percentage(item.count)"
-          class="circle"
-        ></span>
-        {{ item.name }}
-        ({{ percentage(item.count) }}%)
-        <span class="repo-count">{{ formatCount(item.count) }} repos</span>
-      </div>
-    </div>
+    </p>
+    <bar-chart :chartData="chartData"></bar-chart>
   </div>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { Leaderboard } from '@/types'
-import LanguageCell from '@/components/LanguageCell.vue'
-import Break from '@/components/Break.vue'
+import BarChart from '@/components/BarChart.vue'
 import * as Color from '@/helpers/color'
 
 @Component({
   components: {
-    Break,
-    LanguageCell
+    BarChart
   }
 })
 export default class LeaderboardLanguage extends Vue {
@@ -46,15 +29,32 @@ export default class LeaderboardLanguage extends Vue {
   percentage (count: number): number {
     return Math.ceil((count / this.totalCount) * 100)
   }
+
   formatCount (count: number): string {
     return count.toLocaleString()
   }
+
   color (label: string): string {
     return Color.pick(label)
   }
+
   opacity (index: number, count: number): number {
     const value = this.percentage(count)
     return (value - index + 1) / value
+  }
+
+  get chartData () {
+    const items = this.items
+    return {
+      datasets: [
+        {
+          label: 'Top Programming Language',
+          data: items.map(item => item.count),
+          backgroundColor: items.map(item => Color.pick(item.name))
+        }
+      ],
+      labels: items.map(item => item.name)
+    }
   }
 }
 </script>
@@ -63,35 +63,11 @@ export default class LeaderboardLanguage extends Vue {
 .leaderboard-language {
   padding: $dim-300;
   box-shadow: 0 5px 15px rgba(black, 0.2);
+  border: 1px solid #ddd;
   margin: $dim-300;
-}
-.header {
-  @extend %h5;
-  font-weight: bold;
+  border-radius: 5px;
 }
 .subheader {
-  @extend %subheader;
-}
-.language-cells {
-  @extend %h6;
-  display: grid;
-  grid-auto-flows: columns;
-  grid-row-gap: $dim-50;
-}
-.language-cell {
-  display: grid;
-  grid-template-columns: $dim-50 1fr;
-  align-items: center;
-  grid-column-gap: $dim-50;
-}
-.circle {
-  border-radius: 50%;
-  display: inline-block;
-  height: 10px;
-  width: 10px;
-  margin: 0 1px;
-}
-.repo-count {
   @extend %subheader;
 }
 </style>
