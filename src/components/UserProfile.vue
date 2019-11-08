@@ -9,7 +9,7 @@
         ><h2>{{ login }}</h2></a
       >
 
-      <p class="user-name" v-if="name">({{ name }})</p>
+      <p class="user-name" v-if="name">{{ name }}</p>
       <p class="user-created-at">Member since {{ formatDate(createdAt) }}</p>
       <Break />
 
@@ -70,37 +70,37 @@ export default class UserProfile extends Vue {
   display: grid;
   grid-template-columns: max-content 1fr;
   grid-column-gap: 30px;
+}
 
-  .user-photo {
-    max-width: 240px;
-    width: 100%;
-    height: auto;
-    border-radius: 7px;
-  }
+.user-photo {
+  max-width: 240px;
+  width: 100%;
+  height: auto;
+  border-radius: 7px;
+}
 
-  .user-login {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-  }
-  .user-name {
-  }
-  .user-created-at {
-    color: $color-silverlake;
-  }
+.user-login {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+.user-name {
+}
+.user-created-at {
+  color: $color-silverlake;
+}
 
-  .user-bio {
-    max-width: 640px;
-    background: #eee;
-    border-left: 5px solid #ddd;
-    padding: 11px;
-  }
+.user-bio {
+  max-width: 640px;
+  background: #eee;
+  border-left: 5px solid #ddd;
+  padding: 11px;
+}
 
-  .counters {
-    display: grid;
-    grid-auto-flow: column;
-    justify-content: flex-start;
-    grid-column-gap: 22px;
-  }
+.counters {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: flex-start;
+  grid-column-gap: 22px;
 }
 </style>

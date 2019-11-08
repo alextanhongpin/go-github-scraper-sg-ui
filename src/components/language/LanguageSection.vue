@@ -61,21 +61,21 @@ export default class LanguageSection extends Vue {
   @State('languages', Namespace.language) languages?: string[]
   @State('users', Namespace.language) users?: Leaderboard[]
 
-  mounted () {
+  mounted() {
     this.fetchLanguages()
     this.fetchUsers()
   }
 
-  fetchUsers () {
+  fetchUsers() {
     this.fetchLeaderboardUserByLanguage(this.language)
   }
 
-  select (language: string) {
+  select(language: string) {
     this.language = language
     this.fetchUsers()
   }
 
-  search (evt: KeyboardEvent) {
+  search(evt: KeyboardEvent) {
     const keyword = evt.target.value
 
     const language = this.filterLanguage(keyword)
@@ -90,17 +90,17 @@ export default class LanguageSection extends Vue {
     this.language = keyword
   }
 
-  filterLanguage (language: string): string[] {
+  filterLanguage(language: string): string[] {
     return this.languages.filter(s => {
       return s.toLowerCase().startsWith(language.toLowerCase())
     })
   }
 
-  get searchLanguages (): string[] {
+  get searchLanguages(): string[] {
     return this.filterLanguage(this.language)
   }
 
-  get showDropdown () {
+  get showDropdown() {
     const hasLanguage = this.languages.includes(this.language)
     return !hasLanguage && this.language
   }

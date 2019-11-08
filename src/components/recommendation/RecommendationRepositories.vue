@@ -1,6 +1,6 @@
 <template>
   <div class="recommendation-repositories">
-    <Break />
+    <break />
     <div class="recommendation-repositories-header" v-if="user">
       <div class="repo-counter">
         <b>{{ user.repositories }}</b>
@@ -19,39 +19,17 @@
         Starred Repositories
       </div>
     </div>
-    <Break />
+    <break />
 
     <div class="repositories">
       <a
-        v-for="(repo, i) in repositories.slice(0, 6)"
-        class="repository"
+        v-for="repo in repositories"
         :href="repo.url"
+        :key="repo.name"
+        class="repository-link"
         target="_blank"
       >
-        <div class="repo-header">
-          <div class="repo-created-at">
-            Created {{ formatDate(repo.createdAt) }}
-          </div>
-          <h4 class="repo-name">
-            {{ repo.name }}
-          </h4>
-          <Break />
-          <p class="repo-description" v-if="repo.description">
-            {{ repo.description }}
-          </p>
-          <Break />
-          <div class="repo-topic" v-for="topic in repo.topics" :key="topic">
-            {{ topic }}
-          </div>
-          <Break />
-        </div>
-        <div class="repo-stats">
-          <LanguageCell
-            :label="repo.primaryLanguage"
-            class="repo-language"
-          ></LanguageCell>
-          <div class="repo-stargazers">★ {{ repo.stargazers }}</div>
-        </div>
+        <repository v-bind="repo" />
       </a>
     </div>
   </div>
@@ -59,30 +37,24 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { State } from 'vuex-class'
-import { User, Leaderboard, Repository } from '@/types'
+import { User, Leaderboard, Repository as IRepository } from '@/types'
 import Namespace from '@/models/namespace'
 
 // Components.
 import Break from '@/components/Break.vue'
-import Counter from '@/components/Counter.vue'
-import LanguageCell from '@/components/LanguageCell.vue'
-
-import { shortDate } from '@/helpers/date'
+import Repository from '@/components/Repository.vue'
 
 @Component({
   components: {
     Break,
-    Counter,
-    LanguageCell
+    Repository
   }
 })
 export default class RecommendationRepositories extends Vue {
   @State('user', Namespace.match) user?: User
-  @State('repositories', Namespace.match) repositories?: Repository[]
+  @State(state => state.repositories.slice(0, 6), Namespace.match)
+  repositories?: IRepository[]
   @State('languages', Namespace.match) languages?: Leaderboard[]
-  formatDate (dateStr: string): string {
-    return shortDate(dateStr)
-  }
 }
 </script>
 <style lang="scss" scoped>
@@ -104,59 +76,9 @@ export default class RecommendationRepositories extends Vue {
   grid-row-gap: $dim-100;
   grid-template-columns: 1fr 1fr;
 }
-.repository {
-  border: 1px solid #dddddd;
-  padding: $dim-300;
+.repository-link {
+  display: block;
   text-decoration: none;
   color: inherit;
-  background: white;
-  min-height: 240px;
-  border-radius: 7px;
-  display: grid;
-  justify-content: space-between;
-  grid-template-rows: 1fr $dim-300;
-  height: 100%;
-  transition: 0.134s all ease-out;
-}
-.repository:hover {
-  box-shadow: 0 5px 15px rgba(black, 0.2);
-  transform: translate3d(0, -5px, 0);
-}
-.repo-name {
-  font-weight: 600;
-}
-.repo-description {
-}
-.repo-stargazers {
-}
-.repo-language {
-  display: grid;
-  grid-auto-flow: column;
-  justify-content: flex-start;
-  grid-column-gap: 5px;
-  align-items: center;
-}
-.repo-created-at {
-  @extend %h6;
-  color: $color-silverlake;
-}
-.repo-stats {
-  @extend %h6;
-  display: grid;
-  grid-template-columns: repeat(2, max-content);
-  grid-column-gap: $dim-100;
-  align-items: center;
-  height: $dim-300;
-}
-
-$dim-topic: #{$dim-300/2};
-.repo-topic {
-  @extend %h6;
-  background: #eee;
-  display: inline-block;
-  margin: 0 8px 5px 0;
-  padding: 0 $dim-topic;
-  border-radius: $dim-topic;
-  height: $dim-400;
 }
 </style>
