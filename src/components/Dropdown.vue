@@ -41,8 +41,8 @@ export default class Dropdown extends Vue {
 
 .item {
   border-bottom: 1px solid #eeeeee;
-  height: $dim-600;
-  line-height: $dim-600;
+  height: 48px;
+  line-height: 48px;
   padding: 0 $dim-100;
   width: 100%;
   cursor: pointer;

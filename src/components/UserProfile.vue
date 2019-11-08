@@ -6,10 +6,10 @@
 
     <div class="user-grid-main">
       <a class="user-login" :href="githubLink(login)" target="_blank"
-        ><h2>{{ login }}</h2></a
+        ><h1>{{ login }}</h1></a
       >
 
-      <p class="user-name" v-if="name">{{ name }}</p>
+      <h4 class="user-name" v-if="name">{{ name }}</h4>
       <p class="user-created-at">Member since {{ formatDate(createdAt) }}</p>
       <Break />
 

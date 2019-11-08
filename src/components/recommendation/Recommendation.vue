@@ -1,17 +1,20 @@
 <template>
   <div class="recommendation">
-    <RecommendationSearchUserInput class="search-user-input-section" />
-    <Break :px="33" />
+    <Search class="search" />
+    <break :px="33" />
 
     <div class="section" v-if="user">
       <UserProfile v-bind="user" />
-      <Break :px="33" />
+      <break :px="33" />
 
       <h3>Your Top Repositories</h3>
-      <RecommendationRepositories />
-      <Break :px="33" />
+      <repositories />
+      <break :px="33" />
 
-      <RecommendationLanguages header="Repository Summary" />
+      <languages header="Your Top Languages" />
+
+      <h3>Your Similar Users</h3>
+      <users></users>
     </div>
   </div>
 </template>
@@ -23,10 +26,10 @@ import { State } from 'vuex-class'
 import Break from '@/components/Break.vue'
 import UserList from '@/components/UserList.vue'
 import UserProfile from '@/components/UserProfile.vue'
-import RecommendationSearchUserInput from '@/components/recommendation/RecommendationSearchUserInput.vue'
-import RecommendationSimilarUsers from '@/components/recommendation/RecommendationSimilarUsers.vue'
-import RecommendationLanguages from '@/components/recommendation/RecommendationLanguages.vue'
-import RecommendationRepositories from '@/components/recommendation/RecommendationRepositories.vue'
+import Search from '@/components/recommendation/Search.vue'
+import Users from '@/components/recommendation/Users.vue'
+import Languages from '@/components/recommendation/Languages.vue'
+import Repositories from '@/components/recommendation/Repositories.vue'
 
 import { User } from '@/types'
 import Namespace from '@/models/namespace'
@@ -37,10 +40,10 @@ import Namespace from '@/models/namespace'
     UserProfile,
     UserList,
 
-    RecommendationSearchUserInput,
-    RecommendationSimilarUsers,
-    RecommendationLanguages,
-    RecommendationRepositories
+    Search,
+    Users,
+    Languages,
+    Repositories
   }
 })
 export default class Recommendation extends Vue {
@@ -49,10 +52,7 @@ export default class Recommendation extends Vue {
 </script>
 <style lang="scss" scoped>
 @import '@/styles/theme.scss';
-.recommendation {
-}
-
-.search-user-input-section {
+.search {
   max-width: 360px;
 }
 </style>

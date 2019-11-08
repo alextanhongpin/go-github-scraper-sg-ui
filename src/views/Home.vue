@@ -4,11 +4,6 @@
 
     <Recommendation />
 
-    <h3>Similar like you</h3>
-    <Carousel v-on:scroll-horizontal="scroll" v-if="users.length">
-      <GithubCard slot="carousel" :user="user" v-for="user in users" />
-    </Carousel>
-
     <LanguageSection />
 
     <LeaderboardBarChartUser />

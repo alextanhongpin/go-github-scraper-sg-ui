@@ -5,14 +5,13 @@
       <h4 class="repo-name">
         {{ name }}
       </h4>
-      <break />
 
       <p class="repo-description" v-if="description">
         {{ description }}
       </p>
-      <break />
 
-      <h6 class="repo-topic" v-for="topic in topics" :key="topic">
+      <break />
+      <h6 class="repo-topic" v-for="topic in sortedTopics" :key="topic">
         {{ topic }}
       </h6>
       <break />
@@ -22,7 +21,15 @@
         :label="primaryLanguage"
         class="repo-language"
       ></language-cell>
-      <div class="repo-stargazers">★ {{ stargazers }}</div>
+      <div class="repo-stargazers" title="stargazers">
+        <i class="icon-star fa fa-star"></i>&nbsp; {{ stargazers }}
+      </div>
+      <div class="repo-watchers" title="watchers">
+        <i class="icon-eye fa fa-eye"></i>&nbsp; {{ watchers }}
+      </div>
+      <div class="repo-forks" title="forks">
+        <i class="icon-forks fa fa-code-branch"></i>&nbsp; {{ forks }}
+      </div>
     </h6>
   </div>
 </template>
@@ -46,9 +53,16 @@ export default class Repository extends Vue {
   @Prop() topics: string[]
   @Prop() primaryLanguage: string
   @Prop() stargazers: number
+  @Prop() watchers: number
+  @Prop() forks: number
 
   formatDate (dateStr: string): string {
     return shortDate(dateStr)
+  }
+
+  get sortedTopics (): string[] {
+    if (!this.topics) return []
+    return this.topics.sort()
   }
 }
 </script>
@@ -59,24 +73,23 @@ export default class Repository extends Vue {
   border: 1px solid #dddddd;
   padding: $dim-300;
   background: white;
-  min-height: 240px;
-  border-radius: 7px;
+  border-radius: 5px;
   display: grid;
   justify-content: space-between;
   grid-template-rows: 1fr $dim-300;
   height: 100%;
-  transition: 0.134s all ease-out;
 }
 .repository:hover {
-  box-shadow: 0 5px 15px rgba(black, 0.2);
-  transform: translate3d(0, -5px, 0);
+  border: 1px solid #bbb;
 }
 .repo-name {
-  font-weight: 600;
+  font-weight: bold;
 }
-.repo-description {
-}
-.repo-stargazers {
+
+.repo-stargazers,
+.repo-watchers,
+.repo-forks {
+  vertical-align: middle;
 }
 .repo-language {
   display: grid;
@@ -90,19 +103,26 @@ export default class Repository extends Vue {
 }
 .repo-stats {
   display: grid;
-  grid-template-columns: repeat(2, max-content);
-  grid-column-gap: $dim-100;
+  grid-template-columns: repeat(4, max-content);
+  grid-column-gap: $dim-200;
   align-items: center;
-  height: $dim-300;
 }
 
 $dim-topic: #{$dim-300/2};
 .repo-topic {
-  background: #eee;
   display: inline-block;
+  background: #eee;
   margin: 0 8px 5px 0;
   padding: 0 $dim-topic;
   border-radius: $dim-topic;
+
   height: $dim-400;
+}
+
+.icon-star,
+.icon-eye,
+.icon-forks {
+  font-size: $dim-200;
+  color: #666;
 }
 </style>

@@ -1,34 +1,41 @@
 <template>
-  <div class="component">
-    <div class="languages-header">{{ header }}</div>
-    <Break />
-    <div class="languages-subheader">
-      <Counter>{{ languages.length }}</Counter> languages
-    </div>
-    <Break />
-    <div class="languages-body">
-      <LanguageCell
+  <div>
+    <h3>{{ header }}</h3>
+
+    <p>
+      <b>{{ languages.length }}</b>
+      {{ languageLabel }}
+    </p>
+    <break />
+    <pie-chart :chartData="chartdata"></pie-chart>
+
+    <!--
+    <div class="body">
+      <language-cell
         v-for="item in filteredLanguages"
-        :label="item.name"
         class="language"
+        :label="item.name"
+        :key="item.name"
       >
         ({{ formatPercentage(item.count) }}%)
 
-        <span class="language-count">
+        <span class="count">
           {{ item.count }} {{ repoLabel(item.count) }}
         </span>
-      </LanguageCell>
+      </language-cell>
     </div>
-    <Break />
-    <div class="language-footer">
+    <break />
+
+    <div class="footer">
       <button
-        class="language-button-toggle"
+        class="button-toggle"
         v-if="hasMoreThanMax"
         @click="toggleLanguage"
       >
         {{ displayLanguageLabel }}
       </button>
     </div>
+    -->
   </div>
 </template>
 <script lang="ts">
@@ -39,15 +46,18 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import Break from '@/components/Break.vue'
 import Counter from '@/components/Counter.vue'
 import LanguageCell from '@/components/LanguageCell.vue'
+import PieChart from './Pie.vue'
 
 import { Leaderboard } from '@/types'
 import Namespace from '@/models/namespace'
+import * as Color from '@/helpers/color'
 
 @Component({
   components: {
     Break,
     Counter,
-    LanguageCell
+    LanguageCell,
+    PieChart
   }
 })
 export default class RecommendationLanguages extends Vue {
@@ -56,7 +66,7 @@ export default class RecommendationLanguages extends Vue {
   @Prop() header!: string
 
   // States.
-  @State('languages', Namespace.match) languages?: Leaderboard[]
+  @Getter('languages', Namespace.match) languages?: Leaderboard[]
 
   // Methods.
   formatPercentage (count: number): string {
@@ -85,24 +95,37 @@ export default class RecommendationLanguages extends Vue {
   get hasMoreThanMax (): boolean {
     return this.languages.length > this.maxShowCount
   }
+
   get totalRepositoryCount (): number {
     return this.languages.reduce((acc: number, { count }) => {
       return acc + count
     }, 0)
+  }
+
+  get languageLabel () {
+    return this.languages.length === 1 ? 'Language' : 'Languages'
+  }
+
+  get chartdata () {
+    return {
+      datasets: [
+        {
+          data: this.languages.map(lang => lang.count),
+          backgroundColor: this.languages.map(lang => Color.pick(lang.name))
+        }
+      ],
+      labels: this.languages.map(lang => lang.name)
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
 @import '@/styles/theme.scss';
 
-.languages-header {
-  @extend %h4;
-  font-weight: 600;
-}
-.languages-subheader {
+.subheader {
   @extend %h6;
 }
-.languages-body {
+.body {
   display: grid;
   grid-auto-flow: row;
   grid-row-gap: 5px;
@@ -116,13 +139,13 @@ export default class RecommendationLanguages extends Vue {
   align-items: center;
   grid-column-gap: 5px;
 }
-.language-count {
+.count {
   color: #666666;
   text-transform: uppercase;
 }
-.language-footer {
+.footer {
 }
-.language-button-toggle {
+.button-toggle {
   height: $dim-400;
   padding: 0 $dim-50;
   border-radius: 5px;

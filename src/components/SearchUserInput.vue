@@ -1,25 +1,33 @@
 <template>
-  <div class="component">
+  <div class="search-user-input">
     <input
-      class="search"
+      class="search-input"
       type="search"
       placeholder="Enter your Github username"
       @input="$emit('keyup', $event.target.value)"
       autocomplete
+      :value="keyword"
     />
     <slot></slot>
   </div>
 </template>
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import { Getter } from 'vuex-class'
+
+import Namespace from '@/models/namespace'
+
 @Component
-export default class SearchUserInput extends Vue {}
+export default class SearchUserInput extends Vue {
+  // Getters.
+  @Getter('keyword', Namespace.match) keyword: string
+}
 </script>
 <style lang="scss" scoped>
 @import '@/styles/theme.scss';
-$search-dim: $dim-600;
+$search-dim: 48px;
 $search-half-dim: #{$search-dim/2};
-.component {
+.search-user-input {
   // Let the container decide the width.
   // max-width: 320px;
   position: relative;
@@ -27,7 +35,7 @@ $search-half-dim: #{$search-dim/2};
   width: 100%;
 }
 
-.search {
+.search-input {
   @extend %h5;
   background: $color-gray;
   border-radius: $search-half-dim;

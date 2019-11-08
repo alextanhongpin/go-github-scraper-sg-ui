@@ -1,45 +1,51 @@
 <template>
-  <div class="component" v-if="users.length">
-    <div class="header">{{ header }}</div>
-    <Break />
-    <div class="list">
-      <!-- <slot class='list' v-for='user in users' v-bind='user'></slot> -->
-
-      <Carousel>
-        <GithubCard
-          slot="carousel"
-          :user="user"
-          v-for="user in users"
-          :key="user.login"
-        />
-      </Carousel>
-    </div>
-  </div>
+    <Carousel v-if="users.length">
+      <GithubCard
+        slot="carousel"
+        :user="user"
+        v-for="user in users"
+        :key="user.login"
+      />
+    </Carousel>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Action, State } from 'vuex-class'
 
 // Components.
-import Break from '@/components/Break.vue'
 import Carousel from '@/components/Carousel.vue'
 import GithubCard from '@/components/GithubCard.vue'
 
 import { User } from '@/types'
 import Namespace from '@/models/namespace'
 
-import { State } from 'vuex-class'
-
 @Component({
   components: {
-    Break,
     Carousel,
     GithubCard
   }
 })
 export default class RecommendationSimilarUsers extends Vue {
   // Getters.
-  @State('recommendations', Namespace.match) users?: User[]
   @Prop() header!: string
+  @State('recommendations', Namespace.match) users?: User[]
+  @State('nextCursor', Namespace.user) nextCursor?: string
+  @Action('fetchUsers', Namespace.user) fetchUsers: any
+
+  throttle = -1
+  mounted () {
+    this.fetchUsers()
+  }
+
+  /*
+  async scroll (scrollEnd: boolean) {
+    if (scrollEnd) {
+      this.throttle && window.clearTimeout(this.throttle)
+      this.throttle = window.setTimeout(() => {
+        this.fetchUsers(this.nextCursor)
+      }, 250)
+    }
+  }*/
 }
 </script>
 <style lang="scss" scoped>

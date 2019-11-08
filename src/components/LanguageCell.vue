@@ -1,5 +1,5 @@
 <template>
-  <div class="language-cell">
+  <div class="language-cell" :title="label">
     <div class="icon" :style="{ background: color }"></div>
     <span class="label"> {{ label }} <slot></slot> </span>
   </div>
@@ -20,8 +20,8 @@ export default class LanguageCell extends Vue {
 @import '@/styles/theme.scss';
 
 .icon {
-  height: $dim-100;
-  width: $dim-100;
+  height: $dim-200;
+  width: $dim-200;
   border-radius: 50%;
   position: relative;
   display: inline-block;

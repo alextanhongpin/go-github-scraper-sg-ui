@@ -1,6 +1,5 @@
 <template>
   <div class="recommendation-repositories">
-    <break />
     <div class="recommendation-repositories-header" v-if="user">
       <div class="repo-counter">
         <b>{{ user.repositories }}</b>
@@ -19,7 +18,6 @@
         Starred Repositories
       </div>
     </div>
-    <break />
 
     <div class="repositories">
       <a
@@ -64,17 +62,15 @@ export default class RecommendationRepositories extends Vue {
   display: grid;
   grid-template-columns: repeat(4, max-content);
   grid-column-gap: $dim-300;
-  background: #eee;
   height: 48px;
   line-height: 48px;
-  padding: 0 $dim-100;
 }
 
 .repositories {
   display: grid;
   grid-column-gap: $dim-100;
   grid-row-gap: $dim-100;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
 }
 .repository-link {
   display: block;

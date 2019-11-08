@@ -26,6 +26,7 @@ export interface RecommendationState {
   recommendations: User[]
   languages: Leaderboard[]
   repositories: Repository[]
+  keyword: string
 }
 
 const state: RecommendationState = {
@@ -34,19 +35,22 @@ const state: RecommendationState = {
   usersWithRecommendations: [],
   recommendations: [],
   languages: [],
-  repositories: []
+  repositories: [],
+  keyword: ''
 }
 
 const actions: ActionTree<RecommendationState, RootState> = {
   async fetchUsersWithRecommendations ({ commit }) {
     try {
       const response = await ApiCache.getUsersWithRecommendations()
+
       commit('SET_USERS_WITH_RECOMMENDATIONS', response)
     } catch (error) {
       // Retry?
       console.log(error)
     }
   },
+
   async fetchRecommendationsForUser (
     { commit, rootState, state, dispatch },
     name: string
@@ -81,6 +85,7 @@ const actions: ActionTree<RecommendationState, RootState> = {
       console.log(error)
     }
   },
+
   async fetchRepositoriesByUser ({ commit }, login: string) {
     try {
       const response = await ApiCache.getRepositoriesByUser(login)
@@ -88,6 +93,10 @@ const actions: ActionTree<RecommendationState, RootState> = {
     } catch (error) {
       console.log(error)
     }
+  },
+
+  inputKeyword ({ commit }, keyword: string) {
+    commit('SET_KEYWORD', keyword)
   }
 }
 
@@ -98,21 +107,37 @@ const mutations: MutationTree<RecommendationState> = {
     )
     state.usersWithRecommendations = users
   },
+
   SET_LANGUAGES (state: RecommendationState, languages: Leaderboard[]) {
     state.languages = languages
   },
+
   SET_RECOMMENDATIONS (state: RecommendationState, recommendations: User[]) {
     state.recommendations = recommendations
   },
+
   SET_USER (state: RecommendationState, user: User) {
     state.user = user
   },
+
   SET_REPOSITORIES (state: RecommendationState, repositories: Repository[]) {
     state.repositories = repositories
+  },
+
+  SET_KEYWORD (state: RecommendationState, keyword: string) {
+    state.keyword = keyword
   }
 }
 
-const getters: GetterTree<RecommendationState, RootState> = {}
+const getters: GetterTree<RecommendationState, RootState> = {
+  languages (state: RecommendationState) {
+    return state.languages
+  },
+
+  keyword (state: RecommendationState) {
+    return state.keyword
+  }
+}
 
 export const recommendation: Module<RecommendationState, RootState> = {
   namespaced: true,

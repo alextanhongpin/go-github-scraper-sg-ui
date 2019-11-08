@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <SearchUserInput @keyup="search">
-      <!--Display suggestions-->
-      <Dropdown v-if="showDropdown" :items="suggestions" @click="selectItem" />
-    </SearchUserInput>
-  </div>
+  <SearchUserInput @keyup="search">
+    <!--Display suggestions-->
+    <Dropdown v-if="showDropdown" :items="suggestions" @click="selectItem" />
+  </SearchUserInput>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
@@ -29,18 +27,20 @@ import { throttle } from '@/helpers/throttle'
   }
 })
 export default class RecommendationSearchUserInput extends Vue {
-  private keyword: string = ''
-
   // Actions.
   @Action('fetchUsersWithRecommendations', Namespace.match)
   fetchUsersWithRecommendations: any
   @Action('fetchRecommendationsForUser', Namespace.match)
   fetchRecommendations: any
+  @Action('inputKeyword', Namespace.match) inputKeyword: any
 
   // States.
   @State('usersWithRecommendations', Namespace.match)
   usersWithRecommendations?: string[]
   @State('user', Namespace.match) user?: User
+
+  // Getters.
+  @Getter('keyword', Namespace.match) keyword: string
 
   // Lifecycles.
   async mounted () {
@@ -64,16 +64,16 @@ export default class RecommendationSearchUserInput extends Vue {
 
   // Methods.
   search (keyword: string) {
-    this.keyword = keyword
-    if (this.keyword.trim().length) {
-      this.throttleFetch(this.keyword)
+    this.inputKeyword(keyword)
+    if (keyword.trim().length) {
+      this.throttleFetch(keyword)
     }
   }
 
   selectItem (evt) {
     const name = evt.currentTarget.getAttribute('name')
-    this.keyword = name
-    this.search(this.keyword)
+    this.inputKeyword(name)
+    this.search(name)
   }
 
   @throttle(250)

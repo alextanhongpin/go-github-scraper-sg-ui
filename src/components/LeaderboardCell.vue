@@ -1,7 +1,5 @@
 <template>
-  <div class="leaderboard">
-    {{name}} {{count}}
-  </div>
+  <div class="leaderboard" :title="name">{{ name }} {{ count }}</div>
 </template>
 
 <script lang="ts">
@@ -12,11 +10,10 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
 export default class LeaderboardCell extends Vue {
-  @Prop() private name!: string;
-  @Prop() private count!: number;
+  @Prop() private name!: string
+  @Prop() private count!: number
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>
