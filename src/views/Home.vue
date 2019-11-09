@@ -1,7 +1,5 @@
 <template>
   <div class="home">
-    <break />
-
     <recommendation />
     <break :px="33" />
 
