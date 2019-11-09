@@ -5,11 +5,16 @@
     </div>
 
     <div class="user-grid-main">
-      <a class="user-login" :href="githubLink(login)" target="_blank"
-        ><h1>{{ login }}</h1></a
-      >
+      <h1 class="user-login">
+        {{ login }}
+        <h4 class="user-external-link">
+          <a :href="githubLink(login)" target="_blank">
+            <i class="fa fa-external-link-alt"></i> View GitHub
+          </a>
+        </h4>
+      </h1>
 
-      <h4 class="user-name" v-if="name">{{ name }}</h4>
+      <h4 class="user-name" v-if="name">{{ name }}&nbsp; &nbsp;</h4>
       <p class="user-created-at">Member since {{ formatDate(createdAt) }}</p>
       <Break />
 
@@ -98,10 +103,9 @@ export default class UserProfile extends Vue {
   }
 }
 
-.user-login {
-  display: block;
-  text-decoration: none;
-  color: inherit;
+.user-external-link {
+  display: inline-block;
+  vertical-align: middle;
 }
 .user-name {
 }

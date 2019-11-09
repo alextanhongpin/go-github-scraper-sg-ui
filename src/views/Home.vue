@@ -89,6 +89,7 @@ export default class Home extends Vue {
 
   @State('githubUri') githubUri?: string
 
+  // Actions.
   @Action('fetchUsers', Namespace.user) fetchUsers: any
   @Action('fetchCompanyCount', Namespace.user) fetchCompanyCount: any
 
@@ -98,6 +99,7 @@ export default class Home extends Vue {
   fetchLeaderboardLanguage: any
   @Action('fetchLeaderboardUser', Namespace.repo) fetchLeaderboardUser: any
 
+  // Getters.
   @Getter('leaderboardUserWithStats', Namespace.repo)
   leaderboardUserWithStats: any
   @Getter('getUser') getUser?: any

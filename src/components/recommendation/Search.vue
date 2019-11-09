@@ -7,7 +7,7 @@
   </search-input>
 </template>
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Action, Getter, State } from 'vuex-class'
 
 // Components.
@@ -43,10 +43,23 @@ export default class RecommendationSearchUserInput extends Vue {
 
   // Getters.
   @Getter('keyword', Namespace.match) keyword: string
+  @Getter('userWithMatches', Namespace.match) userWithMatches: Set<string>
+
+  @Watch('$route', { immediate: true, deep: true })
+  async onUrlChange (route: any) {
+    const login = route.params.login
+    if (login) {
+      await this.fetchRecommendations(login)
+    }
+  }
 
   // Lifecycles.
   async mounted () {
+    const login = this.$route.params.login
     await this.fetchUsersWithRecommendations()
+    if (login) {
+      await this.fetchRecommendations(login)
+    }
   }
 
   // Getters.
@@ -79,7 +92,10 @@ export default class RecommendationSearchUserInput extends Vue {
 
   @throttle(250)
   throttleFetch (keyword: string) {
-    this.fetchRecommendations(keyword)
+    if (!this.userWithMatches.has(keyword)) {
+      return
+    }
+    this.$router.push('/' + keyword)
   }
 }
 </script>

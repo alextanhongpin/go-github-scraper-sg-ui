@@ -1,5 +1,8 @@
 <template>
   <div class="repository">
+    <a class="hover-link">
+      <i class="fa fa-external-link-alt"></i> View Repository
+    </a>
     <div class="repo-header">
       <h6 class="repo-created-at">Created {{ formatDate(createdAt) }}</h6>
       <h4 class="repo-name">
@@ -78,9 +81,19 @@ export default class Repository extends Vue {
   justify-content: space-between;
   grid-template-rows: 1fr $dim-300;
   height: 100%;
+  position: relative;
 }
 .repository:hover {
   border: 1px solid #bbb;
+}
+.repository:hover > .hover-link {
+  display: block;
+}
+.hover-link {
+  position: absolute;
+  top: $dim-100;
+  right: $dim-100;
+  display: none;
 }
 .repo-name {
   font-weight: bold;

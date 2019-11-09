@@ -8,34 +8,6 @@
     </p>
     <break />
     <pie-chart :chartData="chartdata"></pie-chart>
-
-    <!--
-    <div class="body">
-      <language-cell
-        v-for="item in filteredLanguages"
-        class="language"
-        :label="item.name"
-        :key="item.name"
-      >
-        ({{ formatPercentage(item.count) }}%)
-
-        <span class="count">
-          {{ item.count }} {{ repoLabel(item.count) }}
-        </span>
-      </language-cell>
-    </div>
-    <break />
-
-    <div class="footer">
-      <button
-        class="button-toggle"
-        v-if="hasMoreThanMax"
-        @click="toggleLanguage"
-      >
-        {{ displayLanguageLabel }}
-      </button>
-    </div>
-    -->
   </div>
 </template>
 <script lang="ts">
@@ -44,8 +16,6 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 
 // Components.
 import Break from '@/components/Break.vue'
-import Counter from '@/components/Counter.vue'
-import LanguageCell from '@/components/LanguageCell.vue'
 import PieChart from './PieChart.vue'
 
 import { Leaderboard } from '@/types'
@@ -56,8 +26,6 @@ import * as Color from '@/helpers/color'
 @Component({
   components: {
     Break,
-    Counter,
-    LanguageCell,
     PieChart
   }
 })

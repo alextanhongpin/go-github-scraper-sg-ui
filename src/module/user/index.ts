@@ -129,10 +129,6 @@ const mutations: MutationTree<UserState> = {
 }
 
 const getters: GetterTree<UserState, RootState> = {
-  user (state: UserState): User {
-    return state.user
-  },
-
   companyUsers (state: UserState): User[] {
     return state.companyUsers
   }

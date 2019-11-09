@@ -140,6 +140,10 @@ const getters: GetterTree<RecommendationState, RootState> = {
 
   user (state: RecommendationState): User {
     return state.user
+  },
+
+  userWithMatches (state: RecommendationState): Set<string> {
+    return state.usersWithRecommendationsSet
   }
 }
 
