@@ -4,15 +4,9 @@
 
     <recommendation />
 
+    <h2>GitHub Stats</h2>
     <language-section />
-
-    <year-over-year-user-chart />
-    <year-over-year-repository-chart />
-
-    <!-- <h3>Company found</h3> -->
-    <!-- <div> -->
-    <!--   {{companyCount}} -->
-    <!-- </div> -->
+    <break :px="33" />
 
     <div class="leaderboard-user-section">
       <h3>Top Active Users</h3>
@@ -26,11 +20,19 @@
         :key="user.login"
       />
     </div>
+    <break :px="33" />
 
     <leaderboard-language
       :totalCount="totalLanguageCount"
       :items="leaderboardLanguage"
     />
+    <break :px="33" />
+
+    <year-over-year-user-chart />
+    <break :px="33" />
+
+    <year-over-year-repository-chart />
+    <break :px="33" />
   </div>
 </template>
 

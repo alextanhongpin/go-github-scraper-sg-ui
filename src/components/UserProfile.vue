@@ -70,6 +70,7 @@ export default class UserProfile extends Vue {
   display: grid;
   grid-template-columns: max-content 1fr;
   grid-column-gap: 30px;
+  grid-row-gap: $dim-100;
 }
 
 .user-photo-container {
@@ -86,6 +87,15 @@ export default class UserProfile extends Vue {
   position: absolute;
   width: 100%;
   height: auto;
+}
+
+@media (max-width: 640px) {
+  .user-profile {
+    grid-template-columns: 1fr;
+  }
+  .user-photo-container {
+    width: 100%;
+  }
 }
 
 .user-login {

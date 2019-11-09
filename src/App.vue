@@ -79,5 +79,6 @@ small {
   max-width: 1140px;
   width: 100%;
   margin: auto;
+  padding: $dim-100;
 }
 </style>

@@ -107,14 +107,23 @@ export default class LeaderboardUser extends Vue {
 
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-column-gap: $dim-100;
+  grid-row-gap: $dim-100;
   align-items: center;
   padding: $dim-100;
+  border-radius: 5px;
 }
 .leaderboard-user:not(:last-child) {
   border-bottom: 1px solid #eee;
 }
 .leaderboard-user:hover {
   background: #f7f7f7;
+}
+
+@media (max-width: 800px) {
+  .leaderboard-user {
+    grid-template-columns: 1fr;
+  }
 }
 
 .header {

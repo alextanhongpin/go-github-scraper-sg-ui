@@ -1,5 +1,5 @@
 <template>
-  <div class="recommendation-repositories">
+  <div class="repositories-container">
     <div class="recommendation-repositories-header" v-if="user">
       <div class="repo-counter">
         <b>{{ user.repositories }}</b>
@@ -57,7 +57,6 @@ export default class RecommendationRepositories extends Vue {
 </script>
 <style lang="scss" scoped>
 @import '@/styles/theme.scss';
-
 .recommendation-repositories-header {
   display: grid;
   grid-template-columns: repeat(4, max-content);
@@ -71,6 +70,16 @@ export default class RecommendationRepositories extends Vue {
   grid-column-gap: $dim-100;
   grid-row-gap: $dim-100;
   grid-template-columns: repeat(3, 1fr);
+}
+@media (max-width: 800px) {
+  .repositories {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .repositories {
+    grid-template-columns: 1fr;
+  }
 }
 .repository-link {
   display: block;
