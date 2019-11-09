@@ -8,6 +8,10 @@
         <div>
           <h5 class="user-name">
             {{ user.login }}
+            <trophy-icon
+              :name="['gold', 'silver', 'bronze'][i]"
+              v-if="i < 3"
+            ></trophy-icon>
           </h5>
           <h6 class="user-connections">
             <span>
@@ -60,16 +64,19 @@ import * as Color from '@/helpers/color'
 
 import Break from '@/components/Break.vue'
 import LanguageCell from '@/components/LanguageCell.vue'
+import TrophyIcon from '@/components/TrophyIcon.vue'
 
 @Component({
   components: {
     Break,
-    LanguageCell
+    LanguageCell,
+    TrophyIcon
   }
 })
 export default class LeaderboardUser extends Vue {
   @State('githubUri') githubUri?: string
   @Prop() private user?: User
+  @Prop() i?: number
   @Prop({ default: [] }) private languages?: Leaderboard[]
   @Prop({ default: 0 }) private count?: number
 

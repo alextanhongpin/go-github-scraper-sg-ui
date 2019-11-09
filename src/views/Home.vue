@@ -16,8 +16,9 @@
 
       <leaderboard-user
         v-bind="user"
-        v-for="user in leaderboardUserWithStats"
+        v-for="(user, i) in leaderboardUserWithStats"
         :key="user.login"
+        :i="i"
       />
     </div>
     <break :px="33" />

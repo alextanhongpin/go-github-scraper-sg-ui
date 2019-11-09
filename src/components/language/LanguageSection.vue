@@ -22,15 +22,16 @@
         :href="'https://github.com/' + user.user.login"
         :key="user.user.login"
       >
-        <div class="user-position">
-          <i class="fa fa-trophy" v-if="i < 3"></i>
-          <i v-else>#{{ i + 1 }}</i>
-        </div>
+        <div class="user-position">{{ i + 1 }}.</div>
         <div class="user-info">
           <div>
             <img class="user-photo" :src="user.user.avatarUrl" />
             <div class="user-name">
               {{ user.user.login }}
+              <trophy-icon
+                :name="['gold', 'silver', 'bronze'][i]"
+                v-if="i < 3"
+              />
             </div>
           </div>
           <div class="counter">
@@ -49,11 +50,13 @@ import Namespace from '@/models/namespace'
 
 import Break from '@/components/Break.vue'
 import Dropdown from '@/components/Dropdown.vue'
+import TrophyIcon from '@/components/TrophyIcon.vue'
 
 @Component({
   components: {
     Break,
-    Dropdown
+    Dropdown,
+    TrophyIcon
   }
 })
 export default class LanguageSection extends Vue {
@@ -152,13 +155,6 @@ export default class LanguageSection extends Vue {
 
   display: grid;
   grid-template-columns: max-content 1fr max-content;
-}
-
-$colors: #c98910, #a8a8a8, #965a38;
-@for $i from 1 through 3 {
-  .user:nth-child(#{$i}) .user-position {
-    color: nth($colors, $i);
-  }
 }
 
 .user-position {
