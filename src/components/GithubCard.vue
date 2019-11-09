@@ -6,7 +6,7 @@
         <h4 class="login">
           {{ user.login }}
         </h4>
-        <Break></Break>
+        <break />
 
         <div class="count-info">
           <div>
@@ -22,7 +22,7 @@
             Following
           </div>
         </div>
-        <Break />
+        <break />
       </div>
     </div>
     <div class="back">
@@ -102,7 +102,7 @@ export default class GithubCard extends Vue {
 .front,
 .back {
   backface-visibility: hidden;
-  border-radius: 15px;
+  border-radius: 7px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   height: 100%;
   overflow: hidden;

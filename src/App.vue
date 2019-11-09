@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header class="header">
+    <header class="app-header">
       <span class="brand">{{ brand }}</span
       >&nbsp;<span class="brand-app">Recommender</span>
       <small> version {{ version }} </small>
@@ -61,7 +61,7 @@ small {
   @extend %h6;
 }
 
-.header {
+.app-header {
   height: 80px;
   line-height: 80px;
   @extend %h3;

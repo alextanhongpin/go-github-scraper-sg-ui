@@ -1,7 +1,7 @@
 <template>
   <div class="language-cell" :title="label">
     <div class="icon" :style="{ background: color }"></div>
-    <span class="label"> {{ label }} <slot></slot> </span>
+    <span class="label">&nbsp; {{ label }} <slot></slot> </span>
   </div>
 </template>
 <script lang="ts">

@@ -37,6 +37,7 @@ const actions: ActionTree<RepoState, RootState> = {
       console.log(error)
     }
   },
+
   async fetchLeaderboardLanguage ({ commit }) {
     try {
       const data = await RepoApi.getLeaderboardLanguage()
@@ -54,6 +55,7 @@ const actions: ActionTree<RepoState, RootState> = {
       console.log(error)
     }
   },
+
   async fetchLeaderboardRepository ({ commit }) {
     // try {
     //   const data = await RepoApi.getLeaderboardRepository()
@@ -62,6 +64,7 @@ const actions: ActionTree<RepoState, RootState> = {
     //   console.log(error)
     // }
   },
+
   async fetchLeaderboardUser ({ commit, dispatch }) {
     try {
       const data = await RepoApi.getLeaderboardUser()
@@ -83,18 +86,23 @@ const mutations: MutationTree<RepoState> = {
   fetchRepositoriesByYearsSuccess (state: RepoState, data: Leaderboard[]) {
     state.leaderboardRepositoryByYears = data
   },
+
   fetchLeaderboardRepositorySuccess (state: RepoState, data: Leaderboard[]) {
     state.leaderboardRepository = data
   },
+
   SET_LEADERBOARD_USER (state: RepoState, data: LeaderboardUser[]) {
     state.leaderboardUser = data
   },
+
   fetchLeaderboardLanguageSuccess (state: RepoState, data: Leaderboard[]) {
     state.leaderboardLanguage = data
   },
+
   SET_MAX_LANGUAGE_COUNT (state: RepoState, count: number) {
     state.maxLanguageCount = count
   },
+
   SET_TOTAL_LANGUAGE_COUNT (state: RepoState, count: number) {
     state.totalLanguageCount = count
   }

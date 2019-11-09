@@ -1,36 +1,36 @@
 <template>
   <div class="home">
-    <Break />
+    <break />
 
-    <Recommendation />
+    <recommendation />
 
-    <LanguageSection />
+    <language-section />
 
-    <LeaderboardBarChartUser />
-    <LeaderboardBarChartRepository />
+    <year-over-year-user-chart />
+    <year-over-year-repository-chart />
 
     <!-- <h3>Company found</h3> -->
     <!-- <div> -->
     <!--   {{companyCount}} -->
     <!-- </div> -->
 
-    <div class="leaderboard-user">
-      <div class="leaderboard-user__header">Top Active Users</div>
-      <Break px="5" />
-      <div class="leaderboard-user__subheader">
-        IN MALAYSIA AND SINGAPORE
-      </div>
-      <Break px="12" />
-      <LeaderboardUser v-bind="data" v-for="data in leaderboardUserWithStats" />
+    <div class="leaderboard-user-section">
+      <h3>Top Active Users</h3>
+      <h5>
+        Based on Repository owned count, excluding forks.
+      </h5>
+
+      <leaderboard-user
+        v-bind="user"
+        v-for="user in leaderboardUserWithStats"
+        :key="user.login"
+      />
     </div>
 
-    <LeaderboardLanguage
+    <leaderboard-language
       :totalCount="totalLanguageCount"
       :items="leaderboardLanguage"
     />
-
-    <!-- <h3>Leaderboard Repositories</h3> -->
-    <!-- <LeaderboardCell v-bind="data" v-for="data in leaderboardRepository"/> -->
   </div>
 </template>
 
@@ -43,16 +43,13 @@ import { Component, Vue } from 'vue-property-decorator'
 // Components.
 import Break from '@/components/Break.vue'
 import GithubCard from '@/components/GithubCard.vue'
-import GridCard from '@/components/GridCard.vue'
-import Carousel from '@/components/Carousel.vue'
-import LeaderboardCell from '@/components/LeaderboardCell.vue'
+
 import LeaderboardLanguage from '@/components/LeaderboardLanguage.vue'
 import LeaderboardUser from '@/components/LeaderboardUser.vue'
 import Recommendation from '@/components/recommendation/Recommendation.vue'
 
-import LeaderboardBarChartUser from '@/components/leaderboard/LeaderboardBarChartUser.vue'
-import LeaderboardBarChartRepository from '@/components/leaderboard/LeaderboardBarChartRepository.vue'
-import GridRow from '@/components/GridRow.vue'
+import YearOverYearUserChart from '@/components/leaderboard/YearOverYearUserChart.vue'
+import YearOverYearRepositoryChart from '@/components/leaderboard/YearOverYearRepositoryChart.vue'
 import LanguageSection from '@/components/language/LanguageSection.vue'
 
 import { Score, Leaderboard, User } from '@/types'
@@ -62,15 +59,11 @@ import Namespace from '@/models/namespace'
 @Component({
   components: {
     Break,
-    Carousel,
     GithubCard,
-    GridCard,
-    GridRow,
-    LeaderboardCell,
     LeaderboardUser,
     LeaderboardLanguage,
-    LeaderboardBarChartUser,
-    LeaderboardBarChartRepository,
+    YearOverYearUserChart,
+    YearOverYearRepositoryChart,
     Recommendation,
     LanguageSection
   }
@@ -108,13 +101,10 @@ export default class Home extends Vue {
   throttle: any
   mounted () {
     this.fetchUsers()
-
     this.fetchCompanyCount()
-
     this.fetchLeaderboardUser()
     this.fetchLeaderboardRepository()
     this.fetchLeaderboardLanguage()
-    // await this.fetchRecommendations('alextanhongpin')
   }
   async scroll (scrollEnd: boolean) {
     if (scrollEnd) {
@@ -135,19 +125,9 @@ export default class Home extends Vue {
 <style lang="scss" scoped>
 @import '@/styles/theme.scss';
 
-.leaderboard-user {
-  padding: $dim-300;
-  margin: $dim-300;
+.leaderboard-user-section {
+  padding: $dim-400;
+  border-radius: $dim-100;
   box-shadow: 0 5px 15px rgba(black, 0.2);
-  border-radius: 11px;
-}
-.leaderboard-user__header {
-  font-weight: bold;
-  @extend %h5;
-}
-.leaderboard-user__subheader {
-  font-weight: 600; // Semibold;
-  color: #818181;
-  @extend %h6;
 }
 </style>

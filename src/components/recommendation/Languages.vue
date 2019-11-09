@@ -49,6 +49,7 @@ import LanguageCell from '@/components/LanguageCell.vue'
 import PieChart from './PieChart.vue'
 
 import { Leaderboard } from '@/types'
+import { chartData } from '@/models/chart'
 import Namespace from '@/models/namespace'
 import * as Color from '@/helpers/color'
 
@@ -107,15 +108,9 @@ export default class RecommendationLanguages extends Vue {
   }
 
   get chartdata () {
-    return {
-      datasets: [
-        {
-          data: this.languages.map(lang => lang.count),
-          backgroundColor: this.languages.map(lang => Color.pick(lang.name))
-        }
-      ],
-      labels: this.languages.map(lang => lang.name)
-    }
+    const y = this.languages.map(lang => lang.count)
+    const x = this.languages.map(lang => lang.name)
+    return chartData(x, y, name => Color.pick(name))
   }
 }
 </script>

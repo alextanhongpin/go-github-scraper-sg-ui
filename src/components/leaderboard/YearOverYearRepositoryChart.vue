@@ -1,63 +1,69 @@
 <template>
   <div class="leaderboard-repository">
-    <Break />
-    <LeaderboardBarChart
-      :items="items"
-      :max="max"
-      colorStart="#78A9E6"
-      colorEnd="#AC3FFF"
-    >
-      <h4 slot="header">{{ header }}</h4>
-      <div slot="subheader">
-        {{ subheader }}
-        <Counter>{{ total && total.toLocaleString() }}</Counter>
-      </div>
-    </LeaderboardBarChart>
-    <Break />
+    <h3>{{ header }}</h3>
+
+    <h5>
+      <b>{{ total && total.toLocaleString() }}</b>
+      {{ subheader }}
+    </h5>
+
+    <break :px="33" />
+    <bar-chart :chartData="chartData"></bar-chart>
+    <break />
   </div>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { State, Action } from 'vuex-class'
-import Namespace from '@/models/namespace'
 
+// Components.
 import Break from '@/components/Break.vue'
-import LeaderboardBarChart from '@/components/leaderboard/LeaderboardBarChart.vue'
-import Counter from '@/components/Counter.vue'
+import BarChart from '@/components/BarChart.vue'
+
+// Models.
+import Namespace from '@/models/namespace'
+import { chartData } from '@/models/chart'
 @Component({
   components: {
     Break,
-    Counter,
-    LeaderboardBarChart
+    BarChart
   }
 })
 export default class LeaderboardBarChartRepository extends Vue {
-  @Prop({ default: 'Repositories created by Year' }) private header: string
-  @Prop({ default: 'Total repositories found in Malaysia and Singapore' })
+  @Prop({ default: 'Year-over-Year Repository Growth' }) private header: string
+  @Prop({ default: 'Repositories' })
   private subheader: string
 
   @State('leaderboardRepositoryByYears', Namespace.repo) items?: Leaderboard[]
   @Action('fetchRepositoriesByYears', Namespace.repo)
   fetchRepositoryCountByYears: any
+
   mounted () {
     this.fetchRepositoryCountByYears()
   }
+
   get max (): number {
     return Math.max(...this.items.map(i => i.count))
   }
+
   get total (): number {
     return this.items.reduce((acc, i) => {
       return acc + i.count
     }, 0)
+  }
+
+  get chartData () {
+    const x = this.items.map(i => i.name)
+    const y = this.items.map(i => i.count)
+    return chartData(x, y)
   }
 }
 </script>
 <style lang="scss" scoped>
 @import '@/styles/theme.scss';
 .leaderboard-repository {
-  padding: 0 $dim-300;
-  margin: $dim-300;
+  padding: $dim-400;
   box-shadow: 0 5px 15px rgba(black, 0.2);
-  border-radius: $dim-300;
+  border-radius: $dim-100;
 }
 </style>

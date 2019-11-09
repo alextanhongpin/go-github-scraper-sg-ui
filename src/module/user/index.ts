@@ -38,6 +38,7 @@ const actions: ActionTree<UserState, RootState> = {
   setName ({ commit }, name: string) {
     commit('setName', name)
   },
+
   async fetchUsers ({ state, commit }, cursor?: string) {
     try {
       const { value } = await ApiGenerator.getUsers.next()
@@ -48,6 +49,7 @@ const actions: ActionTree<UserState, RootState> = {
       console.log(error)
     }
   },
+
   async fetchUserCountByYears ({ commit }) {
     try {
       const data = await UserApi.getUserCountByYears()
@@ -56,6 +58,7 @@ const actions: ActionTree<UserState, RootState> = {
       console.log(error)
     }
   },
+
   async fetchCompanyCount ({ commit }) {
     try {
       const count = await UserApi.getCompanyCount()
@@ -64,6 +67,7 @@ const actions: ActionTree<UserState, RootState> = {
       console.log(error)
     }
   },
+
   async fetchUserCount ({ commit }) {
     try {
       const count = await UserApi.getUserCount()
@@ -72,6 +76,7 @@ const actions: ActionTree<UserState, RootState> = {
       console.log(error)
     }
   },
+
   async fetchUserStats (
     { commit, state, rootState },
     login: string
@@ -94,18 +99,25 @@ const mutations: MutationTree<UserState> = {
   fetchUserCountByYearsSuccess (state: UserState, data: Leaderboard[]) {
     state.userCountByYears = data
   },
+
   fetchCompanyCountSuccess (state: UserState, count: number) {
     state.companyCount = count
   },
+
   SET_USERS (state: UserState, users: User[]) {
     state.users = state.users.concat(users)
   },
+
   SET_USER_COUNT (state: UserState, count: number) {
     state.userCount = count
   }
 }
 
-const getters: GetterTree<UserState, RootState> = {}
+const getters: GetterTree<UserState, RootState> = {
+  user (state: UserState) {
+    return state.user
+  }
+}
 
 const user: Module<UserState, RootState> = {
   namespaced: true,

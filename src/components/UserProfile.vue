@@ -1,7 +1,7 @@
 <template>
   <div class="user-profile">
-    <div class="user-grid-aside">
-      <img class="user-photo" :src="avatarUrl" />
+    <div class="user-photo-container">
+      <img :src="avatarUrl" :alt="login" class="user-photo" />
     </div>
 
     <div class="user-grid-main">
@@ -72,11 +72,20 @@ export default class UserProfile extends Vue {
   grid-column-gap: 30px;
 }
 
+.user-photo-container {
+  background: #eee;
+  height: 0;
+  padding-bottom: 100%;
+  position: relative;
+  width: 240px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
 .user-photo {
-  max-width: 240px;
+  position: absolute;
   width: 100%;
   height: auto;
-  border-radius: 7px;
 }
 
 .user-login {

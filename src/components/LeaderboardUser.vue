@@ -1,57 +1,51 @@
 <template>
-  <a class="container" :href="githubLink" target="_blank">
+  <a class="leaderboard-user" :href="githubLink" target="_blank">
     <div class="aside">
       <div class="header">
-        <div class="image">
-          <img :src="user && user.avatarUrl" width="100%" height="auto" />
+        <div class="user-image">
+          <img :src="user.avatarUrl" width="100%" height="auto" />
         </div>
         <div>
-          <div class="name" v-if="user">
+          <h5 class="user-name">
             {{ user.login }}
-          </div>
-          <div class="repo-count" title="Repositories that are not forked">
-            {{ count }} repos
-          </div>
+          </h5>
+          <h6 class="user-connections">
+            <span>
+              <b>{{ user.followers }}</b> Followers
+            </span>
+            |
+            <span>
+              <b>{{ user.following }}</b> Following
+            </span>
+          </h6>
         </div>
       </div>
-      <Break />
-      <h6>
-        <div v-if="user">
-          {{ user.location }}
-        </div>
-      </h6>
     </div>
 
     <div>
-      <div class="info">
-        <div class="info-header">
-          Top 3 Languages
-        </div>
-        <LanguageCell
+      <div class="top-languages">
+        <language-cell
           v-for="language in topThreeLanguage"
           :label="language.name"
           class="language"
           :key="language.name"
         >
           ({{ percentage(language.count, count) }})
-        </LanguageCell>
+        </language-cell>
       </div>
-      <Break />
+
       <div class="counters">
-        <div class="counter-item">
-          <i class="counter">{{ languageCount }}</i> languages
+        <div>
+          <b>{{ count }}</b> Repositories
         </div>
-        <div class="counter-item">
-          <i class="counter">{{ user.gists }}</i> gists
+        <div>
+          <b>{{ user.gists }}</b> Gists
         </div>
-        <div class="counter-item">
-          <i class="counter">{{ forkedRepoCount }}</i> forked repos
+        <div>
+          <b>{{ languageCount }}</b> Languages
         </div>
-        <div class="counter-item">
-          <i class="counter">{{ user.followers }}</i> followers
-        </div>
-        <div class="counter-item">
-          <i class="counter">{{ user.following }}</i> following
+        <div>
+          <b>{{ forkedRepoCount }}</b> Forked Repo
         </div>
       </div>
     </div>
@@ -92,7 +86,7 @@ export default class LeaderboardUser extends Vue {
   }
 
   get forkedRepoCount (): number {
-    return this.user ? this.user.repositories - this.count : 0
+    return this.user ? Math.max(0, this.user.repositories - this.count) : 0
   }
 
   percentage (count: number): string {
@@ -107,102 +101,66 @@ export default class LeaderboardUser extends Vue {
 <style lang="scss" scoped>
 @import '@/styles/theme.scss';
 
-.container {
-  border-bottom: 1px solid #eee;
-  display: grid;
-  grid-template-columns: minmax(120px, 240px) 1fr;
-  grid-column-gap: 10px;
+.leaderboard-user {
   text-decoration: none;
   color: inherit;
-  padding: $dim-100 0;
-  position: relative;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: $dim-100;
 }
-$container-hover-color: #eeeeee;
-.container:hover {
-  background: $container-hover-color;
+.leaderboard-user:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+.leaderboard-user:hover {
+  background: #f7f7f7;
 }
 
-.container:hover::before {
-  content: '';
-  position: absolute;
-  left: -$dim-100;
-  top: 0;
-  height: 100%;
-  width: $dim-100;
-  background: $container-hover-color;
-  z-index: 1000;
-  border-radius: 5px 0 0 5px;
-}
 .header {
   display: grid;
-  grid-template-columns: 40px 1fr;
-  grid-column-gap: 10px;
-}
-
-.image {
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: #ddd;
-}
-
-.name {
-}
-.repo-count {
-  @extend %h6;
-  color: #818181;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.info {
-  display: grid;
-  // grid-auto-flow: column;
-  justify-content: flex-start;
+  grid-template-columns: max-content 1fr;
   grid-column-gap: $dim-100;
-}
-.info-header {
-  @extend %h6;
-  color: #818181;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.language {
-  @extend %h6;
-  display: grid;
-  grid-template-columns: $dim-100 1fr;
-  grid-column-gap: 5px;
   align-items: center;
 }
 
-.language-icon {
-  height: $dim-100;
-  width: $dim-100;
-  border-radius: 50%;
-  position: relative;
-  display: inline-block;
+.user-image {
+  height: 40px;
+  width: 40px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #ddd;
 }
-
-.language-label {
-  display: inline-block;
+.user-name {
+  font-weight: bold;
+}
+.repo-count {
+  color: #818181;
 }
 
 .counters {
-  width: 100%;
   @extend %h6;
   display: grid;
-  grid-auto-flow: column;
-  justify-content: flex-start;
-  grid-column-gap: $dim-100;
+  color: #818181;
+  grid-template-columns: repeat(4, max-content);
+  grid-column-gap: $dim-200;
+  align-items: center;
 }
 
-.counter {
-  display: inline-block;
-  padding: 0 $dim-50;
-  background: $color-alto;
-  font-size: $dim-50;
-  border-radius: 5px;
+.top-languages {
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
+  grid-column-gap: $dim-100;
+  align-items: center;
+}
+.language {
+  @extend %h6;
+  display: grid;
+  align-items: center;
+  grid-template-columns: max-content 1fr;
+}
+
+.user-connections {
+  color: #818181;
 }
 </style>

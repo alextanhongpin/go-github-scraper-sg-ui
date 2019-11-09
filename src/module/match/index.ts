@@ -136,6 +136,10 @@ const getters: GetterTree<RecommendationState, RootState> = {
 
   keyword (state: RecommendationState) {
     return state.keyword
+  },
+
+  user (state: RecommendationState): User {
+    return state.user
   }
 }
 

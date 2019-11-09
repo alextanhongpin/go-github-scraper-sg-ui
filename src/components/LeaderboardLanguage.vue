@@ -4,20 +4,27 @@
       Top Languages
     </h3>
 
-    <p class="subheader">
+    <h5>
       Based on the number of repositories
-    </p>
+    </h5>
+    <break :px="33" />
     <bar-chart :chartData="chartData"></bar-chart>
+    <break />
   </div>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { Leaderboard } from '@/types'
+
 import BarChart from '@/components/BarChart.vue'
+import Break from '@/components/Break.vue'
+
+import { chartData } from '@/models/chart'
 import * as Color from '@/helpers/color'
 
 @Component({
   components: {
+    Break,
     BarChart
   }
 })
@@ -45,29 +52,17 @@ export default class LeaderboardLanguage extends Vue {
 
   get chartData () {
     const items = this.items
-    return {
-      datasets: [
-        {
-          label: 'Top Programming Language',
-          data: items.map(item => item.count),
-          backgroundColor: items.map(item => Color.pick(item.name))
-        }
-      ],
-      labels: items.map(item => item.name)
-    }
+    const x = this.items.map(i => i.name)
+    const y = this.items.map(i => i.count)
+    return chartData(x, y, name => Color.pick(name))
   }
 }
 </script>
 <style lang="scss" scoped>
 @import '@/styles/theme.scss';
 .leaderboard-language {
-  padding: $dim-300;
+  padding: $dim-400;
   box-shadow: 0 5px 15px rgba(black, 0.2);
-  border: 1px solid #ddd;
-  margin: $dim-300;
-  border-radius: 5px;
-}
-.subheader {
-  @extend %subheader;
+  border-radius: $dim-100;
 }
 </style>

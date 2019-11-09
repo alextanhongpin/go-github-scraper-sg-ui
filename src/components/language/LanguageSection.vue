@@ -3,6 +3,7 @@
     <h3>
       Most Repos by Language
     </h3>
+    <break></break>
 
     <div class="languages">
       <div>
@@ -23,6 +24,7 @@
       >
         <div class="user-position">
           <i class="fa fa-trophy" v-if="i < 3"></i>
+          <i v-else>#{{ i + 1 }}</i>
         </div>
         <div class="user-info">
           <div>
@@ -31,9 +33,9 @@
               {{ user.user.login }}
             </div>
           </div>
-          <b class="counter">
-            {{ user.count }}
-          </b>
+          <div class="counter">
+            <b>{{ user.count }}</b> Repos
+          </div>
         </div>
       </a>
     </div>
@@ -113,7 +115,6 @@ export default class LanguageSection extends Vue {
 // The scoped must be at the end.
 .language-section {
   position: relative;
-  padding: 0 $dim-300;
   width: 100%;
 }
 
@@ -150,7 +151,7 @@ export default class LanguageSection extends Vue {
   border-radius: 3px;
 
   display: grid;
-  grid-template-columns: max-content minmax(max-content, 1fr);
+  grid-template-columns: max-content 1fr max-content;
 }
 
 $colors: #c98910, #a8a8a8, #965a38;
@@ -170,7 +171,7 @@ $colors: #c98910, #a8a8a8, #965a38;
 .user-info {
   display: grid;
   border-radius: 11px;
-  grid-template-columns: 1fr min-content;
+  grid-template-columns: 1fr max-content;
   justify-content: space-between;
   align-items: center;
   .counter {
@@ -180,10 +181,14 @@ $colors: #c98910, #a8a8a8, #965a38;
 .user:nth-child(2n + 1) {
   background: #f7f7f7;
 }
+.user:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
 
 .user-photo {
   height: $dim-500;
   width: auto;
+  background: white;
   border-radius: 11px;
   display: inline-block;
   vertical-align: middle;
