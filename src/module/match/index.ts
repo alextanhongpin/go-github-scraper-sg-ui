@@ -97,6 +97,12 @@ const actions: ActionTree<RecommendationState, RootState> = {
 
   inputKeyword ({ commit }, keyword: string) {
     commit('SET_KEYWORD', keyword)
+  },
+
+  clearRecommendations ({ commit }) {
+    commit('SET_KEYWORD', '')
+    commit('SET_RECOMMENDATIONS', [])
+    commit('SET_USER', null)
   }
 }
 

@@ -1,9 +1,11 @@
 <template>
   <div id="app">
     <header class="app-header">
-      <span class="brand">{{ brand }}</span
-      >&nbsp;<span class="brand-app">Recommender</span>
-      <small> version {{ version }} </small>
+      <router-link to="/" class="app-header-link">
+        <span class="brand">{{ brand }}</span
+        >&nbsp;<span class="brand-app">Recommender</span>
+        <small> version {{ version }} </small>
+      </router-link>
     </header>
 
     <main class="app-main">
@@ -67,6 +69,10 @@ small {
   line-height: 80px;
   @extend %h3;
   padding: 0 30px;
+}
+.app-header-link {
+  text-decoration: none;
+  color: inherit;
 }
 
 .brand {

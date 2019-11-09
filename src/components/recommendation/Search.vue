@@ -35,6 +35,7 @@ export default class RecommendationSearchUserInput extends Vue {
   @Action('fetchRecommendationsForUser', Namespace.match)
   fetchRecommendations: any
   @Action('inputKeyword', Namespace.match) inputKeyword: any
+  @Action('clearRecommendations', Namespace.match) clearRecommendations: any
 
   // States.
   @State('usersWithRecommendations', Namespace.match)
@@ -50,6 +51,8 @@ export default class RecommendationSearchUserInput extends Vue {
     const login = route.params.login
     if (login) {
       await this.fetchRecommendations(login)
+    } else {
+      this.clearRecommendations()
     }
   }
 
