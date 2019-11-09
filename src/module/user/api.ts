@@ -91,6 +91,15 @@ export async function getCompanyUsers (company: string): Promise<User> {
   if (!response.ok) {
     throw new Error(await response.text())
   }
-  const {data}= await response.json()
+  const { data } = await response.json()
   return data.map(toCamelCaseObject)
+}
+
+export async function getTopCompanies (): Promise<Leaderboard[]> {
+  const response = await window.fetch(endpoint`/v1/company/stats/top`)
+  if (!response.ok) {
+    throw new Error(await response.text())
+  }
+  const { data } = await response.json()
+  return data
 }

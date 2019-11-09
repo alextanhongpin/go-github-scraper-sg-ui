@@ -50,6 +50,7 @@ export default class RecommendationSearchUserInput extends Vue {
   async onUrlChange (route: any) {
     const login = route.params.login
     if (login) {
+      this.inputKeyword('')
       await this.fetchRecommendations(login)
     } else {
       this.clearRecommendations()

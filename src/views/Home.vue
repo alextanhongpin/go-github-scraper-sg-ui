@@ -22,6 +22,9 @@
     </div>
     <break :px="33" />
 
+    <leaderboard-company />
+    <break :px="33" />
+
     <leaderboard-language
       :totalCount="totalLanguageCount"
       :items="leaderboardLanguage"
@@ -47,6 +50,7 @@ import Break from '@/components/Break.vue'
 import GithubCard from '@/components/GithubCard.vue'
 
 import LeaderboardLanguage from '@/components/LeaderboardLanguage.vue'
+import LeaderboardCompany from '@/components/LeaderboardCompany.vue'
 import LeaderboardUser from '@/components/LeaderboardUser.vue'
 import Recommendation from '@/components/recommendation/Recommendation.vue'
 
@@ -64,6 +68,7 @@ import Namespace from '@/models/namespace'
     GithubCard,
     LeaderboardUser,
     LeaderboardLanguage,
+    LeaderboardCompany,
     YearOverYearUserChart,
     YearOverYearRepositoryChart,
     Recommendation,

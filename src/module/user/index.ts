@@ -4,20 +4,22 @@ import { Cache } from '@/helpers/cache'
 
 // Types.
 import {
-  User,
   Leaderboard,
   PageInfo,
+  RootState,
   Score,
-  UserStat,
-  RootState
+  User,
+  UserStat
 } from '@/types'
 
 export interface UserState {
-  users: User[]
-  userCountByYears: Leaderboard[]
+  companies: Leaderboard[]
   companyCount: number
+  colleagues: User[]
   companyUsers: User[]
   userCount: number
+  userCountByYears: Leaderboard[]
+  users: User[]
 }
 
 const ApiCache = {
@@ -29,11 +31,13 @@ const ApiGenerator = {
 }
 
 const state: UserState = {
-  users: [],
-  userCountByYears: [],
+  companies: [],
   companyCount: 0,
+  colleagues: [],
+  companyUsers: [],
   userCount: 0,
-  companyUsers: []
+  userCountByYears: [],
+  users: []
 }
 
 const actions: ActionTree<UserState, RootState> = {
@@ -103,6 +107,24 @@ const actions: ActionTree<UserState, RootState> = {
     } catch (error) {
       console.log(error)
     }
+  },
+
+  async fetchColleagues ({ commit }, company: string) {
+    try {
+      const response = await UserApi.getCompanyUsers(company)
+      commit('SET_COLLEAGUES', response)
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
+  async fetchTopCompanies ({ commit }) {
+    try {
+      const response = await UserApi.getTopCompanies()
+      commit('SET_TOP_COMPANIES', response)
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
@@ -125,12 +147,28 @@ const mutations: MutationTree<UserState> = {
 
   SET_COMPANY_USERS (state: UserState, users: User[]) {
     state.companyUsers = users
+  },
+
+  SET_TOP_COMPANIES (state: UserState, companies: Leaderboard[]) {
+    state.companies = companies
+  },
+
+  SET_COLLEAGUES (state: UserState, users: User[]) {
+    state.colleagues = users
   }
 }
 
 const getters: GetterTree<UserState, RootState> = {
   companyUsers (state: UserState): User[] {
     return state.companyUsers
+  },
+
+  colleagues (state: UserState): User[] {
+    return state.colleagues
+  },
+
+  companies (state: UserState): Leaderboard[] {
+    return state.companies
   }
 }
 
