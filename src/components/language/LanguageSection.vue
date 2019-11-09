@@ -1,9 +1,21 @@
 <template>
   <div class="language-section" @click.self="toggleDropdown">
     <h3>
-      Most Repos by Language
+      Top Users by Languages
     </h3>
-    <break></break>
+    <break />
+
+    <div class="language-tags">
+      <p
+        class="language-tag"
+        v-for="tag in languageTags"
+        :key="tag"
+        :class="{ 'is-selected': tag === language }"
+        @click="selectTag(tag)"
+      >
+        {{ tag }}
+      </p>
+    </div>
 
     <div class="languages">
       <div>
@@ -44,7 +56,7 @@
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { Action, State } from 'vuex-class'
+import { Action, State, Getter } from 'vuex-class'
 import { LeaderboardUserLanguage } from '@/types'
 import Namespace from '@/models/namespace'
 
@@ -67,6 +79,7 @@ export default class LanguageSection extends Vue {
   fetchLeaderboardUserByLanguage: any
   @State('languages', Namespace.language) languages?: string[]
   @State('users', Namespace.language) users?: Leaderboard[]
+  @Getter('topLanguages', Namespace.repo) topLanguages?: Leaderboard[]
 
   mounted () {
     this.fetchLanguages()
@@ -97,6 +110,11 @@ export default class LanguageSection extends Vue {
     this.language = keyword
   }
 
+  selectTag (tag: string) {
+    this.language = tag
+    this.fetchUsers()
+  }
+
   filterLanguage (language: string): string[] {
     return this.languages.filter(s => {
       return s.toLowerCase().startsWith(language.toLowerCase())
@@ -110,6 +128,10 @@ export default class LanguageSection extends Vue {
   get showDropdown () {
     const hasLanguage = this.languages.includes(this.language)
     return !hasLanguage && this.language
+  }
+
+  get languageTags (): string[] {
+    return this.topLanguages.slice(0, 20).map(language => language.name)
   }
 }
 </script>
@@ -194,5 +216,25 @@ export default class LanguageSection extends Vue {
   display: inline-block;
   vertical-align: middle;
   padding: 0 $dim-50;
+}
+
+.language-tag {
+  background: #eee;
+  border-radius: 3px;
+  display: inline-block;
+  margin: 0 $dim-100 $dim-100 0;
+  cursor: pointer;
+  min-width: 80px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  padding: 0 $dim-100;
+}
+.language-tag:hover {
+  background: #ddd;
+}
+.language-tag.is-selected {
+  background: #333;
+  color: white;
 }
 </style>

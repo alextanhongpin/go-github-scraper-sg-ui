@@ -111,6 +111,10 @@ const mutations: MutationTree<RepoState> = {
 const getters: GetterTree<RepoState, RootState> = {
   leaderboardUserWithStats (state: RepoState) {
     return state.leaderboardUser
+  },
+
+  topLanguages (state: RepoState): Leaderboard[] {
+    return state.leaderboardLanguage
   }
 }
 
