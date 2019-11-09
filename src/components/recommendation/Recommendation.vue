@@ -1,9 +1,10 @@
 <template>
   <div class="recommendation">
     <search-user class="search" />
-    <break :px="33" />
 
     <div class="section" v-if="user">
+      <break :px="33" />
+
       <user-profile v-bind="user" />
       <break :px="33" />
 

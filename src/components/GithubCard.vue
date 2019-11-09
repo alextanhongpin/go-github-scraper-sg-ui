@@ -1,5 +1,5 @@
 <template>
-  <a class="card" :href="githubLink" target="_blank" v-if="user">
+  <div class="card" :to="githubLink" v-if="user" @click="redirect">
     <div class="front">
       <img class="image" :src="user.avatarUrl" />
       <div class="user-info">
@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-  </a>
+  </div>
 </template>
 
 <script lang="ts">
@@ -65,8 +65,14 @@ export default class GithubCard extends Vue {
     }
     return DateHelper.shortDate(this.user.createdAt)
   }
+
   get githubLink (): string {
-    return this.user ? `https://github.com/${this.user.login}` : ''
+    return '/' + this.user.login
+  }
+
+  redirect () {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    this.$router.push(this.githubLink)
   }
 }
 </script>
