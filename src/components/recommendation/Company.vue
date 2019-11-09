@@ -21,7 +21,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { Action, Getter, State } from 'vuex-class'
 import Namespace from '@/models/namespace'
 import { User } from '@/types/user'
@@ -38,13 +38,19 @@ export default class Company extends Vue {
 
   @Prop() user!: string
   @State('githubUri') githubUri!: string
+  @Watch('user')
+  onUserChanged(val: User, oldVal: User) {
+    this.fetchCompanyUsers(val.company)
+  }
 
   mounted () {
     this.fetchCompanyUsers(this.user.company)
   }
 
   get colleagues (): User[] {
-    return this.companyUsers.filter(user => user.email !== this.user.email)
+    const login = this.user && this.user.login
+    if (!login) return []
+    return this.companyUsers.filter(user => user.login !== login)
   }
 
   githubLink (login: string): string {

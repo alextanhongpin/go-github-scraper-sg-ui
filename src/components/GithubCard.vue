@@ -181,7 +181,7 @@ $image-dimension: 240px;
 }
 
 .bio {
-  @extend %h6;
+  @extend %h5;
 }
 
 .count-info {

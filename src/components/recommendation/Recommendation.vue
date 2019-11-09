@@ -14,9 +14,9 @@
       <languages header="Your Top Languages" />
 
       <h3>Your Similar Users</h3>
-      <users></users>
+      <users />
 
-      <company v-if="user.company" :user='user'></company>
+      <companies v-if="user.company" :user="user" />
     </div>
   </div>
 </template>
@@ -27,7 +27,7 @@ import { Getter } from 'vuex-class'
 // Components.
 import Break from '@/components/Break.vue'
 import UserProfile from '@/components/UserProfile.vue'
-import Company from '@/components/recommendation/Company.vue'
+import Companies from '@/components/recommendation/Company.vue'
 import SearchUser from '@/components/recommendation/Search.vue'
 import Users from '@/components/recommendation/Users.vue'
 import Languages from '@/components/recommendation/Languages.vue'
@@ -45,7 +45,7 @@ import Namespace from '@/models/namespace'
     Users,
     Languages,
     Repositories,
-    Company
+    Companies
   }
 })
 export default class Recommendation extends Vue {

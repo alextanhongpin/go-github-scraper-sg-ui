@@ -25,9 +25,10 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700');
 @import '@/styles/reset.scss';
 @import '@/styles/theme.scss';
+
+@import url('https://fonts.googleapis.com/css?family=Cairo:300,400,700&display=swap');
 
 html {
   box-sizing: border-box;
@@ -48,7 +49,7 @@ img {
 input,
 textarea,
 button {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Cairo', sans-serif;
 }
 #app {
   @extend %h5;
