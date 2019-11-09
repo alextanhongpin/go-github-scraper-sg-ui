@@ -16,6 +16,7 @@ export interface UserState {
   users: User[]
   userCountByYears: Leaderboard[]
   companyCount: number
+  companyUsers: User[]
   userCount: number
 }
 
@@ -31,7 +32,8 @@ const state: UserState = {
   users: [],
   userCountByYears: [],
   companyCount: 0,
-  userCount: 0
+  userCount: 0,
+  companyUsers: []
 }
 
 const actions: ActionTree<UserState, RootState> = {
@@ -92,6 +94,15 @@ const actions: ActionTree<UserState, RootState> = {
       console.log(error)
     }
     return null
+  },
+
+  async fetchCompanyUsers ({ commit }, company: string) {
+    try {
+      const response = await UserApi.getCompanyUsers(company)
+      commit('SET_COMPANY_USERS', response)
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
@@ -110,12 +121,20 @@ const mutations: MutationTree<UserState> = {
 
   SET_USER_COUNT (state: UserState, count: number) {
     state.userCount = count
+  },
+
+  SET_COMPANY_USERS (state: UserState, users: User[]) {
+    state.companyUsers = users
   }
 }
 
 const getters: GetterTree<UserState, RootState> = {
-  user (state: UserState) {
+  user (state: UserState): User {
     return state.user
+  },
+
+  companyUsers (state: UserState): User[] {
+    return state.companyUsers
   }
 }
 

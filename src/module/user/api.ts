@@ -83,3 +83,14 @@ export async function getUserStats (login: string): Promise<UserStat> {
   data.user = toCamelCaseObject(data.user)
   return data
 }
+
+// getCompanyUsers returns users that belongs to the same organizations as you.
+export async function getCompanyUsers (company: string): Promise<User> {
+  const url = `/v1/companies/${company}`
+  const response = await window.fetch(endpoint`${url}`)
+  if (!response.ok) {
+    throw new Error(await response.text())
+  }
+  const {data}= await response.json()
+  return data.map(toCamelCaseObject)
+}

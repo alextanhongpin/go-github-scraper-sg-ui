@@ -19,7 +19,7 @@ const getters: GetterTree<RootState, any> = {}
 const store: StoreOptions<RootState> = {
   state: {
     version: process.env.VUE_APP_GIT_VERSION || '1.0.0',
-    brand: 'Github',
+    brand: 'GitHub',
     githubUri: 'https://github.com'
   },
   modules: {
