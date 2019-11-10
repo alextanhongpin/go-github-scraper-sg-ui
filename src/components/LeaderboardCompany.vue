@@ -25,9 +25,11 @@
     >
       {{ company.name }} <b>{{ company.count }}</b> Users
     </div>
+
+    <h4 v-if="selected">Search Result for: {{ selected }}</h4>
     <div class="users">
-      <a v-for="user in users" :key="user.login">
-        <user-tile v-bind="user" />
+      <a v-for="colleague in colleagues" :key="colleague.login">
+        <user-tile v-bind="colleague" />
       </a>
     </div>
   </div>
@@ -50,17 +52,19 @@ import UserTile from '@/components/UserTile.vue'
 })
 export default class LeaderboardCompany extends Vue {
   @Action('fetchTopCompanies', Namespace.user) fetchTopCompanies: any
-  @Action('fetchCompanyUsers', Namespace.user) fetchCompanyUsers: any
   @Action('searchCompany', Namespace.company) searchCompany: any
+  @Action('searchColleague', Namespace.company) searchColleague: any
 
   @Getter('companies', Namespace.user) companies: Leaderboard[]
   @Getter('companyUsers', Namespace.user) users: User[]
   @Getter('searchResults', Namespace.company) searchResults: string[]
+  @Getter('colleagues', Namespace.company) colleagues: string[]
 
   keyword: string = ''
+  selected: string = ''
 
   mounted () {
-    this.fetchTopCompanies()
+    // this.fetchTopCompanies()
   }
 
   get showDropdown (): boolean {
@@ -69,12 +73,14 @@ export default class LeaderboardCompany extends Vue {
     return hasKeyword && hasSearchResults
   }
 
-  selectCompany (name: string) {
+  selectCompany (company: string) {
     this.keyword = ''
-    this.fetchCompanyUsers(name)
+    this.selected = company
+    this.searchColleague(company)
   }
 
   keyup (evt: Event) {
+    this.selected = ''
     const keyword = evt.currentTarget.value
     this.searchCompany(keyword)
   }

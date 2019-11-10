@@ -33,7 +33,7 @@ export async function getTopCompanies (): Promise<Leaderboard[]> {
 }
 
 // searchCompany returns the names of the companies that matches the term.
-export async function searchCompany(term: string): Promise<string[]> {
+export async function searchCompany (term: string): Promise<string[]> {
   const url = `/v1/search/companies?term=${term}`
   const response = await window.fetch(endpoint`${url}`)
   if (!response.ok) {
@@ -51,5 +51,5 @@ export async function searchColleague (term: string): Promise<string[]> {
     throw new Error(await response.text())
   }
   const { data } = await response.json()
-  return data || []
+  return data.map(toCamelCaseObject) || []
 }

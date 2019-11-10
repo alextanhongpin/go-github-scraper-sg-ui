@@ -1,20 +1,24 @@
 import { GetterTree, MutationTree, ActionTree, Module } from 'vuex'
 
-import RootState from '@/types/root-state'
-import { searchCompany } from '@/module/company/api'
+import { RootState, User } from '@/types'
+
+import { searchCompany, searchColleague } from '@/module/company/api'
 import { Cache } from '@/helpers/cache'
 
 export interface CompanyState {
   searchResults: string[]
+  colleagues: User[]
 }
 
 const state: CompanyState = {
-  searchResults: []
+  searchResults: [],
+  colleagues: []
 }
 
 // Define ApiCache.
 const ApiCache = {
-  searchCompany: Cache(searchCompany)
+  searchCompany: Cache(searchCompany),
+  searchColleague: Cache(searchColleague)
 }
 
 const actions: ActionTree<CompanyState, RootState> = {
@@ -25,18 +29,35 @@ const actions: ActionTree<CompanyState, RootState> = {
     } catch (error) {
       console.log(error)
     }
+  },
+
+  async searchColleague ({ commit }, company: string) {
+    try {
+      const colleagues = await ApiCache.searchColleague(company)
+      commit('SET_COLLEAGUES', colleagues)
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
 const mutations: MutationTree<CompanyState> = {
   SET_SEARCH_RESULTS (state: CompanyState, companies: string[]) {
     state.searchResults = companies
+  },
+
+  SET_COLLEAGUES (state: CompanyState, colleagues: User[]) {
+    state.colleagues = colleagues
   }
 }
 
 const getters: GetterTree<CompanyState, RootState> = {
   searchResults (state: CompanyState): string[] {
     return state.searchResults
+  },
+
+  colleagues (state: CompanyState): User[] {
+    return state.colleagues
   }
 }
 
