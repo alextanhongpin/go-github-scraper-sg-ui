@@ -14,18 +14,6 @@ export async function getRecommendations (login: string): Promise<Score[]> {
   return data
 }
 
-// getUsersWithRecommendations returns the list of user logins that has
-// recommendations.
-export async function getUsersWithRecommendations (): Promise<string[]> {
-  const response = await window.fetch(endpoint`/v1/matches`)
-  if (!response.ok) {
-    const { error } = await response.json()
-    throw new Error(error)
-  }
-  const { data } = await response.json()
-  return data
-}
-
 // getRepositoriesByUser returns the top 10 repositories by users with the most
 // stargazers.
 export async function getRepositoriesByUser (
