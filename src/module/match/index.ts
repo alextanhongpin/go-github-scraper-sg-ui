@@ -55,11 +55,6 @@ const actions: ActionTree<RecommendationState, RootState> = {
     { commit, rootState, state, dispatch },
     name: string
   ) {
-    // If the current user is not in the list, skip.
-    if (!state.usersWithRecommendationsSet.has(name.toLowerCase())) {
-      return
-    }
-
     try {
       const response = await ApiCache.getRecommendations(name)
       // Fetch the stats of the target user.

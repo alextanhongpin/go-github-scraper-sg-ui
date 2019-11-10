@@ -56,7 +56,7 @@ export async function getUserCount (): Promise<number> {
   return count
 }
 
-export async function getUserCountByYears (): Promise<Leaderboard[]> {
+export async function getYearOverYearUsers (): Promise<Leaderboard[]> {
   const response = await window.fetch(endpoint`/v1/user/stats`)
   if (!response.ok) {
     throw new Error(await response.text())
@@ -74,6 +74,7 @@ export async function getCompanyCount (): Promise<number> {
   return count
 }
 
+// TODO: Rename this.
 export async function getUserStats (login: string): Promise<UserStat> {
   const response = await window.fetch(endpoint`/v1/users/${login}`)
   if (!response.ok) {
@@ -102,4 +103,14 @@ export async function getTopCompanies (): Promise<Leaderboard[]> {
   }
   const { data } = await response.json()
   return data
+}
+
+export async function searchUser (term: string): Promise<string[]> {
+  const url = `/v1/search/users?term=${term}`
+  const response = await window.fetch(endpoint`${url}`)
+  if (!response.ok) {
+    throw new Error(await response.text())
+  }
+  const { data } = await response.json()
+  return data || []
 }

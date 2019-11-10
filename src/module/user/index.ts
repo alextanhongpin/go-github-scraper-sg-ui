@@ -20,6 +20,7 @@ export interface UserState {
   userCount: number
   userCountByYears: Leaderboard[]
   users: User[]
+  searchUserResults: string[]
 }
 
 const ApiCache = {
@@ -37,7 +38,8 @@ const state: UserState = {
   companyUsers: [],
   userCount: 0,
   userCountByYears: [],
-  users: []
+  users: [],
+  searchUserResults: []
 }
 
 const actions: ActionTree<UserState, RootState> = {
@@ -58,7 +60,7 @@ const actions: ActionTree<UserState, RootState> = {
 
   async fetchUserCountByYears ({ commit }) {
     try {
-      const data = await UserApi.getUserCountByYears()
+      const data = await UserApi.getYearOverYearUsers()
       commit('fetchUserCountByYearsSuccess', data)
     } catch (error) {
       console.log(error)
@@ -125,6 +127,15 @@ const actions: ActionTree<UserState, RootState> = {
     } catch (error) {
       console.log(error)
     }
+  },
+
+  async searchUser ({ commit }, term: string) {
+    try {
+      const response = await UserApi.searchUser(term)
+      commit('SET_SEARCH_USER_RESULT', response)
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
@@ -155,6 +166,10 @@ const mutations: MutationTree<UserState> = {
 
   SET_COLLEAGUES (state: UserState, users: User[]) {
     state.colleagues = users
+  },
+
+  SET_SEARCH_USER_RESULT (state: UserState, users: string[]) {
+    state.searchUserResults = users
   }
 }
 
@@ -169,6 +184,10 @@ const getters: GetterTree<UserState, RootState> = {
 
   companies (state: UserState): Leaderboard[] {
     return state.companies
+  },
+
+  searchUserResults (state: UserState): string[] {
+    return state.searchUserResults
   }
 }
 

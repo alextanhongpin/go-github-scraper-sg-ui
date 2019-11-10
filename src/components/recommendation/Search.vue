@@ -1,7 +1,6 @@
 <template>
   <search-input @keyup="search">
-    <!--Display suggestions-->
-    <dropdown v-if="showDropdown" :items="suggestions">
+    <dropdown v-if="showDropdown" :items="searchUserResults">
       <div slot-scope="{ item }" @click.self="selectItem(item)">{{ item }}</div>
     </dropdown>
   </search-input>
@@ -32,17 +31,18 @@ export default class RecommendationSearchUserInput extends Vue {
   // Actions.
   @Action('fetchUsersWithRecommendations', Namespace.match)
   fetchUsersWithRecommendations: any
+
   @Action('fetchRecommendationsForUser', Namespace.match)
   fetchRecommendations: any
+
   @Action('inputKeyword', Namespace.match) inputKeyword: any
+  @Action('searchUser', Namespace.user) searchUser: any
   @Action('clearRecommendations', Namespace.match) clearRecommendations: any
 
-  // States.
-  @State('usersWithRecommendations', Namespace.match)
-  usersWithRecommendations?: string[]
   @State('user', Namespace.match) user?: User
 
   // Getters.
+  @Getter('searchUserResults', Namespace.user) searchUserResults: string
   @Getter('keyword', Namespace.match) keyword: string
   @Getter('userWithMatches', Namespace.match) userWithMatches: Set<string>
 
@@ -75,12 +75,6 @@ export default class RecommendationSearchUserInput extends Vue {
     return hasKeyword && !hasMatches
   }
 
-  get suggestions (): string[] {
-    return this.usersWithRecommendations.filter(name =>
-      name.toLowerCase().startsWith(this.keyword.toLowerCase())
-    )
-  }
-
   // Methods.
   search (keyword: string) {
     this.inputKeyword(keyword)
@@ -91,15 +85,16 @@ export default class RecommendationSearchUserInput extends Vue {
 
   selectItem (item) {
     this.inputKeyword(item)
-    this.search(item)
+    this.fetchUser(item)
   }
 
   @throttle(250)
   throttleFetch (keyword: string) {
-    if (!this.userWithMatches.has(keyword)) {
-      return
-    }
-    this.$router.push('/' + keyword)
+    this.searchUser(keyword)
+  }
+
+  fetchUser (login: string) {
+    this.$router.push('/' + login)
   }
 }
 </script>

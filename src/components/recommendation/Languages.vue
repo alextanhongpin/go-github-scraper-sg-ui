@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="languages.length">
     <h3>{{ header }}</h3>
 
     <p>

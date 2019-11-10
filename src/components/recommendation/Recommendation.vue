@@ -14,7 +14,6 @@
 
       <languages header="Your Top Languages" />
 
-      <h3>Your Similar Users</h3>
       <users />
 
       <companies v-if="user.company" :user="user" />

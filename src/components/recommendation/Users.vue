@@ -1,5 +1,7 @@
 <template>
-    <Carousel v-if="users.length">
+  <div v-if="users.length">
+    <h3>Your Similar Users</h3>
+    <Carousel>
       <GithubCard
         slot="carousel"
         :user="user"
@@ -7,6 +9,7 @@
         :key="user.login"
       />
     </Carousel>
+  </div>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'

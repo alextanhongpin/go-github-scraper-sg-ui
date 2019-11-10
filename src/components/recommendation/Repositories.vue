@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <div class="repositories">
+    <div class="repositories" v-if="repositories.length">
       <a
         v-for="repo in repositories"
         :href="repo.url"
