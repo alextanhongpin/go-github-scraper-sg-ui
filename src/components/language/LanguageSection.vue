@@ -19,7 +19,13 @@
 
     <div class="languages">
       <div>
-        <input class="search" type="search" :value="language" @keyup="search" />
+        <input
+          class="search"
+          type="search"
+          @keyup="search"
+          placeholder="Search Language, e.g. JavaScript"
+          v-model="language"
+        />
       </div>
       <dropdown v-if="showDropdown" :items="searchResults">
         <div slot-scope="{ item }" @click.self="select(item)">{{ item }}</div>
@@ -90,25 +96,24 @@ export default class LanguageSection extends Vue {
     this.fetchUsers()
   }
 
-  fetchUsers () {
-    this.fetchLeaderboardUserByLanguage(this.language)
+  fetchUsers (language) {
+    this.fetchLeaderboardUserByLanguage(language)
   }
 
   select (language: string) {
-    this.language = language
-    this.fetchUsers()
+    this.language = ''
+    this.fetchUsers(language)
     this.clearSearchResults()
   }
 
-  search (evt: KeyboardEvent) {
-    const language = evt.target.value
-    this.language = language
+  search (evt: Event) {
+    const language = evt.currentTarget.value
     this.searchLanguage(language)
   }
 
   selectLanguage (language: string) {
-    this.language = language
-    this.fetchUsers()
+    this.language = ''
+    this.fetchUsers(language)
   }
 
   get showDropdown () {

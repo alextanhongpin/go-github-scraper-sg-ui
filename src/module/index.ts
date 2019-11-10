@@ -9,6 +9,7 @@ import user from './user'
 import match from './match'
 import repo from './repo'
 import language from './language'
+import company from './company'
 
 import { User, Leaderboard } from '@/types'
 
@@ -23,10 +24,11 @@ const store: StoreOptions<RootState> = {
     githubUri: 'https://github.com'
   },
   modules: {
-    user,
-    repo,
+    company,
+    language,
     match,
-    language
+    repo,
+    user
   },
   getters,
   mutations: {},

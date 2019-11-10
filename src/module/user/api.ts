@@ -53,7 +53,7 @@ export async function getUserCount (): Promise<number> {
     throw new Error(await response.text())
   }
   const { count } = await response.json()
-  return count
+  return count || 0
 }
 
 export async function getYearOverYearUsers (): Promise<Leaderboard[]> {
@@ -62,7 +62,7 @@ export async function getYearOverYearUsers (): Promise<Leaderboard[]> {
     throw new Error(await response.text())
   }
   const { data } = await response.json()
-  return data
+  return data || []
 }
 
 export async function getCompanyCount (): Promise<number> {
@@ -71,7 +71,7 @@ export async function getCompanyCount (): Promise<number> {
     throw new Error(await response.text())
   }
   const { count } = await response.json()
-  return count
+  return count || 0
 }
 
 // TODO: Rename this.
@@ -93,7 +93,7 @@ export async function getCompanyUsers (company: string): Promise<User> {
     throw new Error(await response.text())
   }
   const { data } = await response.json()
-  return data.map(toCamelCaseObject)
+  return data.map(toCamelCaseObject) || []
 }
 
 export async function getTopCompanies (): Promise<Leaderboard[]> {
@@ -102,11 +102,21 @@ export async function getTopCompanies (): Promise<Leaderboard[]> {
     throw new Error(await response.text())
   }
   const { data } = await response.json()
-  return data
+  return data || []
 }
 
 export async function searchUser (term: string): Promise<string[]> {
   const url = `/v1/search/users?term=${term}`
+  const response = await window.fetch(endpoint`${url}`)
+  if (!response.ok) {
+    throw new Error(await response.text())
+  }
+  const { data } = await response.json()
+  return data || []
+}
+
+export async function searchCompanies(term: string): Promise<string[]> {
+  const url = `/v1/search/companies?term=${term}`
   const response = await window.fetch(endpoint`${url}`)
   if (!response.ok) {
     throw new Error(await response.text())
