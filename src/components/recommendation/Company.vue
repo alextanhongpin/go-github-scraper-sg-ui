@@ -4,15 +4,14 @@
     <break />
 
     <div class="colleagues">
-      <a
+      <router-link
         class="colleague"
         v-for="c in myColleagues"
         :key="c.email"
-        target="_blank"
-        :href="githubLink(c.login)"
+        :to="githubLink(c.login)"
       >
         <user-tile v-bind="c"></user-tile>
-      </a>
+      </router-link>
     </div>
   </div>
 </template>
@@ -53,7 +52,7 @@ export default class Company extends Vue {
   }
 
   githubLink (login: string): string {
-    return `${this.githubUri}/${login}`
+    return `/${login}`
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="card" :to="githubLink" v-if="user" @click="redirect">
+  <router-link class="card" v-if="user" :to="githubLink">
     <div class="front">
       <img class="image" :src="user.avatarUrl" />
       <div class="user-info">
@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script lang="ts">
@@ -68,11 +68,6 @@ export default class GithubCard extends Vue {
 
   get githubLink (): string {
     return '/' + this.user.login
-  }
-
-  redirect () {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-    this.$router.push(this.githubLink)
   }
 }
 </script>

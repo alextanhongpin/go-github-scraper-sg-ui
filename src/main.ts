@@ -11,6 +11,11 @@ smoothscroll.polyfill()
 
 Vue.config.productionTip = false
 
+router.beforeEach((to, from, next) => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+  next()
+})
+
 new Vue({
   router,
   store,

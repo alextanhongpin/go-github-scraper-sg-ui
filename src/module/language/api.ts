@@ -24,3 +24,13 @@ export async function getLeaderboardUserByLanguage (
   const { data } = await response.json()
   return data
 }
+
+export async function searchLanguage (term: string): Promise<string[]> {
+  const path = `/v1/search/languages?term=${term}`
+  const response = await window.fetch(endpoint`${path}`)
+  if (!response.ok) {
+    throw new Error(await response.text())
+  }
+  const { data } = await response.json()
+  return data
+}

@@ -7,14 +7,25 @@
   </div>
 </template>
 <script lang="ts">
-import { Emit, Component, Vue } from 'vue-property-decorator'
+import { Emit, Component, Vue, Watch } from 'vue-property-decorator'
 
 @Component
 export default class Carousel extends Vue {
   $refs!: {
     carousel: HTMLElement
   }
+  // A boolean to indicate that the user has reached the end of the horizontal
+  // scroll.
   isEnd = false
+
+  @Watch('$route', { immediate: true, deep: true })
+  onUrlChange (route: any) {
+    // Reset the horizontal scroll whenever the user goes to a new page.
+    if (this.$refs && this.$refs.carousel) {
+      this.$refs.carousel.scrollTo({ left: 0, behavior: 'smooth' })
+    }
+  }
+
   @Emit('scroll-horizontal')
   scroll (evt: Event) {
     const { carousel } = this.$refs

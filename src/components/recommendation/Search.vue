@@ -29,8 +29,6 @@ import { throttle } from '@/helpers/throttle'
 })
 export default class RecommendationSearchUserInput extends Vue {
   // Actions.
-  @Action('fetchUsersWithRecommendations', Namespace.match)
-  fetchUsersWithRecommendations: any
 
   @Action('fetchRecommendationsForUser', Namespace.match)
   fetchRecommendations: any
@@ -60,7 +58,6 @@ export default class RecommendationSearchUserInput extends Vue {
   // Lifecycles.
   async mounted () {
     const login = this.$route.params.login
-    await this.fetchUsersWithRecommendations()
     if (login) {
       await this.fetchRecommendations(login)
     }
@@ -94,7 +91,10 @@ export default class RecommendationSearchUserInput extends Vue {
   }
 
   fetchUser (login: string) {
-    this.$router.push('/' + login)
+    const newPath = '/' + login
+    if (this.$route.path !== newPath) {
+      this.$router.push(newPath)
+    }
   }
 }
 </script>

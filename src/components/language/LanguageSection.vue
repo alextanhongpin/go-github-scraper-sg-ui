@@ -11,7 +11,7 @@
         v-for="tag in languageTags"
         :key="tag"
         :class="{ 'is-selected': tag === language }"
-        @click="selectTag(tag)"
+        @click="selectLanguage(tag)"
       >
         {{ tag }}
       </p>
@@ -21,18 +21,17 @@
       <div>
         <input class="search" type="search" :value="language" @keyup="search" />
       </div>
-      <dropdown v-if="showDropdown" :items="searchLanguages">
+      <dropdown v-if="showDropdown" :items="searchResults">
         <div slot-scope="{ item }" @click.self="select(item)">{{ item }}</div>
       </dropdown>
     </div>
 
     <div class="users">
-      <a
+      <router-link
         v-for="(user, i) in users.slice(0, 10)"
         class="user"
-        target="_blank"
-        :href="'https://github.com/' + user.user.login"
         :key="user.user.login"
+        :to="'/' + user.user.login"
       >
         <div class="user-position">{{ i + 1 }}.</div>
         <div class="user-info">
@@ -50,7 +49,7 @@
             <b>{{ user.count }}</b> Repos
           </div>
         </div>
-      </a>
+      </router-link>
     </div>
   </div>
 </template>
@@ -74,15 +73,20 @@ import TrophyIcon from '@/components/TrophyIcon.vue'
 export default class LanguageSection extends Vue {
   language: string = 'JavaScript'
 
-  @Action('fetchLanguages', Namespace.language) fetchLanguages: any
+  // Actions.
   @Action('fetchLeaderboardUserByLanguage', Namespace.language)
   fetchLeaderboardUserByLanguage: any
-  @State('languages', Namespace.language) languages?: string[]
+  @Action('searchLanguage', Namespace.language) searchLanguage: any
+  @Action('clearSearchResults', Namespace.language) clearSearchResults: any
+
+  // States.
   @State('users', Namespace.language) users?: Leaderboard[]
+
+  // Getters.
   @Getter('topLanguages', Namespace.repo) topLanguages?: Leaderboard[]
+  @Getter('searchResults', Namespace.language) searchResults: string[]
 
   mounted () {
-    this.fetchLanguages()
     this.fetchUsers()
   }
 
@@ -93,40 +97,22 @@ export default class LanguageSection extends Vue {
   select (language: string) {
     this.language = language
     this.fetchUsers()
+    this.clearSearchResults()
   }
 
   search (evt: KeyboardEvent) {
-    const keyword = evt.target.value
-
-    const language = this.filterLanguage(keyword)
-    if (
-      language.length > 0 &&
-      language[0].toLowerCase() === keyword.toLowerCase()
-    ) {
-      this.language = language[0]
-      this.fetchUsers()
-      return
-    }
-    this.language = keyword
+    const language = evt.target.value
+    this.language = language
+    this.searchLanguage(language)
   }
 
-  selectTag (tag: string) {
-    this.language = tag
+  selectLanguage (language: string) {
+    this.language = language
     this.fetchUsers()
   }
 
-  filterLanguage (language: string): string[] {
-    return this.languages.filter(s => {
-      return s.toLowerCase().startsWith(language.toLowerCase())
-    })
-  }
-
-  get searchLanguages (): string[] {
-    return this.filterLanguage(this.language)
-  }
-
   get showDropdown () {
-    const hasLanguage = this.languages.includes(this.language)
+    const hasLanguage = this.searchResults.includes(this.language)
     return !hasLanguage && this.language
   }
 
@@ -177,6 +163,17 @@ export default class LanguageSection extends Vue {
 
   display: grid;
   grid-template-columns: max-content 1fr max-content;
+  cursor: pointer;
+}
+
+.user:hover .user-photo {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+.user:nth-child(2n + 1) {
+  background: #f7f7f7;
+}
+.user:not(:last-child) {
+  border-bottom: 1px solid #eee;
 }
 
 .user-position {
@@ -196,13 +193,6 @@ export default class LanguageSection extends Vue {
     margin: 0 $dim-100;
   }
 }
-.user:nth-child(2n + 1) {
-  background: #f7f7f7;
-}
-.user:not(:last-child) {
-  border-bottom: 1px solid #eee;
-}
-
 .user-photo {
   height: $dim-500;
   width: auto;
