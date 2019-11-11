@@ -1,9 +1,9 @@
 <template>
-  <div v-if="colleagues.length">
+  <div v-if="countExcludingYourself">
     <h3>Your Colleagues</h3>
     <p>
       <b>{{ countExcludingYourself }}</b>
-      {{ countExcludingYourself === 1 ? 'User' : 'Users' }} found
+      {{ countExcludingYourself === 1 ? 'User' : 'Users' }}
     </p>
     <break />
 
