@@ -14,7 +14,9 @@
         </h4>
       </h1>
 
-      <h4 class="user-name" v-if="name">{{ name }}&nbsp; &nbsp;</h4>
+      <h4 class="user-name" v-if="name">
+        {{ name }}&nbsp; <span v-if="company">&middot;&nbsp;</span>{{ company }}
+      </h4>
       <p class="user-created-at">Member since {{ formatDate(createdAt) }}</p>
       <Break />
 
@@ -57,6 +59,7 @@ export default class UserProfile extends Vue {
   @Prop() private bio!: string
   @Prop() private followers!: number
   @Prop() private following!: number
+  @Prop() private company!: string
 
   @State githubUri?: string
 

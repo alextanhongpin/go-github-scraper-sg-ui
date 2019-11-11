@@ -2,8 +2,8 @@
   <div class="user-tile">
     <img class="user-tile-profile" :alt="name" :src="avatarUrl" />
     <div>
-      <h4 class="user-tile-name">{{ login }}</h4>
-      <h5>{{ name }}</h5>
+      <h4 class="user-tile-name ellipsis">{{ login }}</h4>
+      <h5 class="ellipsis">{{ name }}</h5>
     </div>
   </div>
 </template>

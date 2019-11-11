@@ -61,3 +61,13 @@ $color-alto: #D8D8D8;
   @extend %h6;
   text-transform: uppercase;
 }
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nolink {
+	text-decoration: none;
+	color: inherit;
+}

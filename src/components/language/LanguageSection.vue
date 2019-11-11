@@ -94,7 +94,7 @@ export default class LanguageSection extends Vue {
   @Getter('searchResults', Namespace.language) searchResults: string[]
 
   mounted () {
-    this.fetchUsers()
+    this.fetchUsers(this.selected)
   }
 
   fetchUsers (language) {

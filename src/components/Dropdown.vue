@@ -48,6 +48,10 @@ export default class Dropdown extends Vue {
   padding: 0 $dim-100;
   width: 100%;
   cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
 }
 .item:hover {
   background: #eee;

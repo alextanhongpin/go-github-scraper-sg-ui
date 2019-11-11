@@ -12,7 +12,12 @@
         />
       </div>
       <dropdown v-if="showDropdown" :items="searchResults">
-        <div slot-scope="{ item }" @click.self="selectCompany(item)">
+        <div
+          class="ellipsis"
+          slot-scope="{ item }"
+          @click.self="selectCompany(item)"
+          :title="item"
+        >
           {{ item }}
         </div>
       </dropdown>
@@ -27,22 +32,57 @@
     </div>
 
     <h4 v-if="selected">
-      Search Result for <b>{{ selected }}</b>
+      <b>{{ pagination.total }}</b> search results for <b>{{ selected }}</b>
     </h4>
     <break />
 
     <div class="users">
-      <a v-for="colleague in colleagues" :key="colleague.login">
+      <router-link
+        v-for="colleague in colleagues"
+        :key="colleague.login"
+        :to="'/' + colleague.login"
+        class="nolink"
+      >
         <user-tile v-bind="colleague" />
-      </a>
+      </router-link>
     </div>
+
+    <break />
+    <div v-if="!pagination.onlyPage" class="pagination">
+      <button
+        class="button button-next"
+        :disabled="!pagination.hasPrevPage"
+        @click="prev"
+      >
+        Prev
+      </button>
+      <div>
+        <input
+          class="page-input"
+          type="number"
+          :value="pagination.current"
+          @change="inputPage"
+        />
+        /
+        <b>{{ pagination.pages }}</b>
+      </div>
+      <button
+        class="button button-prev"
+        :disabled="!pagination.hasNextPage"
+        @click="next"
+      >
+        Next
+      </button>
+    </div>
+    <break />
   </div>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import { Action, Getter } from 'vuex-class'
 
-import { User, Leaderboard } from '@/types'
+import { User, Leaderboard, Page } from '@/types'
+import { offsetToPage, pageToOffset, paginate } from '@/models/page'
 
 import Namespace from '@/models/namespace'
 import Dropdown from '@/components/Dropdown.vue'
@@ -63,15 +103,12 @@ export default class LeaderboardCompany extends Vue {
 
   @Getter('companies', Namespace.user) companies: Leaderboard[]
   @Getter('companyUsers', Namespace.user) users: User[]
+  @Getter('page', Namespace.company) page: Page
   @Getter('searchResults', Namespace.company) searchResults: string[]
   @Getter('colleagues', Namespace.company) colleagues: string[]
 
   keyword: string = ''
   selected: string = ''
-
-  mounted () {
-    // this.fetchTopCompanies()
-  }
 
   get showDropdown (): boolean {
     const hasKeyword = this.keyword && this.keyword.length
@@ -82,12 +119,45 @@ export default class LeaderboardCompany extends Vue {
   selectCompany (company: string) {
     this.keyword = ''
     this.selected = company
-    this.searchColleague(company)
+    this.searchColleague({ company, limit: this.page.limit, offset: 0 })
   }
 
   keyup (evt: Event) {
-    const keyword = evt.currentTarget.value
-    this.searchCompany(keyword)
+    const company = evt.currentTarget.value
+    this.searchCompany(company)
+  }
+
+  get pagination () {
+    const { limit, offset, total } = this.page
+    const page = offsetToPage(limit, offset)
+    const perPage = limit
+    return paginate(total, page, perPage)
+  }
+
+  next () {
+    const company = this.selected
+    const limit = this.page.limit
+    const offset = pageToOffset(limit, this.pagination.next)
+    this.searchColleague({ company, limit, offset })
+  }
+
+  prev () {
+    const company = this.selected
+    const limit = this.page.limit
+    const offset = pageToOffset(limit, this.pagination.prev)
+    this.searchColleague({ company, limit, offset })
+  }
+
+  inputPage (evt: Event) {
+    const value = parseInt(evt.currentTarget.value)
+    const page = isNaN(value) ? 1 : value
+    const { limit, total } = this.page
+
+    const perPage = limit
+    const pagination = paginate(total, page, perPage)
+    const company = this.selected
+    const offset = pageToOffset(limit, pagination.page)
+    this.searchColleague({ company, limit, offset })
   }
 }
 </script>
@@ -120,5 +190,27 @@ export default class LeaderboardCompany extends Vue {
   border: 1px solid #ddd;
   border-radius: #{$dim-600/2};
   padding: 0 #{$dim-600/2};
+}
+.button {
+  appearance: none;
+  webkit-appearance: none;
+  min-height: $dim-600;
+  min-width: $dim-600;
+  padding: 0 $dim-100;
+  @extend %h5;
+  border-radius: 3px;
+}
+.page-input {
+  min-height: $dim-600;
+  max-width: #{$dim-600 * 1.5};
+  text-align: center;
+}
+
+.pagination {
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
+  grid-column-gap: $dim-100;
+  align-items: center;
+  justify-content: flex-end;
 }
 </style>
