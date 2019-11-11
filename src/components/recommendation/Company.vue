@@ -92,6 +92,8 @@ export default class Company extends Vue {
     return !!this.colleagues.find(user => user.login === login)
   }
 
+  // The search results for users in a company includes yourself. Exclude them
+  // from the actual calculation.
   get countExcludingYourself (): int {
     const count = this.yourself ? 1 : 0
     return this.page.total - count

@@ -36,45 +36,50 @@
     </h4>
     <break />
 
-    <div class="users">
-      <router-link
-        v-for="colleague in colleagues"
-        :key="colleague.login"
-        :to="'/' + colleague.login"
-        class="nolink"
-      >
-        <user-tile v-bind="colleague" />
-      </router-link>
+    <div v-if="!colleagues.length">
+      No search results
     </div>
-
-    <break />
-    <div v-if="!pagination.onlyPage" class="pagination">
-      <button
-        class="button button-next"
-        :disabled="!pagination.hasPrevPage"
-        @click="prev"
-      >
-        Prev
-      </button>
-      <div>
-        <input
-          class="page-input"
-          type="number"
-          :value="pagination.current"
-          @change="inputPage"
-        />
-        /
-        <b>{{ pagination.pages }}</b>
+    <div v-else>
+      <div class="users">
+        <router-link
+          v-for="colleague in colleagues"
+          :key="colleague.login"
+          :to="'/' + colleague.login"
+          class="nolink"
+        >
+          <user-tile v-bind="colleague" />
+        </router-link>
       </div>
-      <button
-        class="button button-prev"
-        :disabled="!pagination.hasNextPage"
-        @click="next"
-      >
-        Next
-      </button>
+
+      <break />
+      <div v-if="!pagination.onlyPage" class="pagination">
+        <button
+          class="button button-next"
+          :disabled="!pagination.hasPrevPage"
+          @click="prev"
+        >
+          Prev
+        </button>
+        <div>
+          <input
+            class="page-input"
+            type="number"
+            :value="pagination.current"
+            @change="inputPage"
+          />
+          /
+          <b>{{ pagination.pages }}</b>
+        </div>
+        <button
+          class="button button-prev"
+          :disabled="!pagination.hasNextPage"
+          @click="next"
+        >
+          Next
+        </button>
+      </div>
+      <break />
     </div>
-    <break />
   </div>
 </template>
 <script lang="ts">
@@ -191,6 +196,7 @@ export default class LeaderboardCompany extends Vue {
   border-radius: #{$dim-600/2};
   padding: 0 #{$dim-600/2};
 }
+
 .button {
   appearance: none;
   webkit-appearance: none;
@@ -200,6 +206,7 @@ export default class LeaderboardCompany extends Vue {
   @extend %h5;
   border-radius: 3px;
 }
+
 .page-input {
   min-height: $dim-600;
   max-width: #{$dim-600 * 1.5};
