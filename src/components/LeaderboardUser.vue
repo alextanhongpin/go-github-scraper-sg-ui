@@ -1,5 +1,5 @@
 <template>
-  <a class="leaderboard-user" :href="githubLink" target="_blank">
+  <router-link class="leaderboard-user" :to="githubLink">
     <div class="aside">
       <div class="header">
         <div class="user-image">
@@ -53,7 +53,7 @@
         </div>
       </div>
     </div>
-  </a>
+  </router-link>
 </template>
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
@@ -74,7 +74,6 @@ import TrophyIcon from '@/components/TrophyIcon.vue'
   }
 })
 export default class LeaderboardUser extends Vue {
-  @State('githubUri') githubUri?: string
   @Prop() private user?: User
   @Prop() i?: number
   @Prop({ default: [] }) private languages?: Leaderboard[]
@@ -89,7 +88,8 @@ export default class LeaderboardUser extends Vue {
   }
 
   get githubLink (): string {
-    return this.user ? [this.githubUri, this.user.login].join('/') : ''
+    const login = this.user && this.user.login
+    return login ? '/' + login : '/'
   }
 
   get forkedRepoCount (): number {

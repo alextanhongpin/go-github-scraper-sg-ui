@@ -10,7 +10,7 @@
         class="language-tag"
         v-for="tag in languageTags"
         :key="tag"
-        :class="{ 'is-selected': tag === language }"
+        :class="{ 'is-selected': tag === selected }"
         @click="selectLanguage(tag)"
       >
         {{ tag }}
@@ -78,6 +78,7 @@ import TrophyIcon from '@/components/TrophyIcon.vue'
 })
 export default class LanguageSection extends Vue {
   language: string = 'JavaScript'
+  selected: string = 'JavaScript'
 
   // Actions.
   @Action('fetchLeaderboardUserByLanguage', Namespace.language)
@@ -102,6 +103,7 @@ export default class LanguageSection extends Vue {
 
   select (language: string) {
     this.language = ''
+    this.selected = language
     this.fetchUsers(language)
     this.clearSearchResults()
   }
@@ -113,6 +115,7 @@ export default class LanguageSection extends Vue {
 
   selectLanguage (language: string) {
     this.language = ''
+    this.selected = language
     this.fetchUsers(language)
   }
 

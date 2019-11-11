@@ -1,6 +1,6 @@
 <template>
   <div class="repositories-container">
-    <div class="recommendation-repositories-header" v-if="user">
+    <div class="header" v-if="user">
       <div class="repo-counter">
         <b>{{ user.repositories }}</b>
         Repositories
@@ -57,12 +57,14 @@ export default class RecommendationRepositories extends Vue {
 </script>
 <style lang="scss" scoped>
 @import '@/styles/theme.scss';
-.recommendation-repositories-header {
+.header {
   display: grid;
   grid-template-columns: repeat(4, max-content);
   grid-column-gap: $dim-300;
   height: 48px;
   line-height: 48px;
+  white-space: nowrap;
+  overflow-x: scroll;
 }
 
 .repositories {

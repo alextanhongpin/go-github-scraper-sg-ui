@@ -26,7 +26,11 @@
       {{ company.name }} <b>{{ company.count }}</b> Users
     </div>
 
-    <h4 v-if="selected">Search Result for: {{ selected }}</h4>
+    <h4 v-if="selected">
+      Search Result for <b>{{ selected }}</b>
+    </h4>
+    <break />
+
     <div class="users">
       <a v-for="colleague in colleagues" :key="colleague.login">
         <user-tile v-bind="colleague" />
@@ -43,9 +47,11 @@ import { User, Leaderboard } from '@/types'
 import Namespace from '@/models/namespace'
 import Dropdown from '@/components/Dropdown.vue'
 import UserTile from '@/components/UserTile.vue'
+import Break from '@/components/Break.vue'
 
 @Component({
   components: {
+    Break,
     Dropdown,
     UserTile
   }
@@ -80,7 +86,6 @@ export default class LeaderboardCompany extends Vue {
   }
 
   keyup (evt: Event) {
-    this.selected = ''
     const keyword = evt.currentTarget.value
     this.searchCompany(keyword)
   }
