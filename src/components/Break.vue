@@ -6,7 +6,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
 export default class Break extends Vue {
-  @Prop() private px?: number
+  @Prop({ default: 11 }) private px!: number
 }
 </script>
 <style lang="scss" scoped>

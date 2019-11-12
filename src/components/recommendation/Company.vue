@@ -68,8 +68,8 @@ import UserTile from '@/components/UserTile.vue'
 })
 export default class Company extends Vue {
   @Action('searchYourColleague', Namespace.company) searchColleague: any
-  @Getter('yourColleagues', Namespace.company) colleagues: User[] = []
-  @Getter('yourPage', Namespace.company) page: Page = newPage()
+  @Getter('yourColleagues', Namespace.company) colleagues!: User[]
+  @Getter('yourPage', Namespace.company) page!: Page
 
   @Prop() user!: User
   @Watch('user')

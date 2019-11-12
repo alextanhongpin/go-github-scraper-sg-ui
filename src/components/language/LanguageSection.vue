@@ -88,11 +88,11 @@ export default class LanguageSection extends Vue {
   @Action('clearSearchResults', Namespace.language) clearSearchResults: any
 
   // States.
-  @State('users', Namespace.language) users: Leaderboard[] = []
+  @State('users', Namespace.language) users!: Leaderboard[]
 
   // Getters.
-  @Getter('topLanguages', Namespace.repo) topLanguages: Leaderboard[] = []
-  @Getter('searchResults', Namespace.language) searchResults: string[] = []
+  @Getter('topLanguages', Namespace.repo) topLanguages!: Leaderboard[]
+  @Getter('searchResults', Namespace.language) searchResults!: string[]
 
   mounted () {
     this.fetchUsers(this.selected)

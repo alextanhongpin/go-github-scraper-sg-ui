@@ -16,7 +16,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 
 @Component
 export default class Dropdown extends Vue {
-  @Prop() items: string[] = []
+  @Prop({ default: [] }) items!: string[]
 }
 </script>
 <style lang="scss" scoped>

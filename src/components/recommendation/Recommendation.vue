@@ -49,7 +49,7 @@ import Namespace from '@/models/namespace'
   }
 })
 export default class Recommendation extends Vue {
-  @Getter('user', Namespace.match) user?: User
+  @Getter('user', Namespace.match) user!: User
 }
 </script>
 <style lang="scss" scoped>

@@ -49,10 +49,10 @@ import Repository from '@/components/Repository.vue'
   }
 })
 export default class RecommendationRepositories extends Vue {
-  @State('user', Namespace.match) user?: User
+  @State('user', Namespace.match) user!: User
   @State(state => state.repositories.slice(0, 6), Namespace.match)
-  repositories?: IRepository[]
-  @State('languages', Namespace.match) languages?: Leaderboard[]
+  repositories!: IRepository[]
+  @State('languages', Namespace.match) languages!: Leaderboard[]
 }
 </script>
 <style lang="scss" scoped>

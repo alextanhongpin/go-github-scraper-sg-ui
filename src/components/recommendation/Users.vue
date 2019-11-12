@@ -31,9 +31,10 @@ import Namespace from '@/models/namespace'
 export default class RecommendationSimilarUsers extends Vue {
   // Getters.
   @Prop() header!: string
-  @State('recommendations', Namespace.match) users?: User[]
-  @State('nextCursor', Namespace.user) nextCursor?: string
   @Action('fetchUsers', Namespace.user) fetchUsers: any
+
+  @State('recommendations', Namespace.match) users!: User[]
+  @State('nextCursor', Namespace.user) nextCursor!: string
 
   throttle = -1
   mounted () {

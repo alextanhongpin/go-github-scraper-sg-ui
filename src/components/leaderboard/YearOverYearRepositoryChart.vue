@@ -32,14 +32,14 @@ import { chartData } from '@/models/chart'
   }
 })
 export default class LeaderboardBarChartRepository extends Vue {
-  @Prop() header: string = 'Year-over-Year Repository Growth'
-  @Prop() subheader: string = 'Repositories'
+  @Prop({ default: 'Year-over-Year Repository Growth' }) header!: string
+  @Prop({ default: 'Repositories' }) subheader!: string
 
   @Action('fetchRepositoriesByYears', Namespace.repo)
   fetchRepositoryCountByYears: any
 
   @State('leaderboardRepositoryByYears', Namespace.repo)
-  items: Leaderboard[] = []
+  items!: Leaderboard[]
 
   mounted () {
     this.fetchRepositoryCountByYears()

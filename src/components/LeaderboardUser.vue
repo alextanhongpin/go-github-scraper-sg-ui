@@ -76,8 +76,8 @@ import TrophyIcon from '@/components/TrophyIcon.vue'
 export default class LeaderboardUser extends Vue {
   @Prop() private user?: User
   @Prop() i?: number
-  @Prop() private languages: Leaderboard[] = []
-  @Prop() private count: number = 0
+  @Prop({ default: [] }) private languages!: Leaderboard[]
+  @Prop({ default: 0 }) private count!: number
 
   get languageCount (): number {
     return this.languages ? this.languages.length : 0

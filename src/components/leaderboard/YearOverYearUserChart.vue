@@ -32,13 +32,13 @@ import { chartData } from '@/models/chart'
   }
 })
 export default class LeaderboardBarChartUser extends Vue {
-  @Prop() header: string = 'Year-over-Year User Growth'
-  @Prop() subheader: string = 'Users'
+  @Prop({ default: 'Year-over-Year User Growth' }) header!: string
+  @Prop({ default: 'Users' }) subheader!: string
 
   @Action('fetchUserCountByYears', Namespace.user) fetchUserCountByYears: any
 
-  @State('userCount', Namespace.user) userCount: number = 0
-  @State('userCountByYears', Namespace.user) items: Leaderboard[] = []
+  @State('userCount', Namespace.user) userCount!: number
+  @State('userCountByYears', Namespace.user) items!: Leaderboard[]
 
   mounted () {
     this.fetchUserCountByYears()

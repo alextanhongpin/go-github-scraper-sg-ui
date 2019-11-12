@@ -11,7 +11,7 @@ const TROPHIES: Record<string, string> = {
 }
 @Component
 export default class TrophyIcon extends Vue {
-  @Prop() name: string = ''
+  @Prop() name!: string
 
   get color (): string {
     return TROPHIES[this.name] || ''

@@ -37,11 +37,11 @@ export default class RecommendationSearchUserInput extends Vue {
   @Action('searchUser', Namespace.user) searchUser: any
   @Action('clearRecommendations', Namespace.match) clearRecommendations: any
 
-  @State('user', Namespace.match) user?: User
+  @State('user', Namespace.match) user!: User
 
   // Getters.
-  @Getter('searchUserResults', Namespace.user) searchUserResults: string = ''
-  @Getter('keyword', Namespace.match) keyword: string = ''
+  @Getter('searchUserResults', Namespace.user) searchUserResults!: string
+  @Getter('keyword', Namespace.match) keyword!: string
 
   @Watch('$route', { immediate: true, deep: true })
   async onUrlChange (route: any) {

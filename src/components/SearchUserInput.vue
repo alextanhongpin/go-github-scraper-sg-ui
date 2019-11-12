@@ -20,7 +20,7 @@ import Namespace from '@/models/namespace'
 @Component
 export default class SearchUserInput extends Vue {
   // Getters.
-  @Getter('keyword', Namespace.match) keyword: string = ''
+  @Getter('keyword', Namespace.match) keyword!: string
 }
 </script>
 <style lang="scss" scoped>

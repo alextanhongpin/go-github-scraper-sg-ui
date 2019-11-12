@@ -10,8 +10,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
 export default class LeaderboardCell extends Vue {
-  @Prop() private name!: string
-  @Prop() private count!: number
+  @Prop({ default: '' }) private name!: string
+  @Prop({ default: 0 }) private count!: number
 }
 </script>
 

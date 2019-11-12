@@ -87,7 +87,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import { Action, Getter } from 'vuex-class'
 
 import { User, Leaderboard, Page } from '@/types'
-import { offsetToPage, pageToOffset, paginate, newPage } from '@/models/page'
+import { offsetToPage, pageToOffset, paginate } from '@/models/page'
 
 import Namespace from '@/models/namespace'
 import Dropdown from '@/components/Dropdown.vue'
@@ -106,11 +106,11 @@ export default class LeaderboardCompany extends Vue {
   @Action('searchCompany', Namespace.company) searchCompany: any
   @Action('searchColleague', Namespace.company) searchColleague: any
 
-  @Getter('companies', Namespace.user) companies: Leaderboard[] = []
-  @Getter('companyUsers', Namespace.user) users: User[] = []
-  @Getter('page', Namespace.company) page: Page = newPage()
-  @Getter('searchResults', Namespace.company) searchResults: string[] = []
-  @Getter('colleagues', Namespace.company) colleagues: string[] = []
+  @Getter('companies', Namespace.user) companies!: Leaderboard[]
+  @Getter('companyUsers', Namespace.user) users!: User[]
+  @Getter('page', Namespace.company) page!: Page
+  @Getter('searchResults', Namespace.company) searchResults!: string[]
+  @Getter('colleagues', Namespace.company) colleagues!: string[]
 
   keyword: string = ''
   selected: string = ''

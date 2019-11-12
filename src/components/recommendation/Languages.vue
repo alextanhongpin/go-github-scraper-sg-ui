@@ -35,7 +35,7 @@ export default class RecommendationLanguages extends Vue {
   @Prop() header!: string
 
   // States.
-  @Getter('languages', Namespace.match) languages: Leaderboard[] = []
+  @Getter('languages', Namespace.match) languages!: Leaderboard[]
 
   // Methods.
   formatPercentage (count: number): string {

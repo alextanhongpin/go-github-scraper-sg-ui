@@ -50,14 +50,14 @@ import { shortDate } from '@/helpers/date'
   }
 })
 export default class Repository extends Vue {
-  @Prop() name: string = ''
-  @Prop() createdAt: string = ''
-  @Prop() description: string = ''
-  @Prop() topics: string[] = []
-  @Prop() primaryLanguage: string = ''
-  @Prop() stargazers: number = 0
-  @Prop() watchers: number = 0
-  @Prop() forks: number = 0
+  @Prop() name!: string
+  @Prop() createdAt!: string
+  @Prop() description!: string
+  @Prop() topics!: string[]
+  @Prop() primaryLanguage!: string
+  @Prop() stargazers!: number
+  @Prop() watchers!: number
+  @Prop() forks!: number
 
   formatDate (dateStr: string): string {
     return shortDate(dateStr)
