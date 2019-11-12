@@ -4,7 +4,11 @@
 
 UI for the Github Scraper. The backend is available [here](https://github.com/alextanhongpin/go-github-scraper-sg)
 
+V2:
 ![preview](./assets/preview_v2.png)
+
+V3:
+![preview](./assets/preview_v3.png)
 
 ## Project setup
 ```
