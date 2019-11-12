@@ -58,7 +58,7 @@ import * as DateHelper from '@/helpers/date'
   }
 })
 export default class GithubCard extends Vue {
-  @Prop() private user?: User
+  @Prop() private user!: User
   get createdAtFmt (): string {
     if (!this.user) {
       return ''

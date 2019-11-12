@@ -4,6 +4,7 @@ import router from './router'
 import store from './module'
 import './registerServiceWorker'
 
+// @ts-ignore
 import smoothscroll from 'smoothscroll-polyfill'
 
 // kick off the polyfill!

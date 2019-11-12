@@ -12,9 +12,9 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 
 @Component
 export default class UserTile extends Vue {
-  @Prop() login: string
-  @Prop() name: string
-  @Prop() avatarUrl: string
+  @Prop() login: string = ''
+  @Prop() name: string = ''
+  @Prop() avatarUrl: string = ''
 }
 </script>
 <style lang="scss">

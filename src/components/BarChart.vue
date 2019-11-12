@@ -33,6 +33,7 @@ export default {
     }
   },
   mounted () {
+    // @ts-ignore
     this.renderChart(this.chartData, this.options)
   }
 }

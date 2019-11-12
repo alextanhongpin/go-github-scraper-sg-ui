@@ -52,10 +52,10 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { Action, Getter, State } from 'vuex-class'
 
-import { User } from '@/types/user'
+import { User, Page } from '@/types'
 
 import Namespace from '@/models/namespace'
-import { offsetToPage, pageToOffset, paginate } from '@/models/page'
+import { offsetToPage, pageToOffset, paginate, newPage } from '@/models/page'
 
 import Break from '@/components/Break.vue'
 import UserTile from '@/components/UserTile.vue'
@@ -68,10 +68,10 @@ import UserTile from '@/components/UserTile.vue'
 })
 export default class Company extends Vue {
   @Action('searchYourColleague', Namespace.company) searchColleague: any
-  @Getter('yourColleagues', Namespace.company) colleagues: User[]
-  @Getter('yourPage', Namespace.company) page: Page
+  @Getter('yourColleagues', Namespace.company) colleagues: User[] = []
+  @Getter('yourPage', Namespace.company) page: Page = newPage()
 
-  @Prop() user!: string
+  @Prop() user!: User
   @Watch('user')
   onUserChanged (val: User, oldVal: User) {
     this.searchColleague({ company: val.company, limit: 20 })
@@ -94,7 +94,7 @@ export default class Company extends Vue {
 
   // The search results for users in a company includes yourself. Exclude them
   // from the actual calculation.
-  get countExcludingYourself (): int {
+  get countExcludingYourself (): number {
     const count = this.yourself ? 1 : 0
     return this.page.total - count
   }
@@ -129,7 +129,7 @@ export default class Company extends Vue {
   }
 
   inputPage (evt: Event) {
-    const value = parseInt(evt.currentTarget.value)
+    const value = parseInt((evt.currentTarget as HTMLInputElement).value)
     const page = isNaN(value) ? 1 : value
     const { limit, total } = this.page
 

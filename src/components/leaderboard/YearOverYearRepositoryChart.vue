@@ -20,6 +20,8 @@ import { State, Action } from 'vuex-class'
 import Break from '@/components/Break.vue'
 import BarChart from '@/components/BarChart.vue'
 
+import { Leaderboard } from '@/types'
+
 // Models.
 import Namespace from '@/models/namespace'
 import { chartData } from '@/models/chart'
@@ -30,13 +32,14 @@ import { chartData } from '@/models/chart'
   }
 })
 export default class LeaderboardBarChartRepository extends Vue {
-  @Prop({ default: 'Year-over-Year Repository Growth' }) private header: string
-  @Prop({ default: 'Repositories' })
-  private subheader: string
+  @Prop() header: string = 'Year-over-Year Repository Growth'
+  @Prop() subheader: string = 'Repositories'
 
-  @State('leaderboardRepositoryByYears', Namespace.repo) items?: Leaderboard[]
   @Action('fetchRepositoriesByYears', Namespace.repo)
   fetchRepositoryCountByYears: any
+
+  @State('leaderboardRepositoryByYears', Namespace.repo)
+  items: Leaderboard[] = []
 
   mounted () {
     this.fetchRepositoryCountByYears()

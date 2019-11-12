@@ -1,4 +1,4 @@
-export function chartData (x, y, colorFn) {
+export function chartData (x: string[], y: number[], colorFn?: any) {
   return {
     datasets: [
       {

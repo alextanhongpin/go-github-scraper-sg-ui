@@ -40,9 +40,8 @@ export default class RecommendationSearchUserInput extends Vue {
   @State('user', Namespace.match) user?: User
 
   // Getters.
-  @Getter('searchUserResults', Namespace.user) searchUserResults: string
-  @Getter('keyword', Namespace.match) keyword: string
-  @Getter('userWithMatches', Namespace.match) userWithMatches: Set<string>
+  @Getter('searchUserResults', Namespace.user) searchUserResults: string = ''
+  @Getter('keyword', Namespace.match) keyword: string = ''
 
   @Watch('$route', { immediate: true, deep: true })
   async onUrlChange (route: any) {
@@ -80,7 +79,7 @@ export default class RecommendationSearchUserInput extends Vue {
     }
   }
 
-  selectItem (item) {
+  selectItem (item: string) {
     this.inputKeyword(item)
     this.fetchUser(item)
   }

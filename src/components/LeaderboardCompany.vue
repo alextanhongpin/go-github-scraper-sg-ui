@@ -87,7 +87,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import { Action, Getter } from 'vuex-class'
 
 import { User, Leaderboard, Page } from '@/types'
-import { offsetToPage, pageToOffset, paginate } from '@/models/page'
+import { offsetToPage, pageToOffset, paginate, newPage } from '@/models/page'
 
 import Namespace from '@/models/namespace'
 import Dropdown from '@/components/Dropdown.vue'
@@ -106,19 +106,19 @@ export default class LeaderboardCompany extends Vue {
   @Action('searchCompany', Namespace.company) searchCompany: any
   @Action('searchColleague', Namespace.company) searchColleague: any
 
-  @Getter('companies', Namespace.user) companies: Leaderboard[]
-  @Getter('companyUsers', Namespace.user) users: User[]
-  @Getter('page', Namespace.company) page: Page
-  @Getter('searchResults', Namespace.company) searchResults: string[]
-  @Getter('colleagues', Namespace.company) colleagues: string[]
+  @Getter('companies', Namespace.user) companies: Leaderboard[] = []
+  @Getter('companyUsers', Namespace.user) users: User[] = []
+  @Getter('page', Namespace.company) page: Page = newPage()
+  @Getter('searchResults', Namespace.company) searchResults: string[] = []
+  @Getter('colleagues', Namespace.company) colleagues: string[] = []
 
   keyword: string = ''
   selected: string = ''
 
   get showDropdown (): boolean {
-    const hasKeyword = this.keyword && this.keyword.length
-    const hasSearchResults = this.searchResults && this.searchResults.length
-    return hasKeyword && hasSearchResults
+    const hasKeyword = this.keyword && this.keyword.length > 0
+    const hasSearchResults = this.searchResults && this.searchResults.length > 0
+    return !!(hasKeyword && hasSearchResults)
   }
 
   selectCompany (company: string) {
@@ -128,7 +128,7 @@ export default class LeaderboardCompany extends Vue {
   }
 
   keyup (evt: Event) {
-    const company = evt.currentTarget.value
+    const company = (evt.currentTarget as HTMLInputElement).value
     this.searchCompany(company)
   }
 
@@ -154,7 +154,7 @@ export default class LeaderboardCompany extends Vue {
   }
 
   inputPage (evt: Event) {
-    const value = parseInt(evt.currentTarget.value)
+    const value = parseInt((evt.currentTarget as HTMLInputElement).value)
     const page = isNaN(value) ? 1 : value
     const { limit, total } = this.page
 

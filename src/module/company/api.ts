@@ -49,6 +49,10 @@ export async function searchColleague ({
   company,
   limit,
   offset
+}: {
+  company: string
+  limit: number
+  offset: number
 }): Promise<UserPage> {
   const url = `/v1/search/colleagues?term=${company}&limit=${limit}&offset=${offset}`
   const response = await window.fetch(endpoint`${url}`)

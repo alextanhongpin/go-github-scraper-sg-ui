@@ -62,7 +62,8 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { Action, State, Getter } from 'vuex-class'
-import { LeaderboardUserLanguage } from '@/types'
+import { Leaderboard } from '@/types'
+
 import Namespace from '@/models/namespace'
 
 import Break from '@/components/Break.vue'
@@ -87,17 +88,17 @@ export default class LanguageSection extends Vue {
   @Action('clearSearchResults', Namespace.language) clearSearchResults: any
 
   // States.
-  @State('users', Namespace.language) users?: Leaderboard[]
+  @State('users', Namespace.language) users: Leaderboard[] = []
 
   // Getters.
-  @Getter('topLanguages', Namespace.repo) topLanguages?: Leaderboard[]
-  @Getter('searchResults', Namespace.language) searchResults: string[]
+  @Getter('topLanguages', Namespace.repo) topLanguages: Leaderboard[] = []
+  @Getter('searchResults', Namespace.language) searchResults: string[] = []
 
   mounted () {
     this.fetchUsers(this.selected)
   }
 
-  fetchUsers (language) {
+  fetchUsers (language: string) {
     this.fetchLeaderboardUserByLanguage(language)
   }
 
@@ -109,7 +110,7 @@ export default class LanguageSection extends Vue {
   }
 
   search (evt: Event) {
-    const language = evt.currentTarget.value
+    const language = (evt.currentTarget as HTMLInputElement).value
     this.searchLanguage(language)
   }
 

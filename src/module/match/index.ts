@@ -100,15 +100,15 @@ const mutations: MutationTree<RecommendationState> = {
 }
 
 const getters: GetterTree<RecommendationState, RootState> = {
-  languages (state: RecommendationState) {
+  languages (state: RecommendationState): Leaderboard[] {
     return state.languages
   },
 
-  keyword (state: RecommendationState) {
+  keyword (state: RecommendationState): string {
     return state.keyword
   },
 
-  user (state: RecommendationState): User {
+  user (state: RecommendationState): User | null {
     return state.user
   }
 }

@@ -39,8 +39,7 @@ export default class RecommendationSimilarUsers extends Vue {
   mounted () {
     this.fetchUsers()
   }
-
-  /*
+  // TODO: Deprecate this.
   async scroll (scrollEnd: boolean) {
     if (scrollEnd) {
       this.throttle && window.clearTimeout(this.throttle)
@@ -48,7 +47,7 @@ export default class RecommendationSimilarUsers extends Vue {
         this.fetchUsers(this.nextCursor)
       }, 250)
     }
-  }*/
+  }
 }
 </script>
 <style lang="scss" scoped>

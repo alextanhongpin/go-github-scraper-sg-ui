@@ -54,7 +54,7 @@ export default class LeaderboardLanguage extends Vue {
     const items = this.items
     const x = this.items.map(i => i.name)
     const y = this.items.map(i => i.count)
-    return chartData(x, y, name => Color.pick(name))
+    return chartData(x, y, (name: string) => Color.pick(name))
   }
 }
 </script>

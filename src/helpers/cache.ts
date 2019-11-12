@@ -9,6 +9,7 @@ export function Cache (fn: any, getter = defaultKeyGetter): any {
     if (m.has(key)) {
       return m.get(key)
     }
+    // @ts-ignore
     const result = await fn.apply(this, arguments)
     m.set(key, result)
     return result

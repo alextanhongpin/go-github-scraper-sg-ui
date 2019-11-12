@@ -35,7 +35,7 @@ export default class RecommendationLanguages extends Vue {
   @Prop() header!: string
 
   // States.
-  @Getter('languages', Namespace.match) languages?: Leaderboard[]
+  @Getter('languages', Namespace.match) languages: Leaderboard[] = []
 
   // Methods.
   formatPercentage (count: number): string {
@@ -78,7 +78,7 @@ export default class RecommendationLanguages extends Vue {
   get chartdata () {
     const y = this.languages.map(lang => lang.count)
     const x = this.languages.map(lang => lang.name)
-    return chartData(x, y, name => Color.pick(name))
+    return chartData(x, y, (name: string) => Color.pick(name))
   }
 }
 </script>

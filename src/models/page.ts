@@ -1,4 +1,4 @@
-import { Page } from '@/types/page'
+import { Page } from '@/types'
 
 export function newPage (limit = 20): Page {
   return {
@@ -12,7 +12,7 @@ export function offsetToPage (limit = 0, offset = 0): number {
   return Math.floor(offset / limit) + 1
 }
 
-export function pageToOffset (limit, page = 0): number {
+export function pageToOffset (limit = 20, page = 0): number {
   return (page - 1) * limit
 }
 

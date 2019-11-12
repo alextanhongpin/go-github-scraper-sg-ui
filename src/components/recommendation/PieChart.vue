@@ -11,13 +11,16 @@ export default {
         tooltips: {
           enabled: true,
           callbacks: {
-            label: function (tooltipItems, data) {
+            label: function (tooltipItems: any, data: any) {
               const { index } = tooltipItems
               const { labels, datasets } = data
               const label = labels[index]
               const dataset = datasets[0]
               const value = dataset.data[index]
-              const max = dataset.data.reduce((a, b) => a + b, 0)
+              const max = dataset.data.reduce(
+                (a: number, b: number) => a + b,
+                0
+              )
               return `${label} ${((value / max) * 100).toFixed(
                 2
               )}% (${value} repos)`
@@ -28,6 +31,7 @@ export default {
     }
   },
   mounted () {
+    // @ts-ignore
     this.renderChart(this.chartData, this.options)
   }
 }
