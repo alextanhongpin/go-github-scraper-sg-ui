@@ -1,5 +1,7 @@
 # github-scraper-sg
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/689835f3-fd9c-4dfb-811a-93e28a2252f9/deploy-status)](https://app.netlify.com/sites/upbeat-williams-20c757/deploys)
+
 UI for the Github Scraper. The backend is available [here](https://github.com/alextanhongpin/go-github-scraper-sg)
 
 ![preview](./assets/preview_v2.png)
