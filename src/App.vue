@@ -11,14 +11,25 @@
     <main class="app-main">
       <router-view />
     </main>
+    <footer class="app-footer">
+      🏃 Designed by
+      <a href="mailto:alextan220990@gmail.com">Alex Tan Hong Pin.</a> &copy;
+      {{ new Date().getFullYear() }}.
+    </footer>
+    <break :px="33" />
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { Action, State } from 'vuex-class'
+import Break from '@/components/Break.vue'
 
-@Component
+@Component({
+  components: {
+    Break
+  }
+})
 export default class App extends Vue {
   // HINT: To fetch a key in the rootState.
   @State brand?: string
@@ -87,5 +98,8 @@ small {
   width: 100%;
   margin: auto;
   padding: $dim-100;
+}
+.app-footer {
+  text-align: center;
 }
 </style>
