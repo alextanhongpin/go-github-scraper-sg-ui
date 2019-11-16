@@ -14,5 +14,9 @@ build:
 deploy: build
 	@npm run deploy
 
-gh-pages: build
+gh-pages: create-config build
 	@npm run gh-pages
+	@rm vue.config.js
+
+create-config:
+	@echo 'module.exports = { "publicPath": "/go-github-scraper-sg-ui/" }' > vue.config.js
