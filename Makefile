@@ -13,3 +13,6 @@ build:
 
 deploy: build
 	@npm run deploy
+
+gh-pages: build
+	@npm run gh-pages
