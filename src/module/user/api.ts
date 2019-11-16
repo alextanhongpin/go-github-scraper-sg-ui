@@ -1,7 +1,7 @@
 import { User, Score, PageInfo, Leaderboard, UserStat } from '@/types'
 
-import { toCamelCaseObject } from '@/helpers/camel-case'
-import { endpoint } from '@/helpers/uri'
+import { toCamelCaseObject } from '@/models/camel-case'
+import { endpoint } from '@/models/uri'
 
 export interface GetUsersResponse {
   users: User[]
@@ -115,7 +115,7 @@ export async function searchUser (term: string): Promise<string[]> {
   return data || []
 }
 
-export async function searchCompanies(term: string): Promise<string[]> {
+export async function searchCompanies (term: string): Promise<string[]> {
   const url = `/v1/search/companies?term=${term}`
   const response = await window.fetch(endpoint`${url}`)
   if (!response.ok) {

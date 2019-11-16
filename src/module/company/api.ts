@@ -1,7 +1,7 @@
 import { Leaderboard, User, UserPage } from '@/types'
 
-import { toCamelCaseObject } from '@/helpers/camel-case'
-import { endpoint } from '@/helpers/uri'
+import { toCamelCaseObject } from '@/models/camel-case'
+import { endpoint } from '@/models/uri'
 import { newPage } from '@/models/page'
 
 export async function getCompanyCount (): Promise<number> {

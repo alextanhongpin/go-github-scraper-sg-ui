@@ -50,7 +50,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { User } from '@/types'
 import Break from '@/components/Break.vue'
-import * as DateHelper from '@/helpers/date'
+import * as DateHelper from '@/models/date'
 
 @Component({
   components: {

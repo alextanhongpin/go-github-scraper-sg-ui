@@ -21,7 +21,7 @@ import PieChart from './PieChart.vue'
 import { Leaderboard } from '@/types'
 import { chartData } from '@/models/chart'
 import Namespace from '@/models/namespace'
-import * as Color from '@/helpers/color'
+import * as Color from '@/models/color'
 
 @Component({
   components: {

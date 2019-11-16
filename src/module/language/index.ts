@@ -5,7 +5,7 @@ import {
   getLeaderboardUserByLanguage,
   searchLanguage
 } from '@/module/language/api'
-import { Cache } from '@/helpers/cache'
+import { Cache } from '@/models/cache'
 import RootState from '@/types/root-state'
 
 // Api with cache layer for getters. Can decorate with retries too.

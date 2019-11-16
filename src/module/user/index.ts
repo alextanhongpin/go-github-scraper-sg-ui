@@ -1,6 +1,6 @@
 import { GetterTree, MutationTree, ActionTree, Module } from 'vuex'
 import * as UserApi from '@/module/user/api'
-import { Cache } from '@/helpers/cache'
+import { Cache } from '@/models/cache'
 
 // Types.
 import {

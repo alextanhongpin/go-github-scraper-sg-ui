@@ -60,7 +60,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { State } from 'vuex-class'
 
 import { User, Leaderboard } from '@/types'
-import * as Color from '@/helpers/color'
+import * as Color from '@/models/color'
 
 import Break from '@/components/Break.vue'
 import LanguageCell from '@/components/LanguageCell.vue'
@@ -151,13 +151,13 @@ export default class LeaderboardUser extends Vue {
   font-weight: bold;
 }
 .repo-count {
-  color: #818181;
+  color: $color-silverlake;
 }
 
 .counters {
   @extend %h6;
   display: grid;
-  color: #818181;
+  color: $color-silverlake;
   grid-template-columns: repeat(4, max-content);
   grid-column-gap: $dim-200;
   align-items: center;
@@ -177,6 +177,6 @@ export default class LeaderboardUser extends Vue {
 }
 
 .user-connections {
-  color: #818181;
+  color: $color-silverlake;
 }
 </style>

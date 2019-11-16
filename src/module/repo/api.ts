@@ -1,6 +1,6 @@
 import { PageInfo, Repository, Leaderboard } from '@/types'
-import { toCamelCaseObject } from '@/helpers/camel-case'
-import { endpoint } from '@/helpers/uri'
+import { toCamelCaseObject } from '@/models/camel-case'
+import { endpoint } from '@/models/uri'
 
 export interface GetRepositoriesResponse {
   pageInfo: PageInfo;

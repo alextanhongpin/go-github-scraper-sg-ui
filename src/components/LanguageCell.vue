@@ -6,7 +6,7 @@
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import * as Color from '@/helpers/color'
+import * as Color from '@/models/color'
 
 @Component
 export default class LanguageCell extends Vue {

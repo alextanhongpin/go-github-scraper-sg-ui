@@ -20,7 +20,7 @@ import BarChart from '@/components/BarChart.vue'
 import Break from '@/components/Break.vue'
 
 import { chartData } from '@/models/chart'
-import * as Color from '@/helpers/color'
+import * as Color from '@/models/color'
 
 @Component({
   components: {

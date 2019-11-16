@@ -2,7 +2,7 @@ import { GetterTree, MutationTree, ActionTree, Module } from 'vuex'
 
 import { User, Leaderboard, Repository, RootState } from '@/types'
 import { getRecommendations, getRepositoriesByUser } from '@/module/match/api'
-import { Cache } from '@/helpers/cache'
+import { Cache } from '@/models/cache'
 
 // Api with cache layer for getters. Can decorate with retries too.
 const ApiCache = {

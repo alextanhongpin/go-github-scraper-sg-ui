@@ -1,6 +1,6 @@
 import { Leaderboard } from '@/types'
-import { endpoint } from '@/helpers/uri'
-import { toCamelCaseObject } from '@/helpers/camel-case'
+import { endpoint } from '@/models/uri'
+import { toCamelCaseObject } from '@/models/camel-case'
 
 export async function getLeaderboardUserByLanguage (
   language: string

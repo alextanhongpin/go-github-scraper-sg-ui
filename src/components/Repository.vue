@@ -41,7 +41,7 @@ import { Prop, Vue, Component } from 'vue-property-decorator'
 import Break from '@/components/Break.vue'
 import LanguageCell from '@/components/LanguageCell.vue'
 
-import { shortDate } from '@/helpers/date'
+import { shortDate } from '@/models/date'
 
 @Component({
   components: {

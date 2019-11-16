@@ -3,7 +3,7 @@ import { GetterTree, MutationTree, ActionTree, Module } from 'vuex'
 import { RootState, User, Page } from '@/types'
 
 import { searchCompany, searchColleague } from '@/module/company/api'
-import { Cache } from '@/helpers/cache'
+import { Cache } from '@/models/cache'
 import { newPage } from '@/models/page'
 
 export interface CompanyState {

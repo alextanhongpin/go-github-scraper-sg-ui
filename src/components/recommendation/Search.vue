@@ -18,8 +18,7 @@ import { User } from '@/types'
 
 // Models.
 import Namespace from '@/models/namespace'
-
-import { throttle } from '@/helpers/throttle'
+import { throttle } from '@/models/throttle'
 
 @Component({
   components: {

@@ -42,7 +42,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { User } from '@/types'
 import Break from '@/components/Break.vue'
 import Counter from '@/components/Counter.vue'
-import { shortDate } from '@/helpers/date'
+import { shortDate } from '@/models/date'
 import { State } from 'vuex-class'
 
 @Component({

@@ -1,6 +1,6 @@
 import { Score, Repository } from '@/types'
-import { endpoint } from '@/helpers/uri'
-import { toCamelCaseObject } from '@/helpers/camel-case'
+import { endpoint } from '@/models/uri'
+import { toCamelCaseObject } from '@/models/camel-case'
 
 // getRecommendations returns the matches for a particular user ordered by the
 // similarity score.
