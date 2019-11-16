@@ -97,5 +97,8 @@
             "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
         ],
         "testURL": "http://localhost/"
+    },
+    "vue": {
+        "publicPath": "/go-github-scraper-sg-ui/"
     }
 }
