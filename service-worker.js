@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "https://alextanhongpin.github.io/go-github-scraper-sg-ui/precache-manifest.0e8a548cacde4c650889516490826932.js"
+  "/go-github-scraper-sg-ui/precache-manifest.f7e2783fce7dc57653332d28e4fc0720.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "github-scraper-sg"});
