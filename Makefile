@@ -9,13 +9,13 @@ start:
 	@yarn serve
 
 build:
-	@npm run build
+	@yarn build
 
 deploy: build
-	@npm run deploy
+	@yarn run deploy
 
 gh-pages: create-config build
-	@npm run gh-pages
+	@yarn run gh-pages
 	@rm vue.config.js
 
 create-config:

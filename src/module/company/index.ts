@@ -104,11 +104,11 @@ const getters: GetterTree<CompanyState, RootState> = {
     return state.page
   },
 
-  yourColleagues(state: CompanyState): User[] {
+  yourColleagues (state: CompanyState): User[] {
     return state.yourColleagues
   },
 
-  yourPage(state: CompanyState): Page {
+  yourPage (state: CompanyState): Page {
     return state.yourPage
   }
 }

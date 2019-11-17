@@ -3,7 +3,7 @@ const Namespace = {
   user: { namespace: 'user' },
   match: { namespace: 'match' },
   language: { namespace: 'language' },
-  company: {namespace: 'company'}
+  company: { namespace: 'company' }
 }
 
 export default Namespace
