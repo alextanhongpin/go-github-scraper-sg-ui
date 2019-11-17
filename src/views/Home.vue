@@ -44,28 +44,29 @@
 // HINT: @ is an alias to /src
 // HINT: Add static images. <img alt="Vue logo" src="../assets/logo.png">
 import { Component, Vue } from 'vue-property-decorator'
-
-// Components.
-import Break from '@/components/Break.vue'
-import GithubCard from '@/components/GithubCard.vue'
-
-import LeaderboardLanguage from '@/components/LeaderboardLanguage.vue'
-import LeaderboardCompany from '@/components/LeaderboardCompany.vue'
-import LeaderboardUser from '@/components/LeaderboardUser.vue'
-import Recommendation from '@/components/recommendation/Recommendation.vue'
-
-import YearOverYearUserChart from '@/components/leaderboard/YearOverYearUserChart.vue'
-import YearOverYearRepositoryChart from '@/components/leaderboard/YearOverYearRepositoryChart.vue'
-import LanguageSection from '@/components/language/LanguageSection.vue'
-
 import { Score, Leaderboard, User } from '@/types'
 import { Action, Getter, State } from 'vuex-class'
 import Namespace from '@/models/namespace'
 
+// Components.
+import Break from '@/components/Break.vue'
+
+const LeaderboardLanguage = () => import('@/components/LeaderboardLanguage.vue')
+const LeaderboardCompany = () => import('@/components/LeaderboardCompany.vue')
+const LeaderboardUser = () => import('@/components/LeaderboardUser.vue')
+const Recommendation = () =>
+  import('@/components/recommendation/Recommendation.vue')
+
+const YearOverYearUserChart = () =>
+  import('@/components/leaderboard/YearOverYearUserChart.vue')
+const YearOverYearRepositoryChart = () =>
+  import('@/components/leaderboard/YearOverYearRepositoryChart.vue')
+const LanguageSection = () =>
+  import('@/components/language/LanguageSection.vue')
+
 @Component({
   components: {
     Break,
-    GithubCard,
     LeaderboardUser,
     LeaderboardLanguage,
     LeaderboardCompany,
