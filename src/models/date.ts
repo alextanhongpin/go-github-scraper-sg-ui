@@ -1,7 +1,16 @@
 const monthShort = [
-  'Jan', 'Feb', 'Mar', 'Apr',
-  'May', 'Jun', 'Jul', 'Aug',
-  'Sep', 'Oct', 'Nov', 'Dec'
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec'
 ]
 
 // shortDate returns the date in the form `Jan 18`

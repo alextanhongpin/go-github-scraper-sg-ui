@@ -1,14 +1,9 @@
-
 export function trimStartSlash (str = ''): string {
-  return str.startsWith('/')
-    ? str.substring(1)
-    : str
+  return str.startsWith('/') ? str.substring(1) : str
 }
 
 export function trimEndSlash (str = ''): string {
-  return str.endsWith('/')
-    ? str.substring(0, str.length - 1)
-    : str
+  return str.endsWith('/') ? str.substring(0, str.length - 1) : str
 }
 
 interface ComposeFunction<T> {
@@ -23,10 +18,19 @@ export function compose<T> (...fns: ComposeFunction<T>[]) {
   }
 }
 
-export function endpoint (paths: TemplateStringsArray, ...placeholders: string[]): string {
-  const trimAll = compose<string>(trimStartSlash, trimEndSlash)
+export function endpoint (
+  paths: TemplateStringsArray,
+  ...placeholders: string[]
+): string {
+  const trimAll = compose<string>(
+    trimStartSlash,
+    trimEndSlash
+  )
   const basePath = process.env.VUE_APP_API_URI
   return paths.reduce((result: string, str: string, i: number) => {
-    return [result, str, placeholders[i]].map(trimAll).filter(i => i.length > 0).join('/')
+    return [result, str, placeholders[i]]
+      .map(trimAll)
+      .filter(i => i.length > 0)
+      .join('/')
   }, basePath)
 }
