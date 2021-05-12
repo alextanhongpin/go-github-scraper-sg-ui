@@ -12,7 +12,7 @@
         "gh-pages": "node_modules/.bin/gh-pages -d dist"
     },
     "dependencies": {
-        "chart.js": "^2.9.2",
+        "chart.js": "^2.9.4",
         "register-service-worker": "^1.5.2",
         "smoothscroll-polyfill": "^0.4.4",
         "vue": "^2.5.17",
